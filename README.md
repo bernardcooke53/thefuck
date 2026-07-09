@@ -18,7 +18,7 @@ E: Unable to lock the administration directory (/var/lib/dpkg/), are you root?
 
 ➜ fuck
 sudo apt-get install vim [enter/↑/↓/ctrl+c]
-[sudo] password for nvbn:
+[sudo] password for bernardcooke53:
 Reading package lists... Done
 ...
 ```
@@ -86,7 +86,7 @@ E: Unable to lock the administration directory (/var/lib/dpkg/), are you root?
 
 ➜ fuck
 sudo apt-get install vim
-[sudo] password for nvbn:
+[sudo] password for bernardcooke53:
 Reading package lists... Done
 ...
 ```
@@ -148,7 +148,7 @@ On other systems, install *The Fuck*  by using `pip`:
 pip install thefuck
 ```
 
-[Alternatively, you may use an OS package manager (OS X, Ubuntu, Arch).](https://github.com/nvbn/thefuck/wiki/Installation)
+[Alternatively, you may use an OS package manager (OS X, Ubuntu, Arch).](https://github.com/bernardcooke53/thefuck/wiki/Installation)
 
 <a href='#manual-installation' name='manual-installation'>#</a>
 It is recommended that you place this command in your `.bash_profile`,
@@ -160,7 +160,7 @@ eval $(thefuck --alias)
 eval $(thefuck --alias FUCK)
 ```
 
-[Or in your shell config (Bash, Zsh, Fish, Powershell, tcsh).](https://github.com/nvbn/thefuck/wiki/Shell-aliases)
+[Or in your shell config (Bash, Zsh, Fish, Powershell, tcsh).](https://github.com/bernardcooke53/thefuck/wiki/Shell-aliases)
 
 Changes are only available in a new shell session. To make changes immediately
 available, run `source ~/.bashrc` (or your shell config file like `.zshrc`).
@@ -429,9 +429,9 @@ priority = 1000  # Lower first, default is 1000
 requires_output = True
 ```
 
-[More examples of rules](https://github.com/nvbn/thefuck/tree/master/thefuck/rules),
-[utility functions for rules](https://github.com/nvbn/thefuck/tree/master/thefuck/utils.py),
-[app/os-specific helpers](https://github.com/nvbn/thefuck/tree/master/thefuck/specific/).
+[More examples of rules](https://github.com/bernardcooke53/thefuck/tree/master/thefuck/rules),
+[utility functions for rules](https://github.com/bernardcooke53/thefuck/tree/master/thefuck/utils.py),
+[app/os-specific helpers](https://github.com/bernardcooke53/thefuck/tree/master/thefuck/specific/).
 
 ##### [Back to Contents](#contents)
 
@@ -554,13 +554,13 @@ Project License can be found [here](LICENSE.md).
 
 [version-badge]:   https://img.shields.io/pypi/v/thefuck.svg?label=version
 [version-link]:    https://pypi.python.org/pypi/thefuck/
-[workflow-badge]:  https://github.com/nvbn/thefuck/workflows/Tests/badge.svg
-[workflow-link]:   https://github.com/nvbn/thefuck/actions?query=workflow%3ATests
-[coverage-badge]:  https://img.shields.io/coveralls/nvbn/thefuck.svg
-[coverage-link]:   https://coveralls.io/github/nvbn/thefuck
+[workflow-badge]:  https://github.com/bernardcooke53/thefuck/workflows/Tests/badge.svg
+[workflow-link]:   https://github.com/bernardcooke53/thefuck/actions?query=workflow%3ATests
+[coverage-badge]:  https://img.shields.io/coveralls/bernardcooke53/thefuck.svg
+[coverage-link]:   https://coveralls.io/github/bernardcooke53/thefuck
 [license-badge]:   https://img.shields.io/badge/license-MIT-007EC7.svg
-[examples-link]:   https://raw.githubusercontent.com/nvbn/thefuck/master/example.gif
-[instant-mode-gif-link]:   https://raw.githubusercontent.com/nvbn/thefuck/master/example_instant_mode.gif
+[examples-link]:   https://raw.githubusercontent.com/bernardcooke53/thefuck/master/example.gif
+[instant-mode-gif-link]:   https://raw.githubusercontent.com/bernardcooke53/thefuck/master/example_instant_mode.gif
 [homebrew]:        https://brew.sh/
 
 ##### [Back to Contents](#contents)

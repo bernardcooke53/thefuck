@@ -1,7 +1,9 @@
 The MIT License (MIT)
 =====================
 
-Copyright (c) 2015-2022 Vladimir Iakovlev
+
+Copyright (c) 2026 Bernard Cooke
+Derivative from https://github.com/nvbn/thefuck copyright (c) 2015-2022 Vladimir Iakovlev
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
