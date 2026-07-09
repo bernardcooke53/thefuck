@@ -1,10 +1,12 @@
-from thefuck.utils import for_app, which
+import shutil
+from thefuck.utils import for_app
 
 
 @for_app("choco", "cinst")
 def match(command):
-    return ((command.script.startswith('choco install') or 'cinst' in command.script_parts)
-            and 'Installing the following packages' in command.output)
+    return (
+        command.script.startswith("choco install") or "cinst" in command.script_parts
+    ) and "Installing the following packages" in command.output
 
 
 def get_new_command(command):
@@ -13,13 +15,14 @@ def get_new_command(command):
         if (
             script_part not in ["choco", "cinst", "install"]
             # Need exact match (bc chocolatey is a package)
-            and not script_part.startswith('-')
+            and not script_part.startswith("-")
             # Leading hyphens are parameters; some packages contain them though
-            and '=' not in script_part and '/' not in script_part
+            and "=" not in script_part
+            and "/" not in script_part
             # These are certainly parameters
         ):
             return command.script.replace(script_part, script_part + ".install")
     return []
 
 
-enabled_by_default = bool(which("choco")) or bool(which("cinst"))
+enabled_by_default = bool(shutil.which("choco")) or bool(shutil.which("cinst"))

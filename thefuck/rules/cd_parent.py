@@ -9,8 +9,8 @@
 
 
 def match(command):
-    return command.script == 'cd..'
+    return command.script == "cd.."
 
 
 def get_new_command(command):
-    return 'cd ..'
+    return "cd .."

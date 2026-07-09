@@ -1,11 +1,10 @@
 from thefuck.utils import for_app
 
 
-@for_app('mvn')
+@for_app("mvn")
 def match(command):
-    return 'No goals have been specified for this build' in command.output
+    return "No goals have been specified for this build" in command.output
 
 
 def get_new_command(command):
-    return [command.script + ' clean package',
-            command.script + ' clean install']
+    return [command.script + " clean package", command.script + " clean install"]

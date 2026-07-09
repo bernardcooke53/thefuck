@@ -1,4 +1,4 @@
-""" Fixes wrong package names with pacman or yaourt.
+"""Fixes wrong package names with pacman or yaourt.
 
 For example the `llc` program is in package `llvm` so this:
     yay -S llc
@@ -11,10 +11,14 @@ from thefuck.specific.archlinux import get_pkgfile, archlinux_env
 
 
 def match(command):
-    return (command.script_parts
-            and (command.script_parts[0] in ('pacman', 'yay', 'pikaur', 'yaourt')
-                 or command.script_parts[0:2] == ['sudo', 'pacman'])
-            and 'error: target not found:' in command.output)
+    return (
+        command.script_parts
+        and (
+            command.script_parts[0] in ("pacman", "yay", "pikaur", "yaourt")
+            or command.script_parts[0:2] == ["sudo", "pacman"]
+        )
+        and "error: target not found:" in command.output
+    )
 
 
 def get_new_command(command):

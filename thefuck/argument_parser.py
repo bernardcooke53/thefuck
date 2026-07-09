@@ -11,57 +11,58 @@ class Parser(object):
     """
 
     def __init__(self):
-        self._parser = ArgumentParser(prog='thefuck', add_help=False)
+        self._parser = ArgumentParser(prog="thefuck", add_help=False)
         self._add_arguments()
 
     def _add_arguments(self):
         """Adds arguments to parser."""
         self._parser.add_argument(
-            '-v', '--version',
-            action='store_true',
-            help="show program's version number and exit")
+            "-v",
+            "--version",
+            action="store_true",
+            help="show program's version number and exit",
+        )
         self._parser.add_argument(
-            '-a', '--alias',
-            nargs='?',
+            "-a",
+            "--alias",
+            nargs="?",
             const=get_alias(),
-            help='[custom-alias-name] prints alias for current shell')
+            help="[custom-alias-name] prints alias for current shell",
+        )
         self._parser.add_argument(
-            '-l', '--shell-logger',
-            action='store',
-            help='log shell output to the file')
+            "-l", "--shell-logger", action="store", help="log shell output to the file"
+        )
         self._parser.add_argument(
-            '--enable-experimental-instant-mode',
-            action='store_true',
-            help='enable experimental instant mode, use on your own risk')
+            "--enable-experimental-instant-mode",
+            action="store_true",
+            help="enable experimental instant mode, use on your own risk",
+        )
         self._parser.add_argument(
-            '-h', '--help',
-            action='store_true',
-            help='show this help message and exit')
+            "-h", "--help", action="store_true", help="show this help message and exit"
+        )
         self._add_conflicting_arguments()
         self._parser.add_argument(
-            '-d', '--debug',
-            action='store_true',
-            help='enable debug output')
+            "-d", "--debug", action="store_true", help="enable debug output"
+        )
+        self._parser.add_argument("--force-command", action="store", help=SUPPRESS)
         self._parser.add_argument(
-            '--force-command',
-            action='store',
-            help=SUPPRESS)
-        self._parser.add_argument(
-            'command',
-            nargs='*',
-            help='command that should be fixed')
+            "command", nargs="*", help="command that should be fixed"
+        )
 
     def _add_conflicting_arguments(self):
         """It's too dangerous to use `-y` and `-r` together."""
         group = self._parser.add_mutually_exclusive_group()
         group.add_argument(
-            '-y', '--yes', '--yeah', '--hard',
-            action='store_true',
-            help='execute fixed command without confirmation')
+            "-y",
+            "--yes",
+            "--yeah",
+            "--hard",
+            action="store_true",
+            help="execute fixed command without confirmation",
+        )
         group.add_argument(
-            '-r', '--repeat',
-            action='store_true',
-            help='repeat on failure')
+            "-r", "--repeat", action="store_true", help="repeat on failure"
+        )
 
     def _prepare_arguments(self, argv):
         """Prepares arguments by:
@@ -75,9 +76,9 @@ class Parser(object):
         """
         if ARGUMENT_PLACEHOLDER in argv:
             index = argv.index(ARGUMENT_PLACEHOLDER)
-            return argv[index + 1:] + ['--'] + argv[:index]
-        elif argv and not argv[0].startswith('-') and argv[0] != '--':
-            return ['--'] + argv
+            return argv[index + 1 :] + ["--"] + argv[:index]
+        elif argv and not argv[0].startswith("-") and argv[0] != "--":
+            return ["--"] + argv
         else:
             return argv
 

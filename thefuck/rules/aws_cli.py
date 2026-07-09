@@ -6,7 +6,7 @@ INVALID_CHOICE = "(?<=Invalid choice: ')(.*)(?=', maybe you meant:)"
 OPTIONS = "^\\s*\\*\\s(.*)"
 
 
-@for_app('aws')
+@for_app("aws")
 def match(command):
     return "usage:" in command.output and "maybe you meant:" in command.output
 

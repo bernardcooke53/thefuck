@@ -6,13 +6,14 @@ Example:
  processing is explicitly requested
 
 """
+
 from thefuck.utils import for_app
 
 
-@for_app('javac')
+@for_app("javac")
 def match(command):
-    return not command.script.endswith('.java')
+    return not command.script.endswith(".java")
 
 
 def get_new_command(command):
-    return command.script + '.java'
+    return command.script + ".java"

@@ -5,8 +5,8 @@
 
 
 def match(command):
-    return '\'' in command.script and '\"' in command.script
+    return "'" in command.script and '"' in command.script
 
 
 def get_new_command(command):
-    return command.script.replace('\'', '\"')
+    return command.script.replace("'", '"')

@@ -1,14 +1,14 @@
 from thefuck.utils import for_app, memoize
-from thefuck.system import Path
+from pathlib import Path
 
 path_to_scm = {
-    '.git': 'git',
-    '.hg': 'hg',
+    ".git": "git",
+    ".hg": "hg",
 }
 
 wrong_scm_patterns = {
-    'git': 'fatal: Not a git repository',
-    'hg': 'abort: no repository found',
+    "git": "fatal: Not a git repository",
+    "hg": "abort: no repository found",
 }
 
 
@@ -29,4 +29,4 @@ def match(command):
 
 def get_new_command(command):
     scm = _get_actual_scm()
-    return u' '.join([scm] + command.script_parts[1:])
+    return " ".join([scm] + command.script_parts[1:])

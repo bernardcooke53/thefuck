@@ -1,6 +1,7 @@
+import shutil
 from types import ModuleType
 from thefuck.specific.apt import apt_available
-from thefuck.utils import memoize, which
+from thefuck.utils import memoize
 from thefuck.shells import shell
 
 try:
@@ -19,7 +20,7 @@ except ImportError:
 
 
 def _get_executable(command):
-    if command.script_parts[0] == 'sudo':
+    if command.script_parts[0] == "sudo":
         return command.script_parts[1]
     else:
         return command.script_parts[0]
@@ -36,9 +37,9 @@ def get_package(executable):
 
 
 def match(command):
-    if 'not found' in command.output or 'not installed' in command.output:
+    if "not found" in command.output or "not installed" in command.output:
         executable = _get_executable(command)
-        return not which(executable) and get_package(executable)
+        return not shutil.which(executable) and get_package(executable)
     else:
         return False
 
@@ -46,5 +47,5 @@ def match(command):
 def get_new_command(command):
     executable = _get_executable(command)
     name = get_package(executable)
-    formatme = shell.and_('sudo apt-get install {}', '{}')
+    formatme = shell.and_("sudo apt-get install {}", "{}")
     return formatme.format(name, command.script)

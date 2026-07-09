@@ -10,12 +10,12 @@
 
 
 def match(command):
-    if command.script_parts[0] == 'cs':
+    if command.script_parts[0] == "cs":
         return True
 
 
 def get_new_command(command):
-    return 'cd' + ''.join(command.script[2:])
+    return "cd" + "".join(command.script[2:])
 
 
 priority = 900

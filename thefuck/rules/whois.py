@@ -1,9 +1,9 @@
 # -*- encoding: utf-8 -*-
-from six.moves.urllib.parse import urlparse
+from urllib.parse import urlparse
 from thefuck.utils import for_app
 
 
-@for_app('whois', at_least=1)
+@for_app("whois", at_least=1)
 def match(command):
     """
     What the `whois` command returns depends on the 'Whois server' it contacted
@@ -27,8 +27,8 @@ def match(command):
 def get_new_command(command):
     url = command.script_parts[1]
 
-    if '/' in command.script:
-        return 'whois ' + urlparse(url).netloc
-    elif '.' in command.script:
-        path = urlparse(url).path.split('.')
-        return ['whois ' + '.'.join(path[n:]) for n in range(1, len(path))]
+    if "/" in command.script:
+        return "whois " + urlparse(url).netloc
+    elif "." in command.script:
+        path = urlparse(url).path.split(".")
+        return ["whois " + ".".join(path[n:]) for n in range(1, len(path))]

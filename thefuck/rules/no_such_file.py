@@ -24,7 +24,7 @@ def get_new_command(command):
 
         if file:
             file = file[0]
-            dir = file[0:file.rfind('/')]
+            dir = file[0 : file.rfind("/")]
 
-            formatme = shell.and_('mkdir -p {}', '{}')
+            formatme = shell.and_("mkdir -p {}", "{}")
             return formatme.format(dir, command.script)

@@ -6,7 +6,7 @@ INVALID_CHOICE = "(?=az)(?:.*): '(.*)' is not in the '.*' command group."
 OPTIONS = "^The most similar choice to '.*' is:\n\\s*(.*)$"
 
 
-@for_app('az')
+@for_app("az")
 def match(command):
     return "is not in the" in command.output and "command group" in command.output
 

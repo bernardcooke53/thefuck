@@ -6,30 +6,32 @@ enabled_by_default = npm_available
 
 
 def _get_wrong_command(script_parts):
-    commands = [part for part in script_parts[1:] if not part.startswith('-')]
+    commands = [part for part in script_parts[1:] if not part.startswith("-")]
     if commands:
         return commands[0]
 
 
 @sudo_support
-@for_app('npm')
+@for_app("npm")
 def match(command):
-    return (command.script_parts[0] == 'npm' and
-            'where <command> is one of:' in command.output and
-            _get_wrong_command(command.script_parts))
+    return (
+        command.script_parts[0] == "npm"
+        and "where <command> is one of:" in command.output
+        and _get_wrong_command(command.script_parts)
+    )
 
 
 @eager
 def _get_available_commands(stdout):
     commands_listing = False
-    for line in stdout.split('\n'):
-        if line.startswith('where <command> is one of:'):
+    for line in stdout.split("\n"):
+        if line.startswith("where <command> is one of:"):
             commands_listing = True
         elif commands_listing:
             if not line:
                 break
 
-            for command in line.split(', '):
+            for command in line.split(", "):
                 stripped = command.strip()
                 if stripped:
                     yield stripped

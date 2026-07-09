@@ -7,9 +7,9 @@ enabled_by_default = apt_available
 
 
 @sudo_support
-@for_app('apt', 'apt-get', 'apt-cache')
+@for_app("apt", "apt-get", "apt-cache")
 def match(command):
-    return 'E: Invalid operation' in command.output
+    return "E: Invalid operation" in command.output
 
 
 @eager
@@ -19,8 +19,9 @@ def _parse_apt_operations(help_text_lines):
         line = line.decode().strip()
         if is_commands_list and line:
             yield line.split()[0]
-        elif line.startswith('Basic commands:') \
-                or line.startswith('Most used commands:'):
+        elif line.startswith("Basic commands:") or line.startswith(
+            "Most used commands:"
+        ):
             is_commands_list = True
 
 
@@ -34,18 +35,17 @@ def _parse_apt_get_and_cache_operations(help_text_lines):
                 return
 
             yield line.split()[0]
-        elif line.startswith('Commands:') \
-                or line.startswith('Most used commands:'):
+        elif line.startswith("Commands:") or line.startswith("Most used commands:"):
             is_commands_list = True
 
 
 def _get_operations(app):
-    proc = subprocess.Popen([app, '--help'],
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE)
+    proc = subprocess.Popen(
+        [app, "--help"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
     lines = proc.stdout.readlines()
 
-    if app == 'apt':
+    if app == "apt":
         return _parse_apt_operations(lines)
     else:
         return _parse_apt_get_and_cache_operations(lines)
@@ -55,8 +55,8 @@ def _get_operations(app):
 def get_new_command(command):
     invalid_operation = command.output.split()[-1]
 
-    if invalid_operation == 'uninstall':
-        return [command.script.replace('uninstall', 'remove')]
+    if invalid_operation == "uninstall":
+        return [command.script.replace("uninstall", "remove")]
 
     else:
         operations = _get_operations(command.script_parts[0])

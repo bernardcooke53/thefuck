@@ -3,16 +3,16 @@ import re
 
 
 def _get_failed_lifecycle(command):
-    return re.search(r'\[ERROR\] Unknown lifecycle phase "(.+)"',
-                     command.output)
+    return re.search(r'\[ERROR\] Unknown lifecycle phase "(.+)"', command.output)
 
 
 def _getavailable_lifecycles(command):
     return re.search(
-        r'Available lifecycle phases are: (.+) -> \[Help 1\]', command.output)
+        r"Available lifecycle phases are: (.+) -> \[Help 1\]", command.output
+    )
 
 
-@for_app('mvn')
+@for_app("mvn")
 def match(command):
     failed_lifecycle = _get_failed_lifecycle(command)
     available_lifecycles = _getavailable_lifecycles(command)
@@ -24,7 +24,8 @@ def get_new_command(command):
     available_lifecycles = _getavailable_lifecycles(command)
     if available_lifecycles and failed_lifecycle:
         selected_lifecycle = get_close_matches(
-            failed_lifecycle.group(1), available_lifecycles.group(1).split(", "))
+            failed_lifecycle.group(1), available_lifecycles.group(1).split(", ")
+        )
         return replace_command(command, failed_lifecycle.group(1), selected_lifecycle)
     else:
         return []

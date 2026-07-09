@@ -6,10 +6,10 @@
 from thefuck.utils import for_app
 
 
-@for_app('python')
+@for_app("python")
 def match(command):
-    return not command.script.endswith('.py')
+    return not command.script.endswith(".py")
 
 
 def get_new_command(command):
-    return command.script + '.py'
+    return command.script + ".py"

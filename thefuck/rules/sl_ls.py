@@ -7,8 +7,8 @@ I often fuck up 'ls' and type 'sl'. No more!
 
 
 def match(command):
-    return command.script == 'sl'
+    return command.script == "sl"
 
 
 def get_new_command(command):
-    return 'ls'
+    return "ls"

@@ -5,7 +5,7 @@ MISTAKE = r'(?<=Terraform has no command named ")([^"]+)(?="\.)'
 FIX = r'(?<=Did you mean ")([^"]+)(?="\?)'
 
 
-@for_app('terraform')
+@for_app("terraform")
 def match(command):
     return re.search(MISTAKE, command.output) and re.search(FIX, command.output)
 

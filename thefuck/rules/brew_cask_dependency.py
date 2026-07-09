@@ -3,17 +3,16 @@ from thefuck.shells import shell
 from thefuck.specific.brew import brew_available
 
 
-@for_app('brew')
+@for_app("brew")
 def match(command):
-    return (u'install' in command.script_parts
-            and u'brew cask install' in command.output)
+    return "install" in command.script_parts and "brew cask install" in command.output
 
 
 @eager
 def _get_cask_install_lines(output):
-    for line in output.split('\n'):
+    for line in output.split("\n"):
         line = line.strip()
-        if line.startswith('brew cask install'):
+        if line.startswith("brew cask install"):
             yield line
 
 

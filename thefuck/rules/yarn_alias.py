@@ -2,9 +2,9 @@ import re
 from thefuck.utils import replace_argument, for_app
 
 
-@for_app('yarn', at_least=1)
+@for_app("yarn", at_least=1)
 def match(command):
-    return 'Did you mean' in command.output
+    return "Did you mean" in command.output
 
 
 def get_new_command(command):

@@ -4,38 +4,55 @@ from thefuck.utils import for_app
 from thefuck.shells import shell
 
 
-tar_extensions = ('.tar', '.tar.Z', '.tar.bz2', '.tar.gz', '.tar.lz',
-                  '.tar.lzma', '.tar.xz', '.taz', '.tb2', '.tbz', '.tbz2',
-                  '.tgz', '.tlz', '.txz', '.tz')
+tar_extensions = (
+    ".tar",
+    ".tar.Z",
+    ".tar.bz2",
+    ".tar.gz",
+    ".tar.lz",
+    ".tar.lzma",
+    ".tar.xz",
+    ".taz",
+    ".tb2",
+    ".tbz",
+    ".tbz2",
+    ".tgz",
+    ".tlz",
+    ".txz",
+    ".tz",
+)
 
 
 def _is_tar_extract(cmd):
-    if '--extract' in cmd:
+    if "--extract" in cmd:
         return True
 
     cmd = cmd.split()
 
-    return len(cmd) > 1 and 'x' in cmd[1]
+    return len(cmd) > 1 and "x" in cmd[1]
 
 
 def _tar_file(cmd):
     for c in cmd:
         for ext in tar_extensions:
             if c.endswith(ext):
-                return (c, c[0:len(c) - len(ext)])
+                return (c, c[0 : len(c) - len(ext)])
 
 
-@for_app('tar')
+@for_app("tar")
 def match(command):
-    return ('-C' not in command.script
-            and _is_tar_extract(command.script)
-            and _tar_file(command.script_parts) is not None)
+    return (
+        "-C" not in command.script
+        and _is_tar_extract(command.script)
+        and _tar_file(command.script_parts) is not None
+    )
 
 
 def get_new_command(command):
     dir = shell.quote(_tar_file(command.script_parts)[1])
-    return shell.and_('mkdir -p {dir}', '{cmd} -C {dir}') \
-        .format(dir=dir, cmd=command.script)
+    return shell.and_("mkdir -p {dir}", "{cmd} -C {dir}").format(
+        dir=dir, cmd=command.script
+    )
 
 
 def side_effect(old_cmd, command):

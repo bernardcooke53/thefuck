@@ -6,11 +6,10 @@ from thefuck.utils import for_app
 # error: go run: no go files listed
 
 
-@for_app('go')
+@for_app("go")
 def match(command):
-    return (command.script.startswith('go run ')
-            and not command.script.endswith('.go'))
+    return command.script.startswith("go run ") and not command.script.endswith(".go")
 
 
 def get_new_command(command):
-    return command.script + '.go'
+    return command.script + ".go"
