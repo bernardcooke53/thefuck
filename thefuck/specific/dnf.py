@@ -1,3 +1,3 @@
-from thefuck.utils import which
+import shutil
 
-dnf_available = bool(which('dnf'))
+dnf_available = bool(shutil.which("dnf"))

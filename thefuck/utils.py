@@ -3,8 +3,10 @@ import os
 import pickle
 import re
 import shelve
+import dbm
 import sys
-import six
+
+# TODO: maybe this dep can be removed
 from decorator import decorator
 from difflib import get_close_matches as difflib_get_close_matches
 from functools import wraps
@@ -12,14 +14,7 @@ from .logs import warn, exception
 from .conf import settings
 from .system import Path
 
-DEVNULL = open(os.devnull, 'w')
-
-if six.PY2:
-    import anydbm
-    shelve_open_error = anydbm.error
-else:
-    import dbm
-    shelve_open_error = dbm.error
+DEVNULL = open(os.devnull, "w")
 
 
 def memoize(fn):
@@ -45,31 +40,6 @@ def memoize(fn):
 memoize.disabled = False
 
 
-@memoize
-def which(program):
-    """Returns `program` path or `None`."""
-    try:
-        from shutil import which
-
-        return which(program)
-    except ImportError:
-        def is_exe(fpath):
-            return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
-
-        fpath, fname = os.path.split(program)
-        if fpath:
-            if is_exe(program):
-                return program
-        else:
-            for path in os.environ["PATH"].split(os.pathsep):
-                path = path.strip('"')
-                exe_file = os.path.join(path, program)
-                if is_exe(exe_file):
-                    return exe_file
-
-        return None
-
-
 def default_settings(params):
     """Adds default values to settings if it not presented.
 
@@ -80,10 +50,12 @@ def default_settings(params):
             print(settings.apt)
 
     """
+
     def _default_settings(fn, command):
         for k, w in params.items():
             settings.setdefault(k, w)
         return fn(command)
+
     return decorator(_default_settings)
 
 
@@ -119,29 +91,29 @@ def get_all_executables():
             return fallback
 
     tf_alias = get_alias()
-    tf_entry_points = ['thefuck', 'fuck']
+    tf_entry_points = ["thefuck", "fuck"]
 
-    bins = [exe.name.decode('utf8') if six.PY2 else exe.name
-            for path in os.environ.get('PATH', '').split(os.pathsep)
-            if include_path_in_search(path)
-            for exe in _safe(lambda: list(Path(path).iterdir()), [])
-            if not _safe(exe.is_dir, True)
-            and exe.name not in tf_entry_points]
-    aliases = [alias.decode('utf8') if six.PY2 else alias
-               for alias in shell.get_aliases() if alias != tf_alias]
+    bins = [
+        exe.name
+        for path in os.environ.get("PATH", "").split(os.pathsep)
+        if include_path_in_search(path)
+        for exe in _safe(lambda: list(Path(path).iterdir()), [])
+        if not _safe(exe.is_dir, True) and exe.name not in tf_entry_points
+    ]
+    aliases = [alias for alias in shell.get_aliases() if alias != tf_alias]
 
     return bins + aliases
 
 
 def replace_argument(script, from_, to):
     """Replaces command line argument."""
-    replaced_in_the_end = re.sub(u' {}$'.format(re.escape(from_)), u' {}'.format(to),
-                                 script, count=1)
+    replaced_in_the_end = re.sub(
+        " {}$".format(re.escape(from_)), " {}".format(to), script, count=1
+    )
     if replaced_in_the_end != script:
         return replaced_in_the_end
     else:
-        return script.replace(
-            u' {} '.format(from_), u' {} '.format(to), 1)
+        return script.replace(" {} ".format(from_), " {} ".format(to), 1)
 
 
 @decorator
@@ -150,11 +122,11 @@ def eager(fn, *args, **kwargs):
 
 
 @eager
-def get_all_matched_commands(stderr, separator='Did you mean'):
+def get_all_matched_commands(stderr, separator="Did you mean"):
     if not isinstance(separator, list):
         separator = [separator]
     should_yield = False
-    for line in stderr.split('\n'):
+    for line in stderr.split("\n"):
         for sep in separator:
             if sep in line:
                 should_yield = True
@@ -167,15 +139,17 @@ def get_all_matched_commands(stderr, separator='Did you mean'):
 def replace_command(command, broken, matched):
     """Helper for *_no_command rules."""
     new_cmds = get_close_matches(broken, matched, cutoff=0.1)
-    return [replace_argument(command.script, broken, new_cmd.strip())
-            for new_cmd in new_cmds]
+    return [
+        replace_argument(command.script, broken, new_cmd.strip())
+        for new_cmd in new_cmds
+    ]
 
 
 @memoize
 def is_app(command, *app_names, **kwargs):
     """Returns `True` if command is call to one of passed app names."""
 
-    at_least = kwargs.pop('at_least', 0)
+    at_least = kwargs.pop("at_least", 0)
     if kwargs:
         raise TypeError("got an unexpected keyword argument '{}'".format(kwargs.keys()))
 
@@ -187,6 +161,7 @@ def is_app(command, *app_names, **kwargs):
 
 def for_app(*app_names, **kwargs):
     """Specifies that matching script is for one of app names."""
+
     def _for_app(fn, command):
         if is_app(command, *app_names, **kwargs):
             return fn(command)
@@ -211,11 +186,11 @@ class Cache(object):
 
     def _setup_db(self):
         cache_dir = self._get_cache_dir()
-        cache_path = Path(cache_dir).joinpath('thefuck').as_posix()
+        cache_path = Path(cache_dir).joinpath("thefuck").as_posix()
 
         try:
             self._db = shelve.open(cache_path)
-        except shelve_open_error + (ImportError,):
+        except dbm.error + (ImportError,):
             # Caused when switching between Python versions
             warn("Removing possibly out-dated cache")
             os.remove(cache_path)
@@ -241,27 +216,27 @@ class Cache(object):
         try:
             return str(os.path.getmtime(path))
         except OSError:
-            return '0'
+            return "0"
 
     def _get_key(self, fn, depends_on, args, kwargs):
-        parts = (fn.__module__, repr(fn).split('at')[0],
-                 depends_on, args, kwargs)
+        parts = (fn.__module__, repr(fn).split("at")[0], depends_on, args, kwargs)
         return str(pickle.dumps(parts))
 
     def get_value(self, fn, depends_on, args, kwargs):
         if self._db is None:
             self._init_db()
 
-        depends_on = [Path(name).expanduser().absolute().as_posix()
-                      for name in depends_on]
+        depends_on = [
+            Path(name).expanduser().absolute().as_posix() for name in depends_on
+        ]
         key = self._get_key(fn, depends_on, args, kwargs)
-        etag = '.'.join(self._get_mtime(path) for path in depends_on)
+        etag = ".".join(self._get_mtime(path) for path in depends_on)
 
-        if self._db.get(key, {}).get('etag') == etag:
-            return self._db[key]['value']
+        if self._db.get(key, {}).get("etag") == etag:
+            return self._db[key]["value"]
         else:
             value = fn(*args, **kwargs)
-            self._db[key] = {'etag': etag, 'value': value}
+            self._db[key] = {"etag": etag, "value": value}
             return value
 
 
@@ -277,6 +252,7 @@ def cache(*depends_on):
     Only functions should be wrapped in `cache`, not methods.
 
     """
+
     def cache_decorator(fn):
         @memoize
         @wraps(fn)
@@ -298,15 +274,15 @@ def get_installation_version():
     try:
         from importlib.metadata import version
 
-        return version('thefuck')
+        return version("thefuck")
     except ImportError:
         import pkg_resources
 
-        return pkg_resources.require('thefuck')[0].version
+        return pkg_resources.require("thefuck")[0].version
 
 
 def get_alias():
-    return os.environ.get('TF_ALIAS', 'fuck')
+    return os.environ.get("TF_ALIAS", "fuck")
 
 
 @memoize
@@ -322,14 +298,18 @@ def get_valid_history_without_current(command):
             yield history[-1]
 
     from thefuck.shells import shell
+
     history = shell.get_history()
     tf_alias = get_alias()
-    executables = set(get_all_executables())\
-        .union(shell.get_builtin_commands())
+    executables = set(get_all_executables()).union(shell.get_builtin_commands())
 
-    return [line for line in _not_corrected(history, tf_alias)
-            if not line.startswith(tf_alias) and not line == command.script
-            and line.split(' ')[0] in executables]
+    return [
+        line
+        for line in _not_corrected(history, tf_alias)
+        if not line.startswith(tf_alias)
+        and not line == command.script
+        and line.split(" ")[0] in executables
+    ]
 
 
 def format_raw_script(raw_script):
@@ -339,9 +319,5 @@ def format_raw_script(raw_script):
     :rtype: basestring
 
     """
-    if six.PY2:
-        script = ' '.join(arg.decode('utf-8') for arg in raw_script)
-    else:
-        script = ' '.join(raw_script)
-
+    script = " ".join(raw_script)
     return script.lstrip()

@@ -14,13 +14,13 @@ def read_actions():
         key = get_key()
 
         # Handle arrows, j/k (qwerty), and n/e (colemak)
-        if key in (const.KEY_UP, const.KEY_CTRL_N, 'k', 'e'):
+        if key in (const.KEY_UP, const.KEY_CTRL_N, "k", "e"):
             yield const.ACTION_PREVIOUS
-        elif key in (const.KEY_DOWN, const.KEY_CTRL_P, 'j', 'n'):
+        elif key in (const.KEY_DOWN, const.KEY_CTRL_P, "j", "n"):
             yield const.ACTION_NEXT
-        elif key in (const.KEY_CTRL_C, 'q'):
+        elif key in (const.KEY_CTRL_C, "q"):
             yield const.ACTION_ABORT
-        elif key in ('\n', '\r'):
+        elif key in ("\n", "\r"):
             yield const.ACTION_SELECT
 
 
@@ -70,8 +70,7 @@ def select_command(corrected_commands):
     try:
         selector = CommandSelector(corrected_commands)
     except NoRuleMatched:
-        logs.failed('No fucks given' if get_alias() == 'fuck'
-                    else 'Nothing found')
+        logs.failed("No fucks given" if get_alias() == "fuck" else "Nothing found")
         return
 
     if not settings.require_confirmation:
@@ -82,10 +81,10 @@ def select_command(corrected_commands):
 
     for action in read_actions():
         if action == const.ACTION_SELECT:
-            sys.stderr.write('\n')
+            sys.stderr.write("\n")
             return selector.value
         elif action == const.ACTION_ABORT:
-            logs.failed('\nAborted')
+            logs.failed("\nAborted")
             return
         elif action == const.ACTION_PREVIOUS:
             selector.previous()

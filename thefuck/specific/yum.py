@@ -1,3 +1,3 @@
-from thefuck.utils import which
+import shutil
 
-yum_available = bool(which('yum'))
+yum_available = bool(shutil.which("yum"))

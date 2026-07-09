@@ -1,3 +1,3 @@
-from thefuck.utils import which
+import shutil
 
-apt_available = bool(which('apt-get'))
+apt_available = bool(shutil.which("apt-get"))

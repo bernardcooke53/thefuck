@@ -1,3 +1,3 @@
-from thefuck.utils import which
+import shutil
 
-nix_available = bool(which('nix'))
+nix_available = bool(shutil.which("nix"))
