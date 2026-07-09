@@ -2,6 +2,7 @@
 implement `from_shell`, `to_shell`, `app_alias`, `put_to_history` and
 `get_aliases` methods.
 """
+
 import os
 from psutil import Process
 from .bash import Bash
@@ -11,17 +12,19 @@ from .tcsh import Tcsh
 from .zsh import Zsh
 from .powershell import Powershell
 
-shells = {'bash': Bash,
-          'fish': Fish,
-          'zsh': Zsh,
-          'csh': Tcsh,
-          'tcsh': Tcsh,
-          'powershell': Powershell,
-          'pwsh': Powershell}
+shells = {
+    "bash": Bash,
+    "fish": Fish,
+    "zsh": Zsh,
+    "csh": Tcsh,
+    "tcsh": Tcsh,
+    "powershell": Powershell,
+    "pwsh": Powershell,
+}
 
 
 def _get_shell_from_env():
-    name = os.environ.get('TF_SHELL')
+    name = os.environ.get("TF_SHELL")
 
     if name in shells:
         return shells[name]()

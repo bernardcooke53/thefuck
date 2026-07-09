@@ -9,11 +9,11 @@ from .generic import Generic
 
 
 class Bash(Generic):
-    friendly_name = 'Bash'
+    friendly_name = "Bash"
 
     def app_alias(self, alias_name):
         # It is VERY important to have the variables declared WITHIN the function
-        return '''
+        return """
             function {name} () {{
                 TF_PYTHONIOENCODING=$PYTHONIOENCODING;
                 export TF_SHELL=bash;
@@ -28,65 +28,65 @@ class Bash(Generic):
                 export PYTHONIOENCODING=$TF_PYTHONIOENCODING;
                 {alter_history}
             }}
-        '''.format(
+        """.format(
             name=alias_name,
             argument_placeholder=ARGUMENT_PLACEHOLDER,
-            alter_history=('history -s $TF_CMD;'
-                           if settings.alter_history else ''))
+            alter_history=("history -s $TF_CMD;" if settings.alter_history else ""),
+        )
 
     def instant_mode_alias(self, alias_name):
-        if os.environ.get('THEFUCK_INSTANT_MODE', '').lower() == 'true':
-            mark = USER_COMMAND_MARK + '\b' * len(USER_COMMAND_MARK)
-            return '''
+        if os.environ.get("THEFUCK_INSTANT_MODE", "").lower() == "true":
+            mark = USER_COMMAND_MARK + "\b" * len(USER_COMMAND_MARK)
+            return """
                 export PS1="{user_command_mark}$PS1";
                 {app_alias}
-            '''.format(user_command_mark=mark,
-                       app_alias=self.app_alias(alias_name))
+            """.format(user_command_mark=mark, app_alias=self.app_alias(alias_name))
         else:
             log_path = os.path.join(
-                gettempdir(), 'thefuck-script-log-{}'.format(uuid4().hex))
-            return '''
+                gettempdir(), "thefuck-script-log-{}".format(uuid4().hex)
+            )
+            return """
                 export THEFUCK_INSTANT_MODE=True;
                 export THEFUCK_OUTPUT_LOG={log};
                 thefuck --shell-logger {log};
                 rm {log};
                 exit
-            '''.format(log=log_path)
+            """.format(log=log_path)
 
     def _parse_alias(self, alias):
-        name, value = alias.replace('alias ', '', 1).split('=', 1)
+        name, value = alias.replace("alias ", "", 1).split("=", 1)
         if value[0] == value[-1] == '"' or value[0] == value[-1] == "'":
             value = value[1:-1]
         return name, value
 
     @memoize
     def get_aliases(self):
-        raw_aliases = os.environ.get('TF_SHELL_ALIASES', '').split('\n')
-        return dict(self._parse_alias(alias)
-                    for alias in raw_aliases if alias and '=' in alias)
+        raw_aliases = os.environ.get("TF_SHELL_ALIASES", "").split("\n")
+        return dict(
+            self._parse_alias(alias) for alias in raw_aliases if alias and "=" in alias
+        )
 
     def _get_history_file_name(self):
-        return os.environ.get("HISTFILE",
-                              os.path.expanduser('~/.bash_history'))
+        return os.environ.get("HISTFILE", os.path.expanduser("~/.bash_history"))
 
     def _get_history_line(self, command_script):
-        return u'{}\n'.format(command_script)
+        return "{}\n".format(command_script)
 
     def how_to_configure(self):
-        if os.path.join(os.path.expanduser('~'), '.bashrc'):
-            config = '~/.bashrc'
-        elif os.path.join(os.path.expanduser('~'), '.bash_profile'):
-            config = '~/.bash_profile'
+        if os.path.join(os.path.expanduser("~"), ".bashrc"):
+            config = "~/.bashrc"
+        elif os.path.join(os.path.expanduser("~"), ".bash_profile"):
+            config = "~/.bash_profile"
         else:
-            config = 'bash config'
+            config = "bash config"
 
         return self._create_shell_configuration(
-            content=u'eval "$(thefuck --alias)"',
+            content='eval "$(thefuck --alias)"',
             path=config,
-            reload=u'source {}'.format(config))
+            reload="source {}".format(config),
+        )
 
     def _get_version(self):
         """Returns the version of the current shell"""
-        proc = Popen(['bash', '-c', 'echo $BASH_VERSION'],
-                     stdout=PIPE, stderr=DEVNULL)
-        return proc.stdout.read().decode('utf-8').strip()
+        proc = Popen(["bash", "-c", "echo $BASH_VERSION"], stdout=PIPE, stderr=DEVNULL)
+        return proc.stdout.read().decode("utf-8").strip()
