@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import re
 import shutil
-from subprocess import Popen, PIPE
-from thefuck.utils import memoize, eager
+from subprocess import PIPE, Popen
+
+from thefuck.utils import eager, memoize
 
 npm_available = bool(shutil.which("npm"))
 

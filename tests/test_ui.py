@@ -1,10 +1,11 @@
-# -*- encoding: utf-8 -*-
+from __future__ import annotations
+
+from itertools import islice
 
 import pytest
-from itertools import islice
-from thefuck import ui
+
+from thefuck import const, ui
 from thefuck.types import CorrectedCommand
-from thefuck import const
 
 
 @pytest.fixture
@@ -63,7 +64,7 @@ def test_command_selector():
 
 
 @pytest.mark.usefixtures("no_colors")
-class TestSelectCommand(object):
+class TestSelectCommand:
     @pytest.fixture
     def commands_with_side_effect(self):
         return [
@@ -129,7 +130,5 @@ class TestSelectCommand(object):
     def test_with_confirmation_select_second(self, capsys, patch_get_key, commands):
         patch_get_key([const.KEY_DOWN, "\n"])
         assert ui.select_command(iter(commands)) == commands[1]
-        stderr = (
-            "{mark}\x1b[1K\rls [enter/↑/↓/ctrl+c]{mark}\x1b[1K\rcd [enter/↑/↓/ctrl+c]\n"
-        ).format(mark=const.USER_COMMAND_MARK)
+        stderr = f"{const.USER_COMMAND_MARK}\x1b[1K\rls [enter/↑/↓/ctrl+c]{const.USER_COMMAND_MARK}\x1b[1K\rcd [enter/↑/↓/ctrl+c]\n"
         assert capsys.readouterr() == ("", stderr)

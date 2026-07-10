@@ -11,6 +11,8 @@ git clone https://github.com/nvbn/thefuck.git
 Author: Miguel Guthridge
 """
 
+from __future__ import annotations
+
 import shutil
 from urllib import parse
 

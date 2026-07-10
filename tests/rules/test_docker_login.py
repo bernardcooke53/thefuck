@@ -1,4 +1,6 @@
-from thefuck.rules.docker_login import match, get_new_command
+from __future__ import annotations
+
+from thefuck.rules.docker_login import get_new_command, match
 from thefuck.types import Command
 
 

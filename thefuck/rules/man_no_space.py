@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 def match(command):
     return (
         command.script.startswith("man")
@@ -6,7 +9,7 @@ def match(command):
 
 
 def get_new_command(command):
-    return "man {}".format(command.script[3:])
+    return f"man {command.script[3:]}"
 
 
 priority = 2000

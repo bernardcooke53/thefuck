@@ -1,10 +1,11 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 
 import pytest
+
 from thefuck.shells import Generic
 
 
-class TestGeneric(object):
+class TestGeneric:
     @pytest.fixture
     def shell(self):
         return Generic()

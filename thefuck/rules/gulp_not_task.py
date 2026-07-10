@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import re
 import subprocess
-from thefuck.utils import replace_command, for_app, cache
+
+from thefuck.utils import cache, for_app, replace_command
 
 
 @for_app("gulp")

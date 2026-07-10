@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import pytest
-from thefuck.rules.npm_wrong_command import match, get_new_command
+
+from thefuck.rules.npm_wrong_command import get_new_command, match
 from thefuck.types import Command
 
 output = """

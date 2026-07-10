@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import pytest
-from thefuck.rules.git_branch_delete_checked_out import match, get_new_command
+
+from thefuck.rules.git_branch_delete_checked_out import get_new_command, match
 from thefuck.types import Command
 
 

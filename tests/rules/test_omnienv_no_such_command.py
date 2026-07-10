@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 
 from thefuck.rules.omnienv_no_such_command import get_new_command, match
@@ -6,7 +8,7 @@ from thefuck.types import Command
 
 @pytest.fixture
 def output(pyenv_cmd):
-    return "pyenv: no such command `{}'".format(pyenv_cmd)
+    return f"pyenv: no such command `{pyenv_cmd}'"
 
 
 @pytest.fixture(autouse=True)
@@ -37,7 +39,7 @@ def test_match(script, pyenv_cmd, output):
 
 
 def test_match_goenv_output_quote():
-    """test goenv's specific output with quotes (')"""
+    """Test goenv's specific output with quotes (')"""
     assert match(Command("goenv list", output="goenv: no such command 'list'"))
 
 

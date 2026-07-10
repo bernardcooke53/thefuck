@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import pytest
-from thefuck.rules.django_south_ghost import match, get_new_command
+
+from thefuck.rules.django_south_ghost import get_new_command, match
 from thefuck.types import Command
 
 
@@ -24,7 +27,7 @@ def output():
     applied_all = check_migration_histories(applied_all, delete_ghosts, ignore_ghosts)
   File "/home/nvbn/work/.../app/lib/south/migration/__init__.py", line 88, in check_migration_histories
     raise exceptions.GhostMigrations(ghosts)
-south.exceptions.GhostMigrations: 
+south.exceptions.GhostMigrations:
 
  ! These migrations are in the database but not on disk:
     <app1: 0033_auto__...>

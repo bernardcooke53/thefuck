@@ -1,8 +1,9 @@
+from __future__ import annotations
+
+
 def _set_confirmation(proc, require):
     proc.sendline("mkdir -p ~/.thefuck")
-    proc.sendline(
-        'echo "require_confirmation = {}" > ~/.thefuck/settings.py'.format(require)
-    )
+    proc.sendline(f'echo "require_confirmation = {require}" > ~/.thefuck/settings.py')
 
 
 def with_confirmation(proc, TIMEOUT):

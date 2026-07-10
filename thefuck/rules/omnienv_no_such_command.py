@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import re
 import shutil
-from thefuck.utils import cache, for_app, replace_argument, replace_command
 from subprocess import PIPE, Popen
 
+from thefuck.utils import cache, for_app, replace_argument, replace_command
 
 supported_apps = "goenv", "nodenv", "pyenv", "rbenv"
 enabled_by_default = any(shutil.which(a) for a in supported_apps)

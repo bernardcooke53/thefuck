@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 patterns = [
     "permission denied",
     "eacces",
@@ -49,7 +51,6 @@ def get_new_command(command):
         return 'sudo sh -c "{}"'.format(
             " ".join([part for part in command.script_parts if part != "sudo"])
         )
-    elif ">" in command.script:
+    if ">" in command.script:
         return 'sudo sh -c "{}"'.format(command.script.replace('"', '\\"'))
-    else:
-        return "sudo {}".format(command.script)
+    return f"sudo {command.script}"

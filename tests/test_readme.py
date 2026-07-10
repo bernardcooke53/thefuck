@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 def test_readme(source_root):
     with source_root.joinpath("README.md").open() as f:
         readme = f.read()
@@ -6,6 +9,4 @@ def test_readme(source_root):
 
         for rule in bundled:
             if rule.stem != "__init__":
-                assert rule.stem in readme, 'Missing rule "{}" in README.md'.format(
-                    rule.stem
-                )
+                assert rule.stem in readme, f'Missing rule "{rule.stem}" in README.md'

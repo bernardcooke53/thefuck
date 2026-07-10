@@ -1,5 +1,6 @@
-# -*- encoding: utf-8 -*-
-from thefuck.utils import memoize, get_alias
+from __future__ import annotations
+
+from thefuck.utils import get_alias, memoize
 
 target_layout = """qwertyuiop[]asdfghjkl;'zxcvbnm,./QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>?"""
 # any new keyboard layout must be appended

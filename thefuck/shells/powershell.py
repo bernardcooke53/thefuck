@@ -1,6 +1,9 @@
-from subprocess import Popen, PIPE
-from ..utils import DEVNULL
+from __future__ import annotations
+
+from subprocess import PIPE, Popen
+
 from .generic import Generic, ShellConfiguration
+from ..utils import DEVNULL
 
 
 class Powershell(Generic):
@@ -22,7 +25,7 @@ class Powershell(Generic):
         )
 
     def and_(self, *commands):
-        return " -and ".join("({0})".format(c) for c in commands)
+        return " -and ".join(f"({c})" for c in commands)
 
     def how_to_configure(self):
         return ShellConfiguration(
@@ -42,6 +45,6 @@ class Powershell(Generic):
             )
             version = proc.stdout.read().decode("utf-8").rstrip().split("\n")
             return ".".join(version[-1].split())
-        except IOError:
+        except OSError:
             proc = Popen(["pwsh", "--version"], stdout=PIPE, stderr=DEVNULL)
             return proc.stdout.read().decode("utf-8").split()[-1]

@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import pytest
-from thefuck.rules.git_diff_staged import match, get_new_command
+
+from thefuck.rules.git_diff_staged import get_new_command, match
 from thefuck.types import Command
 
 

@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import pytest
+
+from thefuck.rules.git_bisect_usage import get_new_command, match
 from thefuck.types import Command
-from thefuck.rules.git_bisect_usage import match, get_new_command
 
 
 @pytest.fixture

@@ -1,12 +1,13 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 
 import pytest
+
 from thefuck.const import ARGUMENT_PLACEHOLDER
 from thefuck.shells import Fish
 
 
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
-class TestFish(object):
+class TestFish:
     @pytest.fixture
     def shell(self):
         return Fish()

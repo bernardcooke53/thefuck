@@ -1,8 +1,11 @@
-from io import BytesIO
-import pytest
-from thefuck.types import Command
-from thefuck.rules.dnf_no_such_command import match, get_new_command, _get_operations
+from __future__ import annotations
 
+from io import BytesIO
+
+import pytest
+
+from thefuck.rules.dnf_no_such_command import _get_operations, get_new_command, match
+from thefuck.types import Command
 
 help_text = b"""usage: dnf [options] COMMAND
 
@@ -176,9 +179,9 @@ dnf_operations = [
 
 
 def invalid_command(command):
-    return """No such command: %s. Please use /usr/bin/dnf --help
-It could be a DNF plugin command, try: "dnf install 'dnf-command(%s)'"
-""" % (command, command)
+    return f"""No such command: {command}. Please use /usr/bin/dnf --help
+It could be a DNF plugin command, try: "dnf install 'dnf-command({command})'"
+"""
 
 
 @pytest.mark.parametrize(

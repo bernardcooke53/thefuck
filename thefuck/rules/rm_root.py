@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from thefuck.specific.sudo import sudo_support
 
 enabled_by_default = False
@@ -15,4 +17,4 @@ def match(command):
 
 @sudo_support
 def get_new_command(command):
-    return "{} --no-preserve-root".format(command.script)
+    return f"{command.script} --no-preserve-root"

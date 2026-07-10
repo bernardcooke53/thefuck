@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import pytest
+
+from thefuck.rules.chmod_x import get_new_command, match
 from thefuck.types import Command
-from thefuck.rules.chmod_x import match, get_new_command
 
 
 @pytest.fixture

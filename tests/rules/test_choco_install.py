@@ -1,7 +1,9 @@
-import pytest
-from thefuck.rules.choco_install import match, get_new_command
-from thefuck.types import Command
+from __future__ import annotations
 
+import pytest
+
+from thefuck.rules.choco_install import get_new_command, match
+from thefuck.types import Command
 
 package_not_found_error = (
     "Chocolatey v0.10.15\n"

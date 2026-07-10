@@ -1,14 +1,17 @@
+from __future__ import annotations
+
 import pytest
-from thefuck.rules.git_rm_local_modifications import match, get_new_command
+
+from thefuck.rules.git_rm_local_modifications import get_new_command, match
 from thefuck.types import Command
 
 
 @pytest.fixture
 def output(target):
     return (
-        "error: the following file has local modifications:\n    {}\n(use "
+        f"error: the following file has local modifications:\n    {target}\n(use "
         "--cached to keep the file, or -f to force removal)"
-    ).format(target)
+    )
 
 
 @pytest.mark.parametrize(

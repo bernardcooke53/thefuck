@@ -1,14 +1,15 @@
+from __future__ import annotations
+
 from thefuck import utils
-from thefuck.utils import replace_argument
 from thefuck.specific.git import git_support
+from thefuck.utils import replace_argument
 
 
 @git_support
 def match(command):
     if command.script_parts and len(command.script_parts) > 1:
         return command.script_parts[1] == "stash" and "usage:" in command.output
-    else:
-        return False
+    return False
 
 
 # git's output here is too complicated to be parsed (see the test file)
@@ -22,7 +23,6 @@ def get_new_command(command):
 
     if fixed is not None:
         return replace_argument(command.script, stash_cmd, fixed)
-    else:
-        cmd = command.script_parts[:]
-        cmd.insert(2, "save")
-        return " ".join(cmd)
+    cmd = command.script_parts[:]
+    cmd.insert(2, "save")
+    return " ".join(cmd)

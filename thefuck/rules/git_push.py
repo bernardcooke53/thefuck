@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import re
-from thefuck.utils import replace_argument
+
 from thefuck.specific.git import git_support
+from thefuck.utils import replace_argument
 
 
 @git_support
@@ -13,10 +16,9 @@ def match(command):
 def _get_upstream_option_index(command_parts):
     if "--set-upstream" in command_parts:
         return command_parts.index("--set-upstream")
-    elif "-u" in command_parts:
+    if "-u" in command_parts:
         return command_parts.index("-u")
-    else:
-        return None
+    return None
 
 
 @git_support
@@ -46,6 +48,4 @@ def get_new_command(command):
     arguments = (
         re.findall(r"git push (.*)", command.output)[-1].replace("'", r"\'").strip()
     )
-    return replace_argument(
-        " ".join(command_parts), "push", "push {}".format(arguments)
-    )
+    return replace_argument(" ".join(command_parts), "push", f"push {arguments}")

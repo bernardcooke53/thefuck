@@ -1,11 +1,12 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 
 import pytest
+
 from thefuck.shells import Powershell
 
 
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
-class TestPowershell(object):
+class TestPowershell:
     @pytest.fixture
     def shell(self):
         return Powershell()

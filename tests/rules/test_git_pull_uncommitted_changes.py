@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import pytest
-from thefuck.rules.git_pull_uncommitted_changes import match, get_new_command
+
+from thefuck.rules.git_pull_uncommitted_changes import get_new_command, match
 from thefuck.types import Command
 
 

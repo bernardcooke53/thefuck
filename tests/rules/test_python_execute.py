@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import pytest
-from thefuck.rules.python_execute import match, get_new_command
+
+from thefuck.rules.python_execute import get_new_command, match
 from thefuck.types import Command
 
 

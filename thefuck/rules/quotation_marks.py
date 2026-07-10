@@ -2,6 +2,7 @@
 #
 # Example:
 # > git commit -m 'My Message"
+from __future__ import annotations
 
 
 def match(command):

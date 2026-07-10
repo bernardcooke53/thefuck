@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 import shutil
 import subprocess
 from itertools import dropwhile, islice, takewhile
 
 from thefuck.specific.sudo import sudo_support
 from thefuck.specific.yum import yum_available
-from thefuck.utils import for_app, replace_command, cache
+from thefuck.utils import cache, for_app, replace_command
 
 enabled_by_default = yum_available
 

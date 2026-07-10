@@ -1,9 +1,11 @@
-import re
+from __future__ import annotations
+
 import os
-from thefuck.utils import memoize, default_settings
+import re
+
 from thefuck.conf import settings
 from thefuck.shells import shell
-
+from thefuck.utils import default_settings, memoize
 
 # order is important: only the first match is considered
 patterns = (

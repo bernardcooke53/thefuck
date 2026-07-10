@@ -1,18 +1,23 @@
 # Initialize output before importing any module, that can use colorama.
+from __future__ import annotations
+
 from pathlib import Path
+
 from ..system import init_output
 
 init_output()
 
 import getpass  # noqa: E402
-import os  # noqa: E402
 import json  # noqa: E402
-from tempfile import gettempdir  # noqa: E402
+import os  # noqa: E402
 import time  # noqa: E402
+from tempfile import gettempdir  # noqa: E402
+
 from psutil import Process  # noqa: E402
-from .. import logs, const  # noqa: E402
-from ..shells import shell  # noqa: E402
+
+from .. import const, logs  # noqa: E402
 from ..conf import settings  # noqa: E402
+from ..shells import shell  # noqa: E402
 
 
 def _get_shell_pid():
@@ -28,9 +33,7 @@ def _get_shell_pid():
 def _get_not_configured_usage_tracker_path():
     """Returns path of special file where we store latest shell pid."""
     return Path(gettempdir()).joinpath(
-        "thefuck.last_not_configured_run_{}".format(
-            getpass.getuser(),
-        )
+        f"thefuck.last_not_configured_run_{getpass.getuser()}"
     )
 
 
@@ -48,8 +51,7 @@ def _get_previous_command():
 
     if history:
         return history[-1]
-    else:
-        return None
+    return None
 
 
 def _is_second_run():
@@ -91,7 +93,8 @@ def _configure(configuration_details):
 
 
 def main():
-    """Shows useful information about how-to configure alias on a first run
+    """
+    Shows useful information about how-to configure alias on a first run
     and configure automatically on a second.
 
     It'll be only visible when user type fuck and when alias isn't configured.
@@ -103,11 +106,10 @@ def main():
         if _is_already_configured(configuration_details):
             logs.already_configured(configuration_details)
             return
-        elif _is_second_run():
+        if _is_second_run():
             _configure(configuration_details)
             logs.configured_successfully(configuration_details)
             return
-        else:
-            _record_first_run()
+        _record_first_run()
 
     logs.how_to_configure_alias(configuration_details)

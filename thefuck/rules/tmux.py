@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import re
-from thefuck.utils import replace_command, for_app
+
+from thefuck.utils import for_app, replace_command
 
 
 @for_app("tmux")

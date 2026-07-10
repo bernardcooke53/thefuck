@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import re
+
 from thefuck.utils import for_app
 
 commands = ("ssh", "scp")
@@ -31,7 +34,7 @@ def side_effect(old_cmd, command):
     )
     offending = offending_pattern.findall(old_cmd.output)
     for filepath, lineno in offending:
-        with open(filepath, "r") as fh:
+        with open(filepath) as fh:
             lines = fh.readlines()
             del lines[int(lineno) - 1]
         with open(filepath, "w") as fh:

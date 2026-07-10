@@ -1,11 +1,12 @@
-# -*- encoding: utf-8 -*-
+from __future__ import annotations
 
 import sys
+
+from . import const, logs
 from .conf import settings
 from .exceptions import NoRuleMatched
 from .system import get_key
 from .utils import get_alias
-from . import logs, const
 
 
 def read_actions():
@@ -24,7 +25,7 @@ def read_actions():
             yield const.ACTION_SELECT
 
 
-class CommandSelector(object):
+class CommandSelector:
     """Helper for selecting rule from rules list."""
 
     def __init__(self, commands):
@@ -57,8 +58,8 @@ class CommandSelector(object):
 
 
 def select_command(corrected_commands):
-    """Returns:
-
+    """
+    Returns:
      - the first command when confirmation disabled;
      - None when ctrl+c pressed;
      - selected command.
@@ -71,7 +72,7 @@ def select_command(corrected_commands):
         selector = CommandSelector(corrected_commands)
     except NoRuleMatched:
         logs.failed("No fucks given" if get_alias() == "fuck" else "Nothing found")
-        return
+        return None
 
     if not settings.require_confirmation:
         logs.show_corrected_command(selector.value)
@@ -83,10 +84,10 @@ def select_command(corrected_commands):
         if action == const.ACTION_SELECT:
             sys.stderr.write("\n")
             return selector.value
-        elif action == const.ACTION_ABORT:
+        if action == const.ACTION_ABORT:
             logs.failed("\nAborted")
-            return
-        elif action == const.ACTION_PREVIOUS:
+            return None
+        if action == const.ACTION_PREVIOUS:
             selector.previous()
             logs.confirm_text(selector.value)
         elif action == const.ACTION_NEXT:

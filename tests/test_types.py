@@ -1,17 +1,20 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 
 import os
+from pathlib import Path
 from subprocess import PIPE, STDOUT
-from mock import Mock
+from unittest.mock import Mock
+
 import pytest
-from tests.utils import CorrectedCommand, Rule
+
 from thefuck import const
 from thefuck.exceptions import EmptyCommand
-from pathlib import Path
 from thefuck.types import Command
 
+from tests.utils import CorrectedCommand, Rule
 
-class TestCorrectedCommand(object):
+
+class TestCorrectedCommand:
     def test_equality(self):
         assert CorrectedCommand("ls", None, 100) == CorrectedCommand("ls", None, 200)
         assert CorrectedCommand("ls", None, 100) != CorrectedCommand(
@@ -57,7 +60,7 @@ class TestCorrectedCommand(object):
         assert out == printed
 
 
-class TestRule(object):
+class TestRule:
     def test_from_path_rule_exception(self, mocker):
         load_source = mocker.patch(
             "thefuck.types.load_source",
@@ -140,7 +143,7 @@ class TestRule(object):
         ]
 
 
-class TestCommand(object):
+class TestCommand:
     @pytest.fixture(autouse=True)
     def Popen(self, monkeypatch):
         Popen = Mock()

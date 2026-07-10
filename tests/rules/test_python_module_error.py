@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 
 from thefuck.rules.python_module_error import get_new_command, match
@@ -6,10 +8,10 @@ from thefuck.types import Command
 
 @pytest.fixture
 def module_error_output(filename, module_name):
-    return """Traceback (most recent call last):
-  File "{0}", line 1, in <module>
-    import {1}
-ModuleNotFoundError: No module named '{1}'""".format(filename, module_name)
+    return f"""Traceback (most recent call last):
+  File "{filename}", line 1, in <module>
+    import {module_name}
+ModuleNotFoundError: No module named '{module_name}'"""
 
 
 @pytest.mark.parametrize(

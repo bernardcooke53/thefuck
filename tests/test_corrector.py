@@ -1,11 +1,14 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
+
+from pathlib import Path
 
 import pytest
-from tests.utils import Rule, CorrectedCommand
-from thefuck import corrector, const
-from pathlib import Path
-from thefuck.types import Command
+
+from thefuck import const, corrector
 from thefuck.corrector import get_corrected_commands, organize_commands
+from thefuck.types import Command
+
+from tests.utils import CorrectedCommand, Rule
 
 
 @pytest.fixture
@@ -18,7 +21,7 @@ def glob(mocker):
     return lambda value: results.update({"value": value})
 
 
-class TestGetRules(object):
+class TestGetRules:
     @pytest.fixture(autouse=True)
     def load_source(self, monkeypatch):
         monkeypatch.setattr("thefuck.types.load_source", lambda x, _: Rule(x))

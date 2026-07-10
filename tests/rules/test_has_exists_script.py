@@ -1,5 +1,8 @@
-from mock import patch
-from thefuck.rules.has_exists_script import match, get_new_command
+from __future__ import annotations
+
+from unittest.mock import patch
+
+from thefuck.rules.has_exists_script import get_new_command, match
 from thefuck.types import Command
 
 

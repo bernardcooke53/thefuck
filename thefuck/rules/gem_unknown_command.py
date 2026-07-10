@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import re
-import subprocess
 import shutil
-from thefuck.utils import for_app, eager, replace_command, cache
+import subprocess
+
+from thefuck.utils import cache, eager, for_app, replace_command
 
 
 @for_app("gem")

@@ -1,4 +1,5 @@
-"""Fixes wrong package names with pacman or yaourt.
+"""
+Fixes wrong package names with pacman or yaourt.
 
 For example the `llc` program is in package `llvm` so this:
     yay -S llc
@@ -6,8 +7,10 @@ should be:
     yay -S llvm
 """
 
+from __future__ import annotations
+
+from thefuck.specific.archlinux import archlinux_env, get_pkgfile
 from thefuck.utils import replace_command
-from thefuck.specific.archlinux import get_pkgfile, archlinux_env
 
 
 def match(command):

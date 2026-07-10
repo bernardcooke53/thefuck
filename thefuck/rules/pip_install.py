@@ -1,5 +1,7 @@
-from thefuck.utils import for_app
+from __future__ import annotations
+
 from thefuck.specific.sudo import sudo_support
+from thefuck.utils import for_app
 
 
 @sudo_support

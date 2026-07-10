@@ -1,9 +1,13 @@
-import pytest
+from __future__ import annotations
+
 import json
 from io import StringIO
-from mock import MagicMock
-from thefuck.shells.generic import ShellConfiguration
+from unittest.mock import MagicMock
+
+import pytest
+
 from thefuck.entrypoints.not_configured import main
+from thefuck.shells.generic import ShellConfiguration
 
 
 @pytest.fixture(autouse=True)

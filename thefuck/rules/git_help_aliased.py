@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from thefuck.specific.git import git_support
 
 
@@ -9,4 +11,4 @@ def match(command):
 @git_support
 def get_new_command(command):
     aliased = command.output.split("`", 2)[2].split("'", 1)[0].split(" ", 1)[0]
-    return "git help {}".format(aliased)
+    return f"git help {aliased}"

@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import pytest
+
 from thefuck.specific.sudo import sudo_support
 from thefuck.types import Command
 

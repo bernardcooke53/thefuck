@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import os
 import re
+
+from thefuck.specific.brew import brew_available, get_brew_path_prefix
 from thefuck.utils import get_closest, replace_command
-from thefuck.specific.brew import get_brew_path_prefix, brew_available
 
 BREW_CMD_PATH = "/Homebrew/Library/Homebrew/cmd"
 TAP_PATH = "/Homebrew/Library/Taps"
@@ -20,8 +23,10 @@ def _get_brew_commands(brew_path_prefix):
 
 
 def _get_brew_tap_specific_commands(brew_path_prefix):
-    """To get tap's specific commands
-    https://github.com/Homebrew/homebrew/blob/master/Library/brew.rb#L115"""
+    """
+    To get tap's specific commands
+    https://github.com/Homebrew/homebrew/blob/master/Library/brew.rb#L115
+    """
     commands = []
     brew_taps_path = brew_path_prefix + TAP_PATH
 

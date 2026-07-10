@@ -1,7 +1,9 @@
-import pytest
-from thefuck.rules.yarn_alias import match, get_new_command
-from thefuck.types import Command
+from __future__ import annotations
 
+import pytest
+
+from thefuck.rules.yarn_alias import get_new_command, match
+from thefuck.types import Command
 
 output_remove = "error Did you mean `yarn remove`?"
 output_etl = 'error Command "etil" not found. Did you mean "etl"?'

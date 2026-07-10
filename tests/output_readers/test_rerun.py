@@ -1,14 +1,15 @@
-# -*- encoding: utf-8 -*-
+from __future__ import annotations
+
+import sys
+from unittest.mock import Mock, patch
 
 import pytest
-import sys
-from mock import Mock, patch
 from psutil import AccessDenied, TimeoutExpired
 
 from thefuck.output_readers import rerun
 
 
-class TestRerun(object):
+class TestRerun:
     def setup_method(self, test_method):
         self.patcher = patch("thefuck.output_readers.rerun.Process")
         process_mock = self.patcher.start()

@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import pytest
-from thefuck.rules.git_flag_after_filename import match, get_new_command
+
+from thefuck.rules.git_flag_after_filename import get_new_command, match
 from thefuck.types import Command
 
 command1 = Command("git log README.md -p", "fatal: bad flag '-p' used after filename")

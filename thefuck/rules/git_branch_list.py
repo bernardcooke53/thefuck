@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from thefuck.shells import shell
 from thefuck.specific.git import git_support
 
@@ -5,7 +7,7 @@ from thefuck.specific.git import git_support
 @git_support
 def match(command):
     # catches "git branch list" in place of "git branch"
-    return command.script_parts and command.script_parts[1:] == "branch list".split()
+    return command.script_parts and command.script_parts[1:] == ["branch", "list"]
 
 
 @git_support

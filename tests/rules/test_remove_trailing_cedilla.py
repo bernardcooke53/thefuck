@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import pytest
-from thefuck.rules.remove_trailing_cedilla import match, get_new_command, CEDILLA
+
+from thefuck.rules.remove_trailing_cedilla import CEDILLA, get_new_command, match
 from thefuck.types import Command
 
 

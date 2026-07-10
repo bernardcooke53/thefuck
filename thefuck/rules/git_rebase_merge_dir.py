@@ -1,5 +1,7 @@
-from thefuck.utils import get_close_matches
+from __future__ import annotations
+
 from thefuck.specific.git import git_support
+from thefuck.utils import get_close_matches
 
 
 @git_support

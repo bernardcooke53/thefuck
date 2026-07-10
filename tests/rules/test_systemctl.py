@@ -1,4 +1,6 @@
-from thefuck.rules.systemctl import match, get_new_command
+from __future__ import annotations
+
+from thefuck.rules.systemctl import get_new_command, match
 from thefuck.types import Command
 
 

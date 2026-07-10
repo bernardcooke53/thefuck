@@ -1,9 +1,11 @@
-# -*- encoding: utf-8 -*-
+from __future__ import annotations
 
 from io import BytesIO
+
 import pytest
+
+from thefuck.rules.yarn_command_not_found import get_new_command, match
 from thefuck.types import Command
-from thefuck.rules.yarn_command_not_found import match, get_new_command
 
 output = """
 error Command "{}" not found.
@@ -20,8 +22,8 @@ yarn_help_stdout = b"""
     --verbose                       output verbose messages on internal operations
     --offline                       trigger an error if any required dependencies are not available in local cache
     --prefer-offline                use network only if dependencies are not available in local cache
-    --strict-semver                 
-    --json                          
+    --strict-semver
+    --json
     --ignore-scripts                don't run lifecycle scripts
     --har                           save HAR output of network traffic
     --ignore-platform               ignore platform checks
@@ -30,18 +32,18 @@ yarn_help_stdout = b"""
     --force                         ignore all caches
     --no-bin-links                  don't generate bin links when setting up packages
     --flat                          only allow one version of a package
-    --prod, --production [prod]     
+    --prod, --production [prod]
     --no-lockfile                   don't read or generate a lockfile
     --pure-lockfile                 don't generate a lockfile
     --frozen-lockfile               don't generate a lockfile and fail if an update is needed
     --link-duplicates               create hardlinks to the repeated modules in node_modules
-    --global-folder <path>          
+    --global-folder <path>
     --modules-folder <path>         rather than installing modules into the node_modules folder relative to the cwd, output them here
     --cache-folder <path>           specify a custom folder to store the yarn cache
     --mutex <type>[:specifier]      use a mutex to ensure only one yarn instance is executing
     --no-emoji                      disable emoji in output
-    --proxy <host>                  
-    --https-proxy <host>            
+    --proxy <host>
+    --https-proxy <host>
     --no-progress                   disable progress bar
     --network-concurrency <number>  maximum number of concurrent network requests
 

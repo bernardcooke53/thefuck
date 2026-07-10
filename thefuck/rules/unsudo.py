@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 patterns = ["you cannot perform this operation as root"]
 
 

@@ -1,5 +1,3 @@
-# -*- encoding: utf-8 -*-
-
 # Redirects cs to cd when there is a typo
 # Due to the proximity of the keys - d and s - this seems like a common typo
 # ~ > cs /etc/
@@ -7,6 +5,7 @@
 # ~ > fuck
 # cd /etc/ [enter/↑/↓/ctrl+c]
 # /etc >
+from __future__ import annotations
 
 
 def match(command):

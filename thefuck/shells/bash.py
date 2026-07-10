@@ -1,11 +1,14 @@
+from __future__ import annotations
+
 import os
-from subprocess import Popen, PIPE
+from subprocess import PIPE, Popen
 from tempfile import gettempdir
 from uuid import uuid4
+
+from .generic import Generic
 from ..conf import settings
 from ..const import ARGUMENT_PLACEHOLDER, USER_COMMAND_MARK
 from ..utils import DEVNULL, memoize
-from .generic import Generic
 
 
 class Bash(Generic):
@@ -37,21 +40,18 @@ class Bash(Generic):
     def instant_mode_alias(self, alias_name):
         if os.environ.get("THEFUCK_INSTANT_MODE", "").lower() == "true":
             mark = USER_COMMAND_MARK + "\b" * len(USER_COMMAND_MARK)
-            return """
-                export PS1="{user_command_mark}$PS1";
-                {app_alias}
-            """.format(user_command_mark=mark, app_alias=self.app_alias(alias_name))
-        else:
-            log_path = os.path.join(
-                gettempdir(), "thefuck-script-log-{}".format(uuid4().hex)
-            )
-            return """
+            return f"""
+                export PS1="{mark}$PS1";
+                {self.app_alias(alias_name)}
+            """
+        log_path = os.path.join(gettempdir(), f"thefuck-script-log-{uuid4().hex}")
+        return f"""
                 export THEFUCK_INSTANT_MODE=True;
-                export THEFUCK_OUTPUT_LOG={log};
-                thefuck --shell-logger {log};
-                rm {log};
+                export THEFUCK_OUTPUT_LOG={log_path};
+                thefuck --shell-logger {log_path};
+                rm {log_path};
                 exit
-            """.format(log=log_path)
+            """
 
     def _parse_alias(self, alias):
         name, value = alias.replace("alias ", "", 1).split("=", 1)
@@ -70,7 +70,7 @@ class Bash(Generic):
         return os.environ.get("HISTFILE", os.path.expanduser("~/.bash_history"))
 
     def _get_history_line(self, command_script):
-        return "{}\n".format(command_script)
+        return f"{command_script}\n"
 
     def how_to_configure(self):
         if os.path.join(os.path.expanduser("~"), ".bashrc"):
@@ -83,7 +83,7 @@ class Bash(Generic):
         return self._create_shell_configuration(
             content='eval "$(thefuck --alias)"',
             path=config,
-            reload="source {}".format(config),
+            reload=f"source {config}",
         )
 
     def _get_version(self):

@@ -1,9 +1,12 @@
-from ..conf import settings
+from __future__ import annotations
+
 from . import read_log, rerun, shell_logger
+from ..conf import settings
 
 
 def get_output(script, expanded):
-    """Get output of the script.
+    """
+    Get output of the script.
 
     :param script: Console script.
     :type script: str
@@ -16,5 +19,4 @@ def get_output(script, expanded):
         return shell_logger.get_output(script)
     if settings.instant_mode:
         return read_log.get_output(script)
-    else:
-        return rerun.get_output(script, expanded)
+    return rerun.get_output(script, expanded)

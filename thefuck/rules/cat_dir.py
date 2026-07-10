@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import os
+
 from thefuck.utils import for_app
 
 

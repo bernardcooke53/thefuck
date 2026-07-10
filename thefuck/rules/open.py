@@ -5,6 +5,8 @@
 # The file ~/github.com does not exist.
 # Perhaps you meant 'http://github.com'?
 #
+from __future__ import annotations
+
 from thefuck.shells import shell
 from thefuck.utils import eager, for_app
 
@@ -26,9 +28,8 @@ def is_arg_url(command):
 
 @for_app("open", "xdg-open", "gnome-open", "kde-open")
 def match(command):
-    return (
-        is_arg_url(command)
-        or command.output.strip().startswith("The file ")
+    return is_arg_url(command) or (
+        command.output.strip().startswith("The file ")
         and command.output.strip().endswith(" does not exist.")
     )
 
@@ -41,4 +42,4 @@ def get_new_command(command):
     elif output.startswith("The file ") and output.endswith(" does not exist."):
         arg = command.script.split(" ", 1)[1]
         for option in ["touch", "mkdir"]:
-            yield shell.and_("{} {}".format(option, arg), command.script)
+            yield shell.and_(f"{option} {arg}", command.script)

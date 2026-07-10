@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 def match(command):
     return (
         "manage.py" in command.script
@@ -7,4 +10,4 @@ def match(command):
 
 
 def get_new_command(command):
-    return "{} --delete-ghost-migrations".format(command.script)
+    return f"{command.script} --delete-ghost-migrations"

@@ -1,9 +1,13 @@
+from __future__ import annotations
+
 import os
-import pytest
 import tarfile
+
+import pytest
+
 from thefuck.rules.dirty_untar import (
-    match,
     get_new_command,
+    match,
     side_effect,
     tar_extensions,
 )  # noqa: E126

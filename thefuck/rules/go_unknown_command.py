@@ -1,8 +1,10 @@
-import shutil
-from itertools import dropwhile, islice, takewhile
-import subprocess
+from __future__ import annotations
 
-from thefuck.utils import get_closest, replace_argument, for_app, cache
+import shutil
+import subprocess
+from itertools import dropwhile, islice, takewhile
+
+from thefuck.utils import cache, for_app, get_closest, replace_argument
 
 
 def get_golang_commands():

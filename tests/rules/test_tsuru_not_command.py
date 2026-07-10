@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import pytest
 
+from thefuck.rules.tsuru_not_command import get_new_command, match
 from thefuck.types import Command
-from thefuck.rules.tsuru_not_command import match, get_new_command
 
 
 @pytest.mark.parametrize(

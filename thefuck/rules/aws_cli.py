@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import re
 
 from thefuck.utils import for_app, replace_argument

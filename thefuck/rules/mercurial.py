@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import re
-from thefuck.utils import get_closest, for_app
+
+from thefuck.utils import for_app, get_closest
 
 
 def extract_possibilities(command):
@@ -17,9 +20,7 @@ def match(command):
     return (
         "hg: unknown command" in command.output
         and "(did you mean one of " in command.output
-        or "hg: command '" in command.output
-        and "' is ambiguous:" in command.output
-    )
+    ) or ("hg: command '" in command.output and "' is ambiguous:" in command.output)
 
 
 def get_new_command(command):

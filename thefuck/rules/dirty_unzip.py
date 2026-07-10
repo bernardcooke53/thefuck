@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import os
 import zipfile
-from thefuck.utils import for_app
+
 from thefuck.shells import shell
+from thefuck.utils import for_app
 
 
 def _is_bad_zip(file):
@@ -21,8 +24,7 @@ def _zip_file(command):
         if not c.startswith("-"):
             if c.endswith(".zip"):
                 return c
-            else:
-                return "{}.zip".format(c)
+            return f"{c}.zip"
 
 
 @for_app("unzip")
@@ -33,12 +35,11 @@ def match(command):
     zip_file = _zip_file(command)
     if zip_file:
         return _is_bad_zip(zip_file)
-    else:
-        return False
+    return False
 
 
 def get_new_command(command):
-    return "{} -d {}".format(command.script, shell.quote(_zip_file(command)[:-4]))
+    return f"{command.script} -d {shell.quote(_zip_file(command)[:-4])}"
 
 
 def side_effect(old_cmd, command):

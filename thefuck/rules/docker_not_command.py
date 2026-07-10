@@ -1,9 +1,12 @@
-from itertools import dropwhile, takewhile, islice
+from __future__ import annotations
+
 import re
-import subprocess
 import shutil
-from thefuck.utils import replace_command, for_app, cache
+import subprocess
+from itertools import dropwhile, islice, takewhile
+
 from thefuck.specific.sudo import sudo_support
+from thefuck.utils import cache, for_app, replace_command
 
 
 @sudo_support

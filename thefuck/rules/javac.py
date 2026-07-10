@@ -1,4 +1,5 @@
-"""Appends .java when compiling java files
+"""
+Appends .java when compiling java files
 
 Example:
  > javac foo
@@ -6,6 +7,8 @@ Example:
  processing is explicitly requested
 
 """
+
+from __future__ import annotations
 
 from thefuck.utils import for_app
 

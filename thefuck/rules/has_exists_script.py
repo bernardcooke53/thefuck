@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import os
+
 from thefuck.specific.sudo import sudo_support
 
 
@@ -13,4 +16,4 @@ def match(command):
 
 @sudo_support
 def get_new_command(command):
-    return "./{}".format(command.script)
+    return f"./{command.script}"

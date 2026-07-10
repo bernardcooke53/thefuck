@@ -1,6 +1,10 @@
-import pytest
+from __future__ import annotations
+
 from io import BytesIO
-from thefuck.rules.go_unknown_command import match, get_new_command
+
+import pytest
+
+from thefuck.rules.go_unknown_command import get_new_command, match
 from thefuck.types import Command
 
 

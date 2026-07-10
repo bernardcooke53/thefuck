@@ -2,6 +2,8 @@
 The confusion in systemctl's param order is massive.
 """
 
+from __future__ import annotations
+
 from thefuck.specific.sudo import sudo_support
 from thefuck.utils import for_app
 

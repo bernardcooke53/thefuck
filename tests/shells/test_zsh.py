@@ -1,12 +1,14 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 
 import os
+
 import pytest
+
 from thefuck.shells.zsh import Zsh
 
 
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
-class TestZsh(object):
+class TestZsh:
     @pytest.fixture
     def shell(self):
         return Zsh()

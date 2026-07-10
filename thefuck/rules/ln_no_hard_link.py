@@ -1,14 +1,18 @@
-# -*- coding: utf-8 -*-
-"""Suggest creating symbolic link if hard link is not allowed.
+"""
+Suggest creating symbolic link if hard link is not allowed.
 
 Example:
 > ln barDir barLink
 ln: ‘barDir’: hard link not allowed for directory
 
 --> ln -s barDir barLink
+
 """
 
+from __future__ import annotations
+
 import re
+
 from thefuck.specific.sudo import sudo_support
 
 

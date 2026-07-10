@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from thefuck.utils import (
     get_close_matches,
     get_closest,

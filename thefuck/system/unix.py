@@ -1,8 +1,12 @@
+from __future__ import annotations
+
 import shutil
 import sys
-import tty
 import termios
+import tty
+
 import colorama
+
 from .. import const
 
 init_output = colorama.init
@@ -23,14 +27,14 @@ def get_key():
 
     if ch in const.KEY_MAPPING:
         return const.KEY_MAPPING[ch]
-    elif ch == "\x1b":
+    if ch == "\x1b":
         next_ch = getch()
         if next_ch == "[":
             last_ch = getch()
 
             if last_ch == "A":
                 return const.KEY_UP
-            elif last_ch == "B":
+            if last_ch == "B":
                 return const.KEY_DOWN
 
     return ch

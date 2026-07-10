@@ -1,12 +1,14 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 
 import os
+
 import pytest
+
 from thefuck.shells import Bash
 
 
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
-class TestBash(object):
+class TestBash:
     @pytest.fixture
     def shell(self):
         return Bash()

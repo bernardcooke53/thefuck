@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import os
+
 from thefuck.specific.sudo import sudo_support
 
 

@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 import array
 import fcntl
-from functools import partial
 import mmap
 import os
 import pty
@@ -8,7 +9,9 @@ import signal
 import sys
 import termios
 import tty
-from .. import logs, const
+from functools import partial
+
+from .. import const, logs
 
 
 def _read(f, fd):
@@ -31,7 +34,8 @@ def _set_pty_size(master_fd):
 
 
 def _spawn(shell, master_read):
-    """Create a spawned process.
+    """
+    Create a spawned process.
 
     Modified version of pty.spawn with terminal size support.
 
@@ -62,7 +66,8 @@ def _spawn(shell, master_read):
 
 
 def shell_logger(output):
-    """Logs shell output to the `output`.
+    """
+    Logs shell output to the `output`.
 
     Works like unix script command with `-f` flag.
 

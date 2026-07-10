@@ -1,13 +1,17 @@
 """This file provide some utility functions for Arch Linux specific rules."""
 
-import subprocess
+from __future__ import annotations
+
 import shutil
+import subprocess
+
 from .. import utils
 
 
 @utils.memoize
 def get_pkgfile(command):
-    """Gets the packages that provide the given command using `pkgfile`.
+    """
+    Gets the packages that provide the given command using `pkgfile`.
 
     If the command is of the form `sudo foo`, searches for the `foo` command
     instead.
@@ -15,14 +19,13 @@ def get_pkgfile(command):
     try:
         command = command.strip()
 
-        if command.startswith("sudo "):
-            command = command[5:]
+        command = command.removeprefix("sudo ")
 
         command = command.split(" ")[0]
 
         packages = subprocess.check_output(
             ["pkgfile", "-b", "-v", command],
-            universal_newlines=True,
+            text=True,
             stderr=utils.DEVNULL,
         ).splitlines()
 
@@ -30,8 +33,7 @@ def get_pkgfile(command):
     except subprocess.CalledProcessError as err:
         if err.returncode == 1 and err.output == "":
             return []
-        else:
-            raise err
+        raise err
 
 
 def archlinux_env():

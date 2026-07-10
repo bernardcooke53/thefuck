@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from thefuck.specific.apt import apt_available
 from thefuck.specific.sudo import sudo_support
 from thefuck.utils import for_app

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from thefuck.shells import shell
 from thefuck.utils import for_app
 
@@ -16,8 +18,7 @@ def get_new_command(command):
     start_all_instances = shell.and_("vagrant up", command.script)
     if machine is None:
         return start_all_instances
-    else:
-        return [
-            shell.and_("vagrant up {}".format(machine), command.script),
-            start_all_instances,
-        ]
+    return [
+        shell.and_(f"vagrant up {machine}", command.script),
+        start_all_instances,
+    ]

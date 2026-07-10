@@ -1,5 +1,7 @@
-# -*- encoding: utf-8 -*-
+from __future__ import annotations
+
 from urllib.parse import urlparse
+
 from thefuck.utils import for_app
 
 
@@ -29,6 +31,6 @@ def get_new_command(command):
 
     if "/" in command.script:
         return "whois " + urlparse(url).netloc
-    elif "." in command.script:
+    if "." in command.script:
         path = urlparse(url).path.split(".")
         return ["whois " + ".".join(path[n:]) for n in range(1, len(path))]

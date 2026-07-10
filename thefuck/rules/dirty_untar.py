@@ -1,8 +1,10 @@
-import tarfile
-import os
-from thefuck.utils import for_app
-from thefuck.shells import shell
+from __future__ import annotations
 
+import os
+import tarfile
+
+from thefuck.shells import shell
+from thefuck.utils import for_app
 
 tar_extensions = (
     ".tar",

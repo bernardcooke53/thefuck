@@ -1,5 +1,8 @@
-from thefuck.utils import for_app, get_close_matches, replace_command
+from __future__ import annotations
+
 import re
+
+from thefuck.utils import for_app, get_close_matches, replace_command
 
 
 def _get_failed_lifecycle(command):
@@ -27,5 +30,4 @@ def get_new_command(command):
             failed_lifecycle.group(1), available_lifecycles.group(1).split(", ")
         )
         return replace_command(command, failed_lifecycle.group(1), selected_lifecycle)
-    else:
-        return []
+    return []

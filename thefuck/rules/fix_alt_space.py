@@ -1,6 +1,7 @@
-# -*- encoding: utf-8 -*-
+from __future__ import annotations
 
 import re
+
 from thefuck.specific.sudo import sudo_support
 
 

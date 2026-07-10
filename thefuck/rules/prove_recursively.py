@@ -1,11 +1,14 @@
+from __future__ import annotations
+
 import os
+
 from thefuck.utils import for_app
 
 
 def _is_recursive(part):
-    if part == "--recurse":
-        return True
-    elif not part.startswith("--") and part.startswith("-") and "r" in part:
+    if part == "--recurse" or (
+        not part.startswith("--") and part.startswith("-") and "r" in part
+    ):
         return True
 
 

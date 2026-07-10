@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import pytest
-from thefuck.rules.tmux import match, get_new_command
+
+from thefuck.rules.tmux import get_new_command, match
 from thefuck.types import Command
 
 

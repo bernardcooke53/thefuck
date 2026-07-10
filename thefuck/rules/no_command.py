@@ -1,11 +1,14 @@
+from __future__ import annotations
+
 import shutil
+
+from thefuck.specific.sudo import sudo_support
 from thefuck.utils import (
     get_all_executables,
     get_close_matches,
-    get_valid_history_without_current,
     get_closest,
+    get_valid_history_without_current,
 )
-from thefuck.specific.sudo import sudo_support
 
 
 @sudo_support

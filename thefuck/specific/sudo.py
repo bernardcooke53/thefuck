@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from decorator import decorator
 
 
@@ -10,8 +12,7 @@ def sudo_support(fn, command):
     result = fn(command.update(script=command.script[5:]))
 
     if result and isinstance(result, str):
-        return "sudo {}".format(result)
-    elif isinstance(result, list):
-        return ["sudo {}".format(x) for x in result]
-    else:
-        return result
+        return f"sudo {result}"
+    if isinstance(result, list):
+        return [f"sudo {x}" for x in result]
+    return result

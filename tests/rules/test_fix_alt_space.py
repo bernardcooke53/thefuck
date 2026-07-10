@@ -1,11 +1,12 @@
-# -*- encoding: utf-8 -*-
+from __future__ import annotations
 
-from thefuck.rules.fix_alt_space import match, get_new_command
+from thefuck.rules.fix_alt_space import get_new_command, match
 from thefuck.types import Command
 
 
 def test_match():
-    """The character before 'grep' is Alt+Space, which happens frequently
+    """
+    The character before 'grep' is Alt+Space, which happens frequently
     on the Mac when typing the pipe character (Alt+7), and holding the Alt
     key pressed for longer than necessary.
 

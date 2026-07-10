@@ -1,7 +1,11 @@
-import pytest
+from __future__ import annotations
+
 import os
 from io import StringIO
-from mock import Mock
+from unittest.mock import Mock
+
+import pytest
+
 from thefuck import const
 
 
@@ -17,7 +21,7 @@ def test_settings_defaults(load_source, settings):
         assert getattr(settings, key) == val
 
 
-class TestSettingsFromFile(object):
+class TestSettingsFromFile:
     def test_from_file(self, load_source, settings):
         load_source.return_value = Mock(
             rules=["test"],
@@ -48,7 +52,7 @@ class TestSettingsFromFile(object):
 
 
 @pytest.mark.usefixtures("load_source")
-class TestSettingsFromEnv(object):
+class TestSettingsFromEnv:
     def test_from_env(self, os_environ, settings):
         os_environ.update(
             {
@@ -89,7 +93,7 @@ def test_settings_from_args(settings):
     assert settings.repeat
 
 
-class TestInitializeSettingsFile(object):
+class TestInitializeSettingsFile:
     def test_ignore_if_exists(self, settings):
         settings_path_mock = Mock(is_file=Mock(return_value=True), open=Mock())
         settings.user_dir = Mock(joinpath=Mock(return_value=settings_path_mock))

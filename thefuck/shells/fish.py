@@ -1,12 +1,15 @@
-from subprocess import Popen, PIPE
-from time import time
+from __future__ import annotations
+
 import os
 import sys
+from subprocess import PIPE, Popen
+from time import time
+
+from .generic import Generic
 from .. import logs
 from ..conf import settings
 from ..const import ARGUMENT_PLACEHOLDER
 from ..utils import DEVNULL, cache
-from .generic import Generic
 
 
 @cache("~/.config/fish/config.fish", "~/.config/fish/functions")
@@ -59,15 +62,15 @@ class Fish(Generic):
             alter_history = ""
         # It is VERY important to have the variables declared WITHIN the alias
         return (
-            'function {0} -d "Correct your previous console command"\n'
+            f'function {alias_name} -d "Correct your previous console command"\n'
             "  set -l fucked_up_command $history[1]\n"
-            "  env TF_SHELL=fish TF_ALIAS={0} PYTHONIOENCODING=utf-8"
-            " thefuck $fucked_up_command {2} $argv | read -l unfucked_command\n"
+            f"  env TF_SHELL=fish TF_ALIAS={alias_name} PYTHONIOENCODING=utf-8"
+            f" thefuck $fucked_up_command {ARGUMENT_PLACEHOLDER} $argv | read -l unfucked_command\n"
             '  if [ "$unfucked_command" != "" ]\n'
-            "    eval $unfucked_command\n{1}"
+            f"    eval $unfucked_command\n{alter_history}"
             "  end\n"
             "end"
-        ).format(alias_name, alter_history, ARGUMENT_PLACEHOLDER)
+        )
 
     def get_aliases(self):
         overridden = self._get_overridden_aliases()
@@ -81,22 +84,20 @@ class Fish(Generic):
         binary = command_script.split(" ")[0]
         if binary in aliases and aliases[binary] != binary:
             return command_script.replace(binary, aliases[binary], 1)
-        elif binary in aliases:
+        if binary in aliases:
             return 'fish -ic "{}"'.format(command_script.replace('"', r"\""))
-        else:
-            return command_script
+        return command_script
 
     def _get_history_file_name(self):
         return os.path.expanduser("~/.config/fish/fish_history")
 
     def _get_history_line(self, command_script):
-        return "- cmd: {}\n   when: {}\n".format(command_script, int(time()))
+        return f"- cmd: {command_script}\n   when: {int(time())}\n"
 
     def _script_from_history(self, line):
         if "- cmd: " in line:
             return line.split("- cmd: ", 1)[1]
-        else:
-            return ""
+        return ""
 
     def and_(self, *commands):
         return "; and ".join(commands)
@@ -119,7 +120,7 @@ class Fish(Generic):
     def put_to_history(self, command):
         try:
             return self._put_to_history(command)
-        except IOError:
+        except OSError:
             logs.exception("Can't update history", sys.exc_info())
 
     def _put_to_history(self, command_script):

@@ -1,8 +1,11 @@
+from __future__ import annotations
+
 import os
-import pytest
-from thefuck import shells
-from thefuck import conf, const
 from pathlib import Path
+
+import pytest
+
+from thefuck import conf, const, shells
 
 shells.shell = shells.Generic()
 

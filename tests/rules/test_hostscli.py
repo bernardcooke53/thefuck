@@ -1,9 +1,12 @@
+from __future__ import annotations
+
 import pytest
-from thefuck.rules.hostscli import no_website, get_new_command, match
+
+from thefuck.rules.hostscli import get_new_command, match, no_website
 from thefuck.types import Command
 
-no_website_long = """
-{}:
+no_website_long = f"""
+{no_website}:
 
 No Domain list found for website: a_website_that_does_not_exist
 
@@ -11,7 +14,7 @@ Please raise a Issue here: https://github.com/dhilipsiva/hostscli/issues/new
 if you think we should add domains for this website.
 
 type `hostscli websites` to see a list of websites that you can block/unblock
-""".format(no_website)
+"""
 
 
 @pytest.mark.parametrize(

@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import pytest
+
 from thefuck.rules.cd_correction import match
 from thefuck.types import Command
 

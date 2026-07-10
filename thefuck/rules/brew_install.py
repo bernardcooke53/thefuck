@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import re
-from thefuck.utils import for_app
+
 from thefuck.specific.brew import brew_available
+from thefuck.utils import for_app
 
 enabled_by_default = brew_available
 

@@ -1,5 +1,6 @@
-import pytest
+from __future__ import annotations
 
+import pytest
 from pytest_docker_pexpect.docker import (
     run as pexpect_docker_run,
     stats as pexpect_docker_stats,

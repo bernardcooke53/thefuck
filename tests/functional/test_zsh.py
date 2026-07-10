@@ -1,14 +1,16 @@
+from __future__ import annotations
+
 import pytest
+
 from tests.functional.plots import (
-    with_confirmation,
-    without_confirmation,
-    refuse_with_confirmation,
     history_changed,
     history_not_changed,
-    select_command_with_arrows,
     how_to_configure,
+    refuse_with_confirmation,
+    select_command_with_arrows,
+    with_confirmation,
+    without_confirmation,
 )
-
 
 python_3 = ("thefuck/python3", "", "sh")
 python_2 = ("thefuck/python2", "", "sh")

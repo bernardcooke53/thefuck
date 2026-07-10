@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from thefuck.utils import for_app
 
 
@@ -7,4 +9,4 @@ def match(command):
 
 
 def get_new_command(command):
-    return "grep -r {}".format(command.script[5:])
+    return f"grep -r {command.script[5:]}"

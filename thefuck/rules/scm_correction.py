@@ -1,5 +1,8 @@
-from thefuck.utils import for_app, memoize
+from __future__ import annotations
+
 from pathlib import Path
+
+from thefuck.utils import for_app, memoize
 
 path_to_scm = {
     ".git": "git",

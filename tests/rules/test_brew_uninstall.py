@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import pytest
-from thefuck.types import Command
+
 from thefuck.rules.brew_uninstall import get_new_command, match
+from thefuck.types import Command
 
 
 @pytest.fixture
@@ -14,7 +17,7 @@ def output():
 
 @pytest.fixture
 def new_command(formula):
-    return "brew uninstall --force {}".format(formula)
+    return f"brew uninstall --force {formula}"
 
 
 @pytest.mark.parametrize(

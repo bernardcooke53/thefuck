@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import pytest
-from thefuck.rules.brew_install import match, get_new_command, _get_suggestions
+
+from thefuck.rules.brew_install import _get_suggestions, get_new_command, match
 from thefuck.types import Command
 
 

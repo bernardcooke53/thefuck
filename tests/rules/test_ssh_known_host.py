@@ -1,6 +1,10 @@
+from __future__ import annotations
+
 import os
+
 import pytest
-from thefuck.rules.ssh_known_hosts import match, get_new_command, side_effect
+
+from thefuck.rules.ssh_known_hosts import get_new_command, match, side_effect
 from thefuck.types import Command
 
 
@@ -18,7 +22,7 @@ def ssh_error(tmpdir):
             fh.writelines(lines)
 
     def known_hosts(path):
-        with open(path, "r") as fh:
+        with open(path) as fh:
             return fh.readlines()
 
     reset(path)

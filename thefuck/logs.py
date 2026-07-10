@@ -1,29 +1,26 @@
-# -*- encoding: utf-8 -*-
+from __future__ import annotations
 
+import sys
 from contextlib import contextmanager
 from datetime import datetime
-import sys
 from traceback import format_exception
+
 import colorama
-from .conf import settings
+
 from . import const
+from .conf import settings
 
 
 def color(color_):
     """Utility for ability to disabling colored output."""
     if settings.no_colors:
         return ""
-    else:
-        return color_
+    return color_
 
 
 def warn(title):
     sys.stderr.write(
-        "{warn}[WARN] {title}{reset}\n".format(
-            warn=color(colorama.Back.RED + colorama.Fore.WHITE + colorama.Style.BRIGHT),
-            reset=color(colorama.Style.RESET_ALL),
-            title=title,
-        )
+        f"{color(colorama.Back.RED + colorama.Fore.WHITE + colorama.Style.BRIGHT)}[WARN] {title}{color(colorama.Style.RESET_ALL)}\n"
     )
 
 
@@ -40,14 +37,12 @@ def exception(title, exc_info):
 
 
 def rule_failed(rule, exc_info):
-    exception("Rule {}".format(rule.name), exc_info)
+    exception(f"Rule {rule.name}", exc_info)
 
 
 def failed(msg):
     sys.stderr.write(
-        "{red}{msg}{reset}\n".format(
-            msg=msg, red=color(colorama.Fore.RED), reset=color(colorama.Style.RESET_ALL)
-        )
+        f"{color(colorama.Fore.RED)}{msg}{color(colorama.Style.RESET_ALL)}\n"
     )
 
 
@@ -86,12 +81,7 @@ def confirm_text(corrected_command):
 def debug(msg):
     if settings.debug:
         sys.stderr.write(
-            "{blue}{bold}DEBUG:{reset} {msg}\n".format(
-                msg=msg,
-                reset=color(colorama.Style.RESET_ALL),
-                blue=color(colorama.Fore.BLUE),
-                bold=color(colorama.Style.BRIGHT),
-            )
+            f"{color(colorama.Fore.BLUE)}{color(colorama.Style.BRIGHT)}DEBUG:{color(colorama.Style.RESET_ALL)} {msg}\n"
         )
 
 
@@ -101,14 +91,12 @@ def debug_time(msg):
     try:
         yield
     finally:
-        debug("{} took: {}".format(msg, datetime.now() - started))
+        debug(f"{msg} took: {datetime.now() - started}")
 
 
 def how_to_configure_alias(configuration_details):
     print(
-        "Seems like {bold}fuck{reset} alias isn't configured!".format(
-            bold=color(colorama.Style.BRIGHT), reset=color(colorama.Style.RESET_ALL)
-        )
+        f"Seems like {color(colorama.Style.BRIGHT)}fuck{color(colorama.Style.RESET_ALL)} alias isn't configured!"
     )
 
     if configuration_details:
@@ -124,11 +112,8 @@ def how_to_configure_alias(configuration_details):
 
         if configuration_details.can_configure_automatically:
             print(
-                "Or run {bold}fuck{reset} a second time to configure"
-                " it automatically.".format(
-                    bold=color(colorama.Style.BRIGHT),
-                    reset=color(colorama.Style.RESET_ALL),
-                )
+                f"Or run {color(colorama.Style.BRIGHT)}fuck{color(colorama.Style.RESET_ALL)} a second time to configure"
+                " it automatically."
             )
 
     print("More details - https://github.com/nvbn/thefuck#manual-installation")
@@ -136,31 +121,21 @@ def how_to_configure_alias(configuration_details):
 
 def already_configured(configuration_details):
     print(
-        "Seems like {bold}fuck{reset} alias already configured!\n"
-        "For applying changes run {bold}{reload}{reset}"
-        " or restart your shell.".format(
-            bold=color(colorama.Style.BRIGHT),
-            reset=color(colorama.Style.RESET_ALL),
-            reload=configuration_details.reload,
-        )
+        f"Seems like {color(colorama.Style.BRIGHT)}fuck{color(colorama.Style.RESET_ALL)} alias already configured!\n"
+        f"For applying changes run {color(colorama.Style.BRIGHT)}{configuration_details.reload}{color(colorama.Style.RESET_ALL)}"
+        " or restart your shell."
     )
 
 
 def configured_successfully(configuration_details):
     print(
-        "{bold}fuck{reset} alias configured successfully!\n"
-        "For applying changes run {bold}{reload}{reset}"
-        " or restart your shell.".format(
-            bold=color(colorama.Style.BRIGHT),
-            reset=color(colorama.Style.RESET_ALL),
-            reload=configuration_details.reload,
-        )
+        f"{color(colorama.Style.BRIGHT)}fuck{color(colorama.Style.RESET_ALL)} alias configured successfully!\n"
+        f"For applying changes run {color(colorama.Style.BRIGHT)}{configuration_details.reload}{color(colorama.Style.RESET_ALL)}"
+        " or restart your shell."
     )
 
 
 def version(thefuck_version, python_version, shell_info):
     sys.stderr.write(
-        "The Fuck {} using Python {} and {}\n".format(
-            thefuck_version, python_version, shell_info
-        )
+        f"The Fuck {thefuck_version} using Python {python_version} and {shell_info}\n"
     )

@@ -1,7 +1,11 @@
+from __future__ import annotations
+
+from unittest.mock import patch
+
 import pytest
-from mock import patch
+
 from thefuck.rules import pacman_not_found
-from thefuck.rules.pacman_not_found import match, get_new_command
+from thefuck.rules.pacman_not_found import get_new_command, match
 from thefuck.types import Command
 
 PKGFILE_OUTPUT_LLC = """extra/llvm 3.6.0-5      /usr/bin/llc

@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import pytest
+
 from thefuck.rules.git_remote_delete import get_new_command, match
 from thefuck.types import Command
 

@@ -1,12 +1,12 @@
-# -*- encoding: utf-8 -*-
+from __future__ import annotations
 
 
-class _GenConst(object):
+class _GenConst:
     def __init__(self, name):
         self._name = name
 
     def __repr__(self):
-        return "<const: {}>".format(self._name)
+        return f"<const: {self._name}>"
 
 
 KEY_UP = _GenConst("↑")

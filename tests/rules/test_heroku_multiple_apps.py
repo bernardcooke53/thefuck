@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 
 import pytest
-from thefuck.types import Command
-from thefuck.rules.heroku_multiple_apps import match, get_new_command
 
+from thefuck.rules.heroku_multiple_apps import get_new_command, match
+from thefuck.types import Command
 
 suggest_output = """
  ▸    Multiple apps in git remotes
@@ -38,7 +38,7 @@ Add-on:                postgresql-round-12345
 
 @pytest.mark.parametrize("cmd", ["pg"])
 def test_match(cmd):
-    assert match(Command("heroku {}".format(cmd), suggest_output))
+    assert match(Command(f"heroku {cmd}", suggest_output))
 
 
 @pytest.mark.parametrize("script, output", [("heroku pg", not_match_output)])
@@ -50,5 +50,5 @@ def test_not_match(script, output):
     "cmd, result", [("pg", ["heroku pg --app myapp", "heroku pg --app myapp-dev"])]
 )
 def test_get_new_command(cmd, result):
-    command = Command("heroku {}".format(cmd), suggest_output)
+    command = Command(f"heroku {cmd}", suggest_output)
     assert get_new_command(command) == result

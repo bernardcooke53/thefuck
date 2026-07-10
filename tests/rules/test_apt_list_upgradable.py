@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 
 import pytest
+
 from thefuck.rules.apt_list_upgradable import get_new_command, match
 from thefuck.types import Command
 

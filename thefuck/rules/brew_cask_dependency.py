@@ -1,6 +1,8 @@
-from thefuck.utils import for_app, eager
+from __future__ import annotations
+
 from thefuck.shells import shell
 from thefuck.specific.brew import brew_available
+from thefuck.utils import eager, for_app
 
 
 @for_app("brew")
@@ -20,8 +22,7 @@ def _get_script_for_brew_cask(output):
     cask_install_lines = _get_cask_install_lines(output)
     if len(cask_install_lines) > 1:
         return shell.and_(*cask_install_lines)
-    else:
-        return cask_install_lines[0]
+    return cask_install_lines[0]
 
 
 def get_new_command(command):

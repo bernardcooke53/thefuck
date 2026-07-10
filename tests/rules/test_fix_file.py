@@ -1,9 +1,11 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 
-import pytest
 import os
 from collections import namedtuple
-from thefuck.rules.fix_file import match, get_new_command
+
+import pytest
+
+from thefuck.rules.fix_file import get_new_command, match
 from thefuck.types import Command
 
 FixFileTest = namedtuple("FixFileTest", ["script", "file", "line", "col", "output"])
@@ -332,10 +334,12 @@ def test_get_new_command_with_settings(mocker, monkeypatch, test, settings):
     settings.fixcolcmd = "{editor} {file} +{line}:{col}"
 
     if test.col:
-        assert get_new_command(cmd) == "dummy_editor {} +{}:{} && {}".format(
-            test.file, test.line, test.col, test.script
+        assert (
+            get_new_command(cmd)
+            == f"dummy_editor {test.file} +{test.line}:{test.col} && {test.script}"
         )
     else:
-        assert get_new_command(cmd) == "dummy_editor {} +{} && {}".format(
-            test.file, test.line, test.script
+        assert (
+            get_new_command(cmd)
+            == f"dummy_editor {test.file} +{test.line} && {test.script}"
         )

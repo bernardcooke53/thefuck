@@ -1,5 +1,7 @@
-from thefuck.utils import eager, replace_argument
+from __future__ import annotations
+
 from thefuck.specific.git import git_support
+from thefuck.utils import eager, replace_argument
 
 
 @git_support
@@ -14,4 +16,4 @@ def match(command):
 @git_support
 def get_new_command(command):
     for opt in ("-a", "-p"):
-        yield replace_argument(command.script, "commit", "commit {}".format(opt))
+        yield replace_argument(command.script, "commit", f"commit {opt}")

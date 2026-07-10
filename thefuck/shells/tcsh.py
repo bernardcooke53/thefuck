@@ -1,8 +1,11 @@
-from subprocess import Popen, PIPE
-from time import time
+from __future__ import annotations
+
 import os
-from ..utils import DEVNULL, memoize
+from subprocess import PIPE, Popen
+from time import time
+
 from .generic import Generic
+from ..utils import DEVNULL, memoize
 
 
 class Tcsh(Generic):
@@ -10,10 +13,10 @@ class Tcsh(Generic):
 
     def app_alias(self, alias_name):
         return (
-            "alias {0} 'setenv TF_SHELL tcsh && setenv TF_ALIAS {0} && "
+            f"alias {alias_name} 'setenv TF_SHELL tcsh && setenv TF_ALIAS {alias_name} && "
             "set fucked_cmd=`history -h 2 | head -n 1` && "
-            "eval `thefuck ${{fucked_cmd}}`'"
-        ).format(alias_name)
+            "eval `thefuck ${fucked_cmd}`'"
+        )
 
     def _parse_alias(self, alias):
         name, value = alias.split("\t", 1)
@@ -32,7 +35,7 @@ class Tcsh(Generic):
         return os.environ.get("HISTFILE", os.path.expanduser("~/.history"))
 
     def _get_history_line(self, command_script):
-        return "#+{}\n{}\n".format(int(time()), command_script)
+        return f"#+{int(time())}\n{command_script}\n"
 
     def how_to_configure(self):
         return self._create_shell_configuration(

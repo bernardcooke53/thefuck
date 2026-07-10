@@ -1,9 +1,11 @@
-from collections import Counter
-import re
-from pathlib import Path
-from thefuck.utils import get_valid_history_without_current, memoize, replace_argument
-from thefuck.shells import shell
+from __future__ import annotations
 
+import re
+from collections import Counter
+from pathlib import Path
+
+from thefuck.shells import shell
+from thefuck.utils import get_valid_history_without_current, memoize, replace_argument
 
 patterns = [
     r"no such file or directory: (.*)$",
@@ -34,8 +36,7 @@ def _get_all_absolute_paths_from_history(command):
 
         for param in splitted[1:]:
             if param.startswith("/") or param.startswith("~"):
-                if param.endswith("/"):
-                    param = param[:-1]
+                param = param.removesuffix("/")
 
                 counter[param] += 1
 

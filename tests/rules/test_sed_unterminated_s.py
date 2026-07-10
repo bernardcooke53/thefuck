@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import pytest
-from thefuck.rules.sed_unterminated_s import match, get_new_command
+
+from thefuck.rules.sed_unterminated_s import get_new_command, match
 from thefuck.types import Command
 
 

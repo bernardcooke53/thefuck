@@ -6,6 +6,7 @@
 # Example:
 # > cd..
 # cd..: command not found
+from __future__ import annotations
 
 
 def match(command):

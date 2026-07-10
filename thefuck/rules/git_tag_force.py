@@ -1,5 +1,7 @@
-from thefuck.utils import replace_argument
+from __future__ import annotations
+
 from thefuck.specific.git import git_support
+from thefuck.utils import replace_argument
 
 
 @git_support

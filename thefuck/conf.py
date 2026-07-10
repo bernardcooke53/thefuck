@@ -1,10 +1,12 @@
-import os
-import sys
-from warnings import warn
-from . import const
-from pathlib import Path
+from __future__ import annotations
 
 import importlib.util
+import os
+import sys
+from pathlib import Path
+from warnings import warn
+
+from . import const
 
 
 def load_source(name, pathname, _file=None):
@@ -57,13 +59,10 @@ class Settings(dict):
         # For backward compatibility use legacy '~/.thefuck' if it exists:
         if legacy_user_dir.is_dir():
             warn(
-                "Config path {} is deprecated. Please move to {}".format(
-                    legacy_user_dir, user_dir
-                )
+                f"Config path {legacy_user_dir} is deprecated. Please move to {user_dir}"
             )
             return legacy_user_dir
-        else:
-            return user_dir
+        return user_dir
 
     def _setup_user_dir(self):
         """Returns user config dir, create it when it doesn't exist."""
@@ -106,16 +105,16 @@ class Settings(dict):
         val = os.environ[env]
         if attr in ("rules", "exclude_rules"):
             return self._rules_from_env(val)
-        elif attr == "priority":
+        if attr == "priority":
             return dict(self._priority_from_env(val))
-        elif attr in (
+        if attr in (
             "wait_command",
             "history_limit",
             "wait_slow_command",
             "num_close_matches",
         ):
             return int(val)
-        elif attr in (
+        if attr in (
             "require_confirmation",
             "no_colors",
             "debug",
@@ -123,10 +122,9 @@ class Settings(dict):
             "instant_mode",
         ):
             return val.lower() == "true"
-        elif attr in ("slow_commands", "excluded_search_path_prefixes"):
+        if attr in ("slow_commands", "excluded_search_path_prefixes"):
             return val.split(":")
-        else:
-            return val
+        return val
 
     def _settings_from_env(self):
         """Loads settings from env."""

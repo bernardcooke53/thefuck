@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import os
+
 from thefuck.shells import shell
 
 
@@ -12,4 +15,4 @@ def match(command):
 
 
 def get_new_command(command):
-    return shell.and_("chmod +x {}".format(command.script_parts[0][2:]), command.script)
+    return shell.and_(f"chmod +x {command.script_parts[0][2:]}", command.script)

@@ -1,19 +1,20 @@
-import io
+from __future__ import annotations
+
 import os
-from pathlib import Path
 import shlex
 from collections import namedtuple
+from pathlib import Path
+
+from ..conf import settings
 from ..logs import warn
 from ..utils import memoize
-from ..conf import settings
-
 
 ShellConfiguration = namedtuple(
     "ShellConfiguration", ("content", "path", "reload", "can_configure_automatically")
 )
 
 
-class Generic(object):
+class Generic:
     friendly_name = "Generic Shell"
 
     def get_aliases(self):
@@ -24,8 +25,7 @@ class Generic(object):
         binary = command_script.split(" ")[0]
         if binary in aliases:
             return command_script.replace(binary, aliases[binary], 1)
-        else:
-            return command_script
+        return command_script
 
     def from_shell(self, command_script):
         """Prepares command before running in app."""
@@ -37,8 +37,8 @@ class Generic(object):
 
     def app_alias(self, alias_name):
         return (
-            """alias {0}='eval "$(TF_ALIAS={0} PYTHONIOENCODING=utf-8 """
-            """thefuck "$(fc -ln -1)")"'""".format(alias_name)
+            f"""alias {alias_name}='eval "$(TF_ALIAS={alias_name} PYTHONIOENCODING=utf-8 """
+            """thefuck "$(fc -ln -1)")"'"""
         )
 
     def instant_mode_alias(self, alias_name):
@@ -59,8 +59,8 @@ class Generic(object):
         """Returns list of history entries."""
         history_file_name = self._get_history_file_name()
         if os.path.isfile(history_file_name):
-            with io.open(
-                history_file_name, "r", encoding="utf-8", errors="ignore"
+            with open(
+                history_file_name, encoding="utf-8", errors="ignore"
             ) as history_file:
                 lines = history_file.readlines()
                 if settings.history_limit:
@@ -110,7 +110,8 @@ class Generic(object):
         return line
 
     def put_to_history(self, command):
-        """Adds fixed command to shell history.
+        """
+        Adds fixed command to shell history.
 
         In most of shells we change history on shell-level, but not
         all shells support it (Fish).
@@ -187,9 +188,9 @@ class Generic(object):
         try:
             version = self._get_version()
         except Exception as e:
-            warn("Could not determine shell version: {}".format(e))
+            warn(f"Could not determine shell version: {e}")
             version = ""
-        return "{} {}".format(self.friendly_name, version).rstrip()
+        return f"{self.friendly_name} {version}".rstrip()
 
     def _create_shell_configuration(self, content, path, reload):
         return ShellConfiguration(

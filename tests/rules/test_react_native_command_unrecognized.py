@@ -1,6 +1,10 @@
-import pytest
+from __future__ import annotations
+
 from io import BytesIO
-from thefuck.rules.react_native_command_unrecognized import match, get_new_command
+
+import pytest
+
+from thefuck.rules.react_native_command_unrecognized import get_new_command, match
 from thefuck.types import Command
 
 output = "Unrecognized command '{}'".format

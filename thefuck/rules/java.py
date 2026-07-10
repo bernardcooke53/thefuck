@@ -1,10 +1,13 @@
-"""Fixes common java command mistake
+"""
+Fixes common java command mistake
 
 Example:
 > java foo.java
 Error: Could not find or load main class foo.java
 
 """
+
+from __future__ import annotations
 
 from thefuck.utils import for_app
 

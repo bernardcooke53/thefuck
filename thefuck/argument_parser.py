@@ -1,11 +1,15 @@
+from __future__ import annotations
+
 import sys
-from argparse import ArgumentParser, SUPPRESS
+from argparse import SUPPRESS, ArgumentParser
+
 from .const import ARGUMENT_PLACEHOLDER
 from .utils import get_alias
 
 
-class Parser(object):
-    """Argument parser that can handle arguments with our special
+class Parser:
+    """
+    Argument parser that can handle arguments with our special
     placeholder.
 
     """
@@ -65,7 +69,8 @@ class Parser(object):
         )
 
     def _prepare_arguments(self, argv):
-        """Prepares arguments by:
+        """
+        Prepares arguments by:
 
         - removing placeholder and moving arguments after it to beginning,
           we need this to distinguish arguments from `command` with ours;
@@ -77,10 +82,9 @@ class Parser(object):
         if ARGUMENT_PLACEHOLDER in argv:
             index = argv.index(ARGUMENT_PLACEHOLDER)
             return argv[index + 1 :] + ["--"] + argv[:index]
-        elif argv and not argv[0].startswith("-") and argv[0] != "--":
+        if argv and not argv[0].startswith("-") and argv[0] != "--":
             return ["--"] + argv
-        else:
-            return argv
+        return argv
 
     def parse(self, argv):
         arguments = self._prepare_arguments(argv[1:])

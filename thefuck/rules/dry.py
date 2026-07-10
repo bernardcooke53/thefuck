@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 def match(command):
     split_command = command.script_parts
 

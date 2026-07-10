@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import re
 from pathlib import Path
+
 from thefuck.shells import shell
 from thefuck.specific.git import git_support
 from thefuck.utils import memoize

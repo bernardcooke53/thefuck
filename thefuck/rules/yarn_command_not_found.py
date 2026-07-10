@@ -1,12 +1,15 @@
-import shutil
+from __future__ import annotations
+
 import re
-from subprocess import Popen, PIPE
+import shutil
+from subprocess import PIPE, Popen
+
 from thefuck.utils import (
-    for_app,
-    eager,
-    replace_command,
-    replace_argument,
     cache,
+    eager,
+    for_app,
+    replace_argument,
+    replace_command,
 )
 
 regex = re.compile(r'error Command "(.*)" not found.')
@@ -44,6 +47,5 @@ def get_new_command(command):
     if misspelled_task in npm_commands:
         yarn_command = npm_commands[misspelled_task]
         return replace_argument(command.script, misspelled_task, yarn_command)
-    else:
-        tasks = _get_all_tasks()
-        return replace_command(command, misspelled_task, tasks)
+    tasks = _get_all_tasks()
+    return replace_command(command, misspelled_task, tasks)

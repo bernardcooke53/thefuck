@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import pytest
+
 from thefuck.rules.ag_literal import get_new_command, match
 from thefuck.types import Command
 
@@ -23,4 +26,4 @@ def test_not_match(script):
 
 @pytest.mark.parametrize("script, new_cmd", [("ag \\(", "ag -Q \\(")])
 def test_get_new_command(script, new_cmd, output):
-    assert get_new_command((Command(script, output))) == new_cmd
+    assert get_new_command(Command(script, output)) == new_cmd

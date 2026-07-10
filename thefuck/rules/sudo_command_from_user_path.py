@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import re
 import shutil
+
 from thefuck.utils import for_app, replace_argument
 
 
@@ -19,5 +22,5 @@ def match(command):
 def get_new_command(command):
     command_name = _get_command_name(command)
     return replace_argument(
-        command.script, command_name, 'env "PATH=$PATH" {}'.format(command_name)
+        command.script, command_name, f'env "PATH=$PATH" {command_name}'
     )

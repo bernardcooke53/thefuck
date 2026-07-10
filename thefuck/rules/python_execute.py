@@ -3,6 +3,8 @@
 # Example:
 # > python foo
 # error: python: can't open file 'foo': [Errno 2] No such file or directory
+from __future__ import annotations
+
 from thefuck.utils import for_app
 
 

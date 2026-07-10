@@ -1,8 +1,11 @@
+from __future__ import annotations
+
 import re
 import shutil
-from subprocess import Popen, PIPE
-from thefuck.utils import memoize
+from subprocess import PIPE, Popen
+
 from thefuck.shells import shell
+from thefuck.utils import memoize
 
 enabled_by_default = bool(shutil.which("lsof"))
 
@@ -16,12 +19,11 @@ patterns = [
 
 @memoize
 def _get_pid_by_port(port):
-    proc = Popen(["lsof", "-i", ":{}".format(port)], stdout=PIPE)
+    proc = Popen(["lsof", "-i", f":{port}"], stdout=PIPE)
     lines = proc.stdout.read().decode().split("\n")
     if len(lines) > 1:
         return lines[1].split()[1]
-    else:
-        return None
+    return None
 
 
 @memoize
@@ -40,4 +42,4 @@ def match(command):
 def get_new_command(command):
     port = _get_used_port(command)
     pid = _get_pid_by_port(port)
-    return shell.and_("kill {}".format(pid), command.script)
+    return shell.and_(f"kill {pid}", command.script)

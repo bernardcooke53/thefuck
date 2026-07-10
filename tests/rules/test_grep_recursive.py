@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 
-from thefuck.rules.grep_recursive import match, get_new_command
+from thefuck.rules.grep_recursive import get_new_command, match
 from thefuck.types import Command
 
 

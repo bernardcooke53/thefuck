@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import pytest
-from thefuck.rules.mvn_unknown_lifecycle_phase import match, get_new_command
+
+from thefuck.rules.mvn_unknown_lifecycle_phase import get_new_command, match
 from thefuck.types import Command
 
 
@@ -22,11 +25,11 @@ def test_match(command):
         Command(
             "mvn clean",
             """
-[INFO] Scanning for projects...[INFO]                                                                         
+[INFO] Scanning for projects...[INFO]
 [INFO] ------------------------------------------------------------------------
 [INFO] Building test 0.2
 [INFO] ------------------------------------------------------------------------
-[INFO] 
+[INFO]
 [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ test ---
 [INFO] Deleting /home/mlk/code/test/target
 [INFO] ------------------------------------------------------------------------

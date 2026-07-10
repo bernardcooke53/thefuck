@@ -1,8 +1,12 @@
+from __future__ import annotations
+
 import json
 import os
 import socket
 from shutil import get_terminal_size
+
 import pyte
+
 from .. import const, logs
 
 
@@ -11,7 +15,8 @@ def _get_socket_path():
 
 
 def is_available():
-    """Returns `True` if shell logger socket available.
+    """
+    Returns `True` if shell logger socket available.
 
     :rtype: book
 
@@ -57,6 +62,5 @@ def get_output(script):
                 lines = _get_output_lines(command["output"])
                 output = "\n".join(lines).strip()
                 return output
-            else:
-                logs.warn("Output isn't available in shell logger")
-                return None
+            logs.warn("Output isn't available in shell logger")
+            return None

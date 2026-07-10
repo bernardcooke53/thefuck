@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import pytest
 
-from thefuck.rules.conda_mistype import match, get_new_command
+from thefuck.rules.conda_mistype import get_new_command, match
 from thefuck.types import Command
 
 

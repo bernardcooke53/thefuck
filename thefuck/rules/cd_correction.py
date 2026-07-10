@@ -1,8 +1,11 @@
 """Attempts to spellcheck and correct failed cd commands"""
 
+from __future__ import annotations
+
 import os
-from thefuck.specific.sudo import sudo_support
+
 from thefuck.rules import cd_mkdir
+from thefuck.specific.sudo import sudo_support
 from thefuck.utils import for_app, get_close_matches
 
 __author__ = "mmussomele"
@@ -51,7 +54,7 @@ def get_new_command(command):
     for directory in dest:
         if directory == ".":
             continue
-        elif directory == "..":
+        if directory == "..":
             cwd = os.path.split(cwd)[0]
             continue
         best_matches = get_close_matches(
@@ -61,4 +64,4 @@ def get_new_command(command):
             cwd = os.path.join(cwd, best_matches[0])
         else:
             return cd_mkdir.get_new_command(command)
-    return 'cd "{0}"'.format(cwd)
+    return f'cd "{cwd}"'

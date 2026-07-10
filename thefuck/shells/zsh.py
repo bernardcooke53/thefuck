@@ -1,12 +1,15 @@
-from time import time
+from __future__ import annotations
+
 import os
-from subprocess import Popen, PIPE
+from subprocess import PIPE, Popen
 from tempfile import gettempdir
+from time import time
 from uuid import uuid4
+
+from .generic import Generic
 from ..conf import settings
 from ..const import ARGUMENT_PLACEHOLDER, USER_COMMAND_MARK
 from ..utils import DEVNULL, memoize
-from .generic import Generic
 
 
 class Zsh(Generic):
@@ -44,21 +47,18 @@ class Zsh(Generic):
     def instant_mode_alias(self, alias_name):
         if os.environ.get("THEFUCK_INSTANT_MODE", "").lower() == "true":
             mark = "%{" + USER_COMMAND_MARK + "\b" * len(USER_COMMAND_MARK) + "%}"
-            return """
-                export PS1="{user_command_mark}$PS1";
-                {app_alias}
-            """.format(user_command_mark=mark, app_alias=self.app_alias(alias_name))
-        else:
-            log_path = os.path.join(
-                gettempdir(), "thefuck-script-log-{}".format(uuid4().hex)
-            )
-            return """
+            return f"""
+                export PS1="{mark}$PS1";
+                {self.app_alias(alias_name)}
+            """
+        log_path = os.path.join(gettempdir(), f"thefuck-script-log-{uuid4().hex}")
+        return f"""
                 export THEFUCK_INSTANT_MODE=True;
-                export THEFUCK_OUTPUT_LOG={log};
-                thefuck --shell-logger {log};
-                rm -f {log};
+                export THEFUCK_OUTPUT_LOG={log_path};
+                thefuck --shell-logger {log_path};
+                rm -f {log_path};
                 exit
-            """.format(log=log_path)
+            """
 
     def _parse_alias(self, alias):
         name, value = alias.split("=", 1)
@@ -77,13 +77,12 @@ class Zsh(Generic):
         return os.environ.get("HISTFILE", os.path.expanduser("~/.zsh_history"))
 
     def _get_history_line(self, command_script):
-        return ": {}:0;{}\n".format(int(time()), command_script)
+        return f": {int(time())}:0;{command_script}\n"
 
     def _script_from_history(self, line):
         if ";" in line:
             return line.split(";", 1)[1]
-        else:
-            return ""
+        return ""
 
     def how_to_configure(self):
         return self._create_shell_configuration(

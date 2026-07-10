@@ -1,5 +1,9 @@
-from mock import Mock
+from __future__ import annotations
+
+from unittest.mock import Mock
+
 import pytest
+
 from thefuck.entrypoints.alias import _get_alias, print_alias
 
 

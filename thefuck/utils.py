@@ -1,18 +1,21 @@
+from __future__ import annotations
+
 import atexit
+import dbm
 import os
 import pickle
 import re
 import shelve
-import dbm
 import sys
+from difflib import get_close_matches as difflib_get_close_matches
+from functools import wraps
 from pathlib import Path
 
 # TODO: maybe this dep can be removed
 from decorator import decorator
-from difflib import get_close_matches as difflib_get_close_matches
-from functools import wraps
-from .logs import warn, exception
+
 from .conf import settings
+from .logs import exception, warn
 
 DEVNULL = open(os.devnull, "w")
 
@@ -41,7 +44,8 @@ memoize.disabled = False
 
 
 def default_settings(params):
-    """Adds default values to settings if it not presented.
+    """
+    Adds default values to settings if it not presented.
 
     Usage:
 
@@ -107,13 +111,10 @@ def get_all_executables():
 
 def replace_argument(script, from_, to):
     """Replaces command line argument."""
-    replaced_in_the_end = re.sub(
-        " {}$".format(re.escape(from_)), " {}".format(to), script, count=1
-    )
+    replaced_in_the_end = re.sub(f" {re.escape(from_)}$", f" {to}", script, count=1)
     if replaced_in_the_end != script:
         return replaced_in_the_end
-    else:
-        return script.replace(" {} ".format(from_), " {} ".format(to), 1)
+    return script.replace(f" {from_} ", f" {to} ", 1)
 
 
 @decorator
@@ -148,10 +149,9 @@ def replace_command(command, broken, matched):
 @memoize
 def is_app(command, *app_names, **kwargs):
     """Returns `True` if command is call to one of passed app names."""
-
     at_least = kwargs.pop("at_least", 0)
     if kwargs:
-        raise TypeError("got an unexpected keyword argument '{}'".format(kwargs.keys()))
+        raise TypeError(f"got an unexpected keyword argument '{kwargs.keys()}'")
 
     if len(command.script_parts) > at_least:
         return os.path.basename(command.script_parts[0]) in app_names
@@ -165,13 +165,12 @@ def for_app(*app_names, **kwargs):
     def _for_app(fn, command):
         if is_app(command, *app_names, **kwargs):
             return fn(command)
-        else:
-            return False
+        return False
 
     return decorator(_for_app)
 
 
-class Cache(object):
+class Cache:
     """Lazy read cache and save changes at exit."""
 
     def __init__(self):
@@ -234,17 +233,17 @@ class Cache(object):
 
         if self._db.get(key, {}).get("etag") == etag:
             return self._db[key]["value"]
-        else:
-            value = fn(*args, **kwargs)
-            self._db[key] = {"etag": etag, "value": value}
-            return value
+        value = fn(*args, **kwargs)
+        self._db[key] = {"etag": etag, "value": value}
+        return value
 
 
 _cache = Cache()
 
 
 def cache(*depends_on):
-    """Caches function result in temporary file.
+    """
+    Caches function result in temporary file.
 
     Cache will be expired when modification date of files from `depends_on`
     will be changed.
@@ -259,8 +258,7 @@ def cache(*depends_on):
         def wrapper(*args, **kwargs):
             if cache.disabled:
                 return fn(*args, **kwargs)
-            else:
-                return _cache.get_value(fn, depends_on, args, kwargs)
+            return _cache.get_value(fn, depends_on, args, kwargs)
 
         return wrapper
 
@@ -313,7 +311,8 @@ def get_valid_history_without_current(command):
 
 
 def format_raw_script(raw_script):
-    """Creates single script from a list of script parts.
+    """
+    Creates single script from a list of script parts.
 
     :type raw_script: [basestring]
     :rtype: basestring

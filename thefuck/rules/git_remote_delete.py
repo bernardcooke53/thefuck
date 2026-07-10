@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import re
 
 from thefuck.specific.git import git_support

@@ -1,7 +1,9 @@
-import pytest
-from thefuck.rules.git_push_pull import match, get_new_command
-from thefuck.types import Command
+from __future__ import annotations
 
+import pytest
+
+from thefuck.rules.git_push_pull import get_new_command, match
+from thefuck.types import Command
 
 git_err = """
 To /tmp/foo

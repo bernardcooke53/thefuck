@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import pytest
-from thefuck.rules.open import is_arg_url, match, get_new_command
+
+from thefuck.rules.open import get_new_command, is_arg_url, match
 from thefuck.types import Command
 
 

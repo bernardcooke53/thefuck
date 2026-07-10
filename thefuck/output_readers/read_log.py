@@ -1,11 +1,15 @@
-import os
-import shlex
+from __future__ import annotations
+
 import mmap
+import os
 import re
+import shlex
 from shutil import get_terminal_size
+
 import pyte
-from ..exceptions import ScriptNotInLog
+
 from .. import const, logs
+from ..exceptions import ScriptNotInLog
 
 
 def _group_by_calls(log):
@@ -63,7 +67,8 @@ def _skip_old_lines(log_file):
 
 
 def get_output(script):
-    """Reads script output from log.
+    """
+    Reads script output from log.
 
     :type script: str
     :rtype: str | None
@@ -89,7 +94,7 @@ def get_output(script):
             _skip_old_lines(buffer)
             lines = _get_output_lines(script, buffer)
             output = "\n".join(lines).strip()
-            logs.debug("Received output: {}".format(output))
+            logs.debug(f"Received output: {output}")
             return output
     except OSError:
         logs.warn("Can't read output log")

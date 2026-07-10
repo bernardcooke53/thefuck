@@ -1,9 +1,12 @@
-import pytest
-from mock import patch
-from thefuck.rules import pacman
-from thefuck.rules.pacman import match, get_new_command
-from thefuck.types import Command
+from __future__ import annotations
 
+from unittest.mock import patch
+
+import pytest
+
+from thefuck.rules import pacman
+from thefuck.rules.pacman import get_new_command, match
+from thefuck.types import Command
 
 pacman_cmd = getattr(pacman, "pacman", "pacman")
 
@@ -84,11 +87,11 @@ vim_possibilities = [s.format(pacman_cmd) for s in vim_possibilities]
         (Command("sudo vim", ""), sudo_vim_possibilities),
         (
             Command("convert", ""),
-            ["{} -S extra/imagemagick && convert".format(pacman_cmd)],
+            [f"{pacman_cmd} -S extra/imagemagick && convert"],
         ),
         (
             Command("sudo convert", ""),
-            ["{} -S extra/imagemagick && sudo convert".format(pacman_cmd)],
+            [f"{pacman_cmd} -S extra/imagemagick && sudo convert"],
         ),
     ],
 )
@@ -103,17 +106,17 @@ def test_get_new_command(command, new_command, mocker):
         (Command("sudo vim", ""), sudo_vim_possibilities, PKGFILE_OUTPUT_VIM),
         (
             Command("convert", ""),
-            ["{} -S extra/imagemagick && convert".format(pacman_cmd)],
+            [f"{pacman_cmd} -S extra/imagemagick && convert"],
             PKGFILE_OUTPUT_CONVERT,
         ),
         (
             Command("sudo", ""),
-            ["{} -S core/sudo && sudo".format(pacman_cmd)],
+            [f"{pacman_cmd} -S core/sudo && sudo"],
             PKGFILE_OUTPUT_SUDO,
         ),
         (
             Command("sudo convert", ""),
-            ["{} -S extra/imagemagick && sudo convert".format(pacman_cmd)],
+            [f"{pacman_cmd} -S extra/imagemagick && sudo convert"],
             PKGFILE_OUTPUT_CONVERT,
         ),
     ],

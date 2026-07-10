@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import re
+
 from thefuck.utils import for_app
 
 MISTAKE = r'(?<=Terraform has no command named ")([^"]+)(?="\.)'

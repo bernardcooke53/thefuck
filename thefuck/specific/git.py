@@ -1,7 +1,11 @@
+from __future__ import annotations
+
 import re
+
 from decorator import decorator
-from ..utils import is_app
+
 from ..shells import shell
+from ..utils import is_app
 
 
 @decorator
@@ -27,7 +31,7 @@ def git_support(fn, command):
         expansion = " ".join(
             shell.quote(part) for part in shell.split_command(search.group(2))
         )
-        new_script = re.sub(r"\b{}\b".format(alias), expansion, command.script)
+        new_script = re.sub(rf"\b{alias}\b", expansion, command.script)
 
         command = command.update(script=new_script)
 

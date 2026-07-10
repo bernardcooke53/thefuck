@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import subprocess
+
 from thefuck.specific.apt import apt_available
 from thefuck.specific.sudo import sudo_support
-from thefuck.utils import for_app, eager, replace_command
+from thefuck.utils import eager, for_app, replace_command
 
 enabled_by_default = apt_available
 
@@ -47,8 +50,7 @@ def _get_operations(app):
 
     if app == "apt":
         return _parse_apt_operations(lines)
-    else:
-        return _parse_apt_get_and_cache_operations(lines)
+    return _parse_apt_get_and_cache_operations(lines)
 
 
 @sudo_support
@@ -58,6 +60,5 @@ def get_new_command(command):
     if invalid_operation == "uninstall":
         return [command.script.replace("uninstall", "remove")]
 
-    else:
-        operations = _get_operations(command.script_parts[0])
-        return replace_command(command, invalid_operation, operations)
+    operations = _get_operations(command.script_parts[0])
+    return replace_command(command, invalid_operation, operations)
