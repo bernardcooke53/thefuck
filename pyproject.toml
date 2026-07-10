@@ -27,4 +27,202 @@ thefuck = "thefuck.entrypoints.main:main"
 fuck = "thefuck.entrypoints.not_configured:main"
 
 [project.urls]
-source = "https://github.com/bernardcooke53/thefuck"
+Documentation = "https://github.com/bernardcooke53/thefuck#readme"
+Issues = "https://github.com/bernardcooke53/thefuck/issues"
+Source = "https://github.com/bernardcooke53/thefuck"
+
+[dependency-groups]
+dev = [
+    "tox",
+    "ruff",
+    "mypy",
+    "prek",
+    "coverage[toml]>=6.5",
+    "pytest",
+    "pytest-cov",
+    "pytest-clarity",
+    #"pytest-env",
+    "pytest-pretty",
+    #"pytest-mock",
+    "pyupgrade>=3.15.0",
+    "tox >= 4.4.6",
+    "bandit[toml]>=1.7.5",
+]
+
+[tool.pytest.ini_options]
+addopts = [
+    "-ra",
+    "--cache-clear",
+    "--cov=misprint",
+    "--cov-report",
+    "html:coverage-html",
+    "--cov-report",
+    "term",
+]
+python_files = ["tests/test_*.py", "tests/**/test_*.py"]
+
+[tool.bandit]
+targets = ["thefuck"]
+
+[tool.ruff.lint]
+task-tags = ["NOTE", "TODO", "FIXME", "XXX"]
+
+select = ["ALL"]
+# See https://docs.astral.sh/ruff/rules
+ignore = [
+    # attribute shadows builtin (e.g. Foo.list())
+    "A003",
+    # Annotations (flake8-annotations)
+    # no typing.Any
+    "ANN401",
+    # flake8-bugbear
+    # no functools.lru_cache
+    "B019",
+    # flake8-commas
+    "COM",
+    # Missing docstrings
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D105",
+    "D107",
+
+    # class docstrings must be preceded by a newline
+    "D203",
+    # one blank line between summary and description for docstrings
+    "D205",
+    # multiline summary should start on first line of docstring
+    "D212",
+    # first line should end with a period
+    "D400",
+    # "an imperative mood"
+    "D401",
+    # First word of docstring should be "This"
+    "D404",
+    "D415",
+    # flake8-datetimez
+    "DTZ",
+    # flake8-errmsg
+    "EM",
+    # don't compare types, use isinstance()
+    # sometimes using type(x) == y is deliberately chosen to exclude
+    # subclasses
+    "E721",
+    # flake8-fixme
+    "FIX",
+    # flake8-boolean-trap
+    "FBT",
+    # No implicit packages
+    "INP001",
+    # Errors should end with "Error"
+    "N818",
+    # flake8-pytest-style, values rowtype (list|tuple)
+    "PT007",
+    # pytest.raises must be alone in a with-block
+    "PT012",
+    # use only simple "import pytest"
+    "PT013",
+    # pylint
+    "PLR",
+    "PLE1507",
+    # flake8-use-pathlib
+    "PTH",
+    # flake8-raise
+    "RSE",
+    # ruff
+    # This seems to flag a load of false-positives, thinking that the # noqa's are
+    # unneeded and trying to fix them even though ruff then flags the errors that
+    # were previously ignored
+    "RUF100",
+    # flake8-todos
+    "TD002",
+    "TD003",
+    # tryceratops
+    "TRY003",
+    "TRY401",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Imported but unused
+"__init__.py" = ["F401"]
+
+"tests/**/*" = [
+    # magic values
+    "PLR2004",
+    # unused arguments - likely fixtures
+    "ARG001",
+    # "assert" used
+    "S101",
+    # Private member access
+    "SLF001",
+    # Annotations
+    "ANN",
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 15
+
+[tool.ruff.lint.flake8-implicit-str-concat]
+allow-multiline = true
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.flake8-type-checking]
+strict = true
+
+[tool.ruff.lint.flake8-pytest-style]
+fixture-parentheses = false
+mark-parentheses = false
+parametrize-names-type = "csv"
+
+[tool.ruff.lint.isort]
+required-imports = ["from __future__ import annotations"]
+combine-as-imports = true
+known-first-party = ["thefuck"]
+forced-separate = ["tests"]
+relative-imports-order = "closest-to-furthest"
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "tests",
+    "local-folder",
+]
+sections = { "tests" = ["tests"] }
+
+
+[tool.mypy]
+python_version = "3.10"
+mypy_path = "$MYPY_CONFIG_FILE_DIR/thefuck"
+show_column_numbers = true
+show_error_context = true
+pretty = true
+error_summary = true
+follow_imports = "normal"
+disallow_untyped_calls = true
+strict_optional = true
+warn_no_return = true
+warn_redundant_casts = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+check_untyped_defs = true
+cache_dir = "/dev/null"
+plugins = []
+
+
+[tool.coverage.run]
+source_pkgs = ["thefuck"]
+branch = true
+parallel = true
+omit = []
+
+[tool.coverage.paths]
+thefuck = ["thefuck"]
+tests = ["tests", "*/thefuck/tests"]
+
+[tool.coverage.report]
+exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
