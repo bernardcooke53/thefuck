@@ -2,7 +2,7 @@ import pytest
 from thefuck.rules.npm_wrong_command import match, get_new_command
 from thefuck.types import Command
 
-output = '''
+output = """
 Usage: npm <command>
 
 where <command> is one of:
@@ -29,30 +29,36 @@ or on the command line via: npm <command> --key value
 Config info can be viewed via: npm help config
 
 npm@2.14.7 /opt/node/lib/node_modules/npm
-'''
+"""
 
 
-@pytest.mark.parametrize('script', [
-    'npm urgrdae',
-    'npm urgrade -g',
-    'npm -f urgrade -g',
-    'npm urg'])
+@pytest.mark.parametrize(
+    "script", ["npm urgrdae", "npm urgrade -g", "npm -f urgrade -g", "npm urg"]
+)
 def test_match(script):
     assert match(Command(script, output))
 
 
-@pytest.mark.parametrize('script, output', [
-    ('npm urgrade', ''),
-    ('npm', output),
-    ('test urgrade', output),
-    ('npm -e', output)])
+@pytest.mark.parametrize(
+    "script, output",
+    [
+        ("npm urgrade", ""),
+        ("npm", output),
+        ("test urgrade", output),
+        ("npm -e", output),
+    ],
+)
 def test_not_match(script, output):
     assert not match(Command(script, output))
 
 
-@pytest.mark.parametrize('script, result', [
-    ('npm urgrade', 'npm upgrade'),
-    ('npm -g isntall gulp', 'npm -g install gulp'),
-    ('npm isntall -g gulp', 'npm install -g gulp')])
+@pytest.mark.parametrize(
+    "script, result",
+    [
+        ("npm urgrade", "npm upgrade"),
+        ("npm -g isntall gulp", "npm -g install gulp"),
+        ("npm isntall -g gulp", "npm install -g gulp"),
+    ],
+)
 def test_get_new_command(script, result):
     assert get_new_command(Command(script, output)) == result

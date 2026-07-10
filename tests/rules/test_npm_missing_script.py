@@ -3,7 +3,7 @@ from io import BytesIO
 from thefuck.types import Command
 from thefuck.rules.npm_missing_script import match, get_new_command
 
-output = '''
+output = """
 npm ERR! Linux 4.4.0-31-generic
 npm ERR! argv "/opt/node/bin/node" "/opt/node/bin/npm" "run" "dvelop"
 npm ERR! node v4.4.7
@@ -16,9 +16,9 @@ npm ERR!     <https://github.com/npm/npm/issues>
 
 npm ERR! Please include the following file with any support request:
 npm ERR!     /home/nvbn/exp/code_view/client_web/npm-debug.log
-'''.format
+""".format
 
-run_script_stdout = b'''
+run_script_stdout = b"""
 Lifecycle scripts included in code-view-web:
   test
     jest
@@ -31,38 +31,52 @@ available via `npm run-script`:
   watch-test
     jest --verbose --watch
 
-'''
+"""
 
 
 @pytest.fixture(autouse=True)
 def run_script(mocker):
-    patch = mocker.patch('thefuck.specific.npm.Popen')
+    patch = mocker.patch("thefuck.specific.npm.Popen")
     patch.return_value.stdout = BytesIO(run_script_stdout)
     return patch.return_value
 
 
-@pytest.mark.parametrize('command', [
-    Command('npm ru wach', output('wach')),
-    Command('npm run live-tes', output('live-tes')),
-    Command('npm run-script sahare', output('sahare'))])
+@pytest.mark.parametrize(
+    "command",
+    [
+        Command("npm ru wach", output("wach")),
+        Command("npm run live-tes", output("live-tes")),
+        Command("npm run-script sahare", output("sahare")),
+    ],
+)
 def test_match(command):
     assert match(command)
 
 
-@pytest.mark.parametrize('command', [
-    Command('npm wach', output('wach')),
-    Command('vim live-tes', output('live-tes')),
-    Command('npm run-script sahare', '')])
+@pytest.mark.parametrize(
+    "command",
+    [
+        Command("npm wach", output("wach")),
+        Command("vim live-tes", output("live-tes")),
+        Command("npm run-script sahare", ""),
+    ],
+)
 def test_not_match(command):
     assert not match(command)
 
 
-@pytest.mark.parametrize('script, output, result', [
-    ('npm ru wach-tests', output('wach-tests'), 'npm ru watch-test'),
-    ('npm -i run-script dvelop', output('dvelop'),
-     'npm -i run-script develop'),
-    ('npm -i run-script buld -X POST', output('buld'),
-     'npm -i run-script build -X POST')])
+@pytest.mark.parametrize(
+    "script, output, result",
+    [
+        ("npm ru wach-tests", output("wach-tests"), "npm ru watch-test"),
+        ("npm -i run-script dvelop", output("dvelop"), "npm -i run-script develop"),
+        (
+            "npm -i run-script buld -X POST",
+            output("buld"),
+            "npm -i run-script build -X POST",
+        ),
+    ],
+)
 def test_get_new_command(script, output, result):
     command = Command(script, output)
 

@@ -5,7 +5,7 @@ from thefuck.types import Command
 
 @pytest.fixture
 def output():
-    return '''Traceback (most recent call last):
+    return """Traceback (most recent call last):
   File "/home/nvbn/work/.../bin/python", line 42, in <module>
     exec(compile(__file__f.read(), __file__, "exec"))
   File "/home/nvbn/work/.../app/manage.py", line 34, in <module>
@@ -37,17 +37,19 @@ south.exceptions.GhostMigrations:
  ! I'm not trusting myself; either fix this yourself by fiddling
  ! with the south_migrationhistory table, or pass --delete-ghost-migrations
  ! to South to have it delete ALL of these records (this may not be good).
-'''  # noqa
+"""  # noqa
 
 
 def test_match(output):
-    assert match(Command('./manage.py migrate', output))
-    assert match(Command('python manage.py migrate', output))
-    assert not match(Command('./manage.py migrate', ''))
-    assert not match(Command('app migrate', output))
-    assert not match(Command('./manage.py test', output))
+    assert match(Command("./manage.py migrate", output))
+    assert match(Command("python manage.py migrate", output))
+    assert not match(Command("./manage.py migrate", ""))
+    assert not match(Command("app migrate", output))
+    assert not match(Command("./manage.py test", output))
 
 
 def test_get_new_command():
-    assert get_new_command(Command('./manage.py migrate auth', ''))\
-        == './manage.py migrate auth --delete-ghost-migrations'
+    assert (
+        get_new_command(Command("./manage.py migrate auth", ""))
+        == "./manage.py migrate auth --delete-ghost-migrations"
+    )

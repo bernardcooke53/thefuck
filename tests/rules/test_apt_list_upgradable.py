@@ -4,7 +4,7 @@ import pytest
 from thefuck.rules.apt_list_upgradable import get_new_command, match
 from thefuck.types import Command
 
-full_english_output = '''
+full_english_output = """
 Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
 Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
 Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
@@ -17,14 +17,14 @@ Reading package lists... Done
 Building dependency tree
 Reading state information... Done
 8 packages can be upgraded. Run 'apt list --upgradable' to see them.
-'''
+"""
 
 match_output = [
     full_english_output,
-    'Führen Sie »apt list --upgradable« aus, um sie anzuzeigen.'  # German
+    "Führen Sie »apt list --upgradable« aus, um sie anzuzeigen.",  # German
 ]
 
-no_match_output = '''
+no_match_output = """
 Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
 Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
 Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
@@ -52,33 +52,36 @@ Reading package lists... Done
 Building dependency tree
 Reading state information... Done
 All packages are up to date.
-'''
+"""
 
 
-@pytest.mark.parametrize('output', match_output)
+@pytest.mark.parametrize("output", match_output)
 def test_match(output):
-    assert match(Command('sudo apt update', output))
+    assert match(Command("sudo apt update", output))
 
 
-@pytest.mark.parametrize('command', [
-    Command('apt-cache search foo', ''),
-    Command('aptitude search foo', ''),
-    Command('apt search foo', ''),
-    Command('apt-get install foo', ''),
-    Command('apt-get source foo', ''),
-    Command('apt-get clean', ''),
-    Command('apt-get remove', ''),
-    Command('apt-get update', ''),
-    Command('sudo apt update', no_match_output)
-])
+@pytest.mark.parametrize(
+    "command",
+    [
+        Command("apt-cache search foo", ""),
+        Command("aptitude search foo", ""),
+        Command("apt search foo", ""),
+        Command("apt-get install foo", ""),
+        Command("apt-get source foo", ""),
+        Command("apt-get clean", ""),
+        Command("apt-get remove", ""),
+        Command("apt-get update", ""),
+        Command("sudo apt update", no_match_output),
+    ],
+)
 def test_not_match(command):
     assert not match(command)
 
 
-@pytest.mark.parametrize('output', match_output)
+@pytest.mark.parametrize("output", match_output)
 def test_get_new_command(output):
-    new_command = get_new_command(Command('sudo apt update', output))
-    assert new_command == 'sudo apt list --upgradable'
+    new_command = get_new_command(Command("sudo apt update", output))
+    assert new_command == "sudo apt list --upgradable"
 
-    new_command = get_new_command(Command('apt update', output))
-    assert new_command == 'apt list --upgradable'
+    new_command = get_new_command(Command("apt update", output))
+    assert new_command == "apt list --upgradable"

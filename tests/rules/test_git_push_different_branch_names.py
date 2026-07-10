@@ -22,18 +22,21 @@ def error_msg(localbranch, remotebranch):
 
 
 def test_match():
-    assert match(Command('git push', error_msg('foo', 'bar')))
+    assert match(Command("git push", error_msg("foo", "bar")))
 
 
-@pytest.mark.parametrize('command', [
-    Command('vim', ''),
-    Command('git status', error_msg('foo', 'bar')),
-    Command('git push', '')
-])
+@pytest.mark.parametrize(
+    "command",
+    [
+        Command("vim", ""),
+        Command("git status", error_msg("foo", "bar")),
+        Command("git push", ""),
+    ],
+)
 def test_not_match(command):
     assert not match(command)
 
 
 def test_get_new_command():
-    new_command = get_new_command(Command('git push', error_msg('foo', 'bar')))
-    assert new_command == 'git push origin HEAD:bar'
+    new_command = get_new_command(Command("git push", error_msg("foo", "bar")))
+    assert new_command == "git push origin HEAD:bar"

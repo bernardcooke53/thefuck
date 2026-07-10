@@ -5,7 +5,7 @@ from thefuck.rules.port_already_in_use import match, get_new_command
 from thefuck.types import Command
 
 outputs = [
-    '''
+    """
 
 DE 70% 1/1 build modulesevents.js:141
       throw er; // Unhandled 'error' event
@@ -20,8 +20,8 @@ Error: listen EADDRINUSE 127.0.0.1:8080
     at GetAddrInfoReqWrap.asyncCallback [as callback] (dns.js:64:16)
     at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:83:10)
 
-    ''',
-    '''
+    """,
+    """
 [6:40:01 AM] <START> Building Dependency Graph
 [6:40:01 AM] <START> Crawling File System
  ERROR  Packager can't listen on port 8080
@@ -36,8 +36,8 @@ You can either shut down the other process:
 
 or run packager on different port.
 
-    ''',
-    '''
+    """,
+    """
 Traceback (most recent call last):
   File "/usr/lib/python3.5/runpy.py", line 184, in _run_module_as_main
     "__main__", mod_spec)
@@ -58,35 +58,40 @@ Traceback (most recent call last):
 OSError: [Errno 98] error while attempting to bind on address ('0.0.0.0', 8080): address already in use
 Task was destroyed but it is pending!
 task: <Task pending coro=<RedisProtocol._reader_coroutine() running at /home/nvbn/.virtualenvs/code_view/lib/python3.5/site-packages/asyncio_redis/protocol.py:921> wait_for=<Future pending cb=[Task._wakeup()]>>
-    '''
+    """,
 ]
 
-lsof_stdout = b'''COMMAND   PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+lsof_stdout = b"""COMMAND   PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
 node    18233 nvbn   16u  IPv4 557134      0t0  TCP localhost:http-alt (LISTEN)
-'''
+"""
 
 
 @pytest.fixture(autouse=True)
 def lsof(mocker):
-    patch = mocker.patch('thefuck.rules.port_already_in_use.Popen')
+    patch = mocker.patch("thefuck.rules.port_already_in_use.Popen")
     patch.return_value.stdout = BytesIO(lsof_stdout)
     return patch
 
 
-@pytest.mark.usefixtures('no_memoize')
+@pytest.mark.usefixtures("no_memoize")
 @pytest.mark.parametrize(
-    'command',
-    [Command('./app', output) for output in outputs]
-    + [Command('./app', output) for output in outputs])
+    "command",
+    [Command("./app", output) for output in outputs]
+    + [Command("./app", output) for output in outputs],
+)
 def test_match(command):
     assert match(command)
 
 
-@pytest.mark.usefixtures('no_memoize')
-@pytest.mark.parametrize('command, lsof_output', [
-    (Command('./app', ''), lsof_stdout),
-    (Command('./app', outputs[1]), b''),
-    (Command('./app', outputs[2]), b'')])
+@pytest.mark.usefixtures("no_memoize")
+@pytest.mark.parametrize(
+    "command, lsof_output",
+    [
+        (Command("./app", ""), lsof_stdout),
+        (Command("./app", outputs[1]), b""),
+        (Command("./app", outputs[2]), b""),
+    ],
+)
 def test_not_match(lsof, command, lsof_output):
     lsof.return_value.stdout = BytesIO(lsof_output)
 
@@ -94,8 +99,9 @@ def test_not_match(lsof, command, lsof_output):
 
 
 @pytest.mark.parametrize(
-    'command',
-    [Command('./app', output) for output in outputs]
-    + [Command('./app', output) for output in outputs])
+    "command",
+    [Command("./app", output) for output in outputs]
+    + [Command("./app", output) for output in outputs],
+)
 def test_get_new_command(command):
-    assert get_new_command(command) == 'kill 18233 && ./app'
+    assert get_new_command(command) == "kill 18233 && ./app"

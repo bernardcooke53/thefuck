@@ -1,12 +1,14 @@
 import pytest
 
-from pytest_docker_pexpect.docker import run as pexpect_docker_run, \
-    stats as pexpect_docker_stats
+from pytest_docker_pexpect.docker import (
+    run as pexpect_docker_run,
+    stats as pexpect_docker_stats,
+)
 
 
 @pytest.fixture(autouse=True)
 def build_container_mock(mocker):
-    return mocker.patch('pytest_docker_pexpect.docker.build_container')
+    return mocker.patch("pytest_docker_pexpect.docker.build_container")
 
 
 def run_side_effect(*args, **kwargs):
@@ -17,4 +19,4 @@ def run_side_effect(*args, **kwargs):
 
 @pytest.fixture(autouse=True)
 def run_mock(mocker):
-    return mocker.patch('pytest_docker_pexpect.docker.run', side_effect=run_side_effect)
+    return mocker.patch("pytest_docker_pexpect.docker.run", side_effect=run_side_effect)

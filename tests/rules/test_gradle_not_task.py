@@ -3,7 +3,7 @@ from io import BytesIO
 from thefuck.rules.gradle_no_task import match, get_new_command
 from thefuck.types import Command
 
-gradle_tasks = b'''
+gradle_tasks = b"""
 :tasks
 
 ------------------------------------------------------------
@@ -95,9 +95,9 @@ To see more detail about a task, run gradlew help --task <task>
 BUILD SUCCESSFUL
 
 Total time: 1.936 secs
-'''
+"""
 
-output_not_found = '''
+output_not_found = """
 
 FAILURE: Build failed with an exception.
 
@@ -106,9 +106,9 @@ Task '{}' not found in root project 'org.rerenderer_example.snake'.
 
 * Try:
 Run gradlew tasks to get a list of available tasks. Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output.
-'''.format
+""".format
 
-output_ambiguous = '''
+output_ambiguous = """
 
 FAILURE: Build failed with an exception.
 
@@ -117,42 +117,59 @@ Task '{}' is ambiguous in root project 'org.rerenderer_example.snake'. Candidate
 
 * Try:
 Run gradlew tasks to get a list of available tasks. Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output.
-'''.format
+""".format
 
 
 @pytest.fixture(autouse=True)
 def tasks(mocker):
-    patch = mocker.patch('thefuck.rules.gradle_no_task.Popen')
+    patch = mocker.patch("thefuck.rules.gradle_no_task.Popen")
     patch.return_value.stdout = BytesIO(gradle_tasks)
     return patch
 
 
-@pytest.mark.parametrize('command', [
-    Command('./gradlew assembler', output_ambiguous('assembler')),
-    Command('./gradlew instar', output_not_found('instar')),
-    Command('gradle assembler', output_ambiguous('assembler')),
-    Command('gradle instar', output_not_found('instar'))])
+@pytest.mark.parametrize(
+    "command",
+    [
+        Command("./gradlew assembler", output_ambiguous("assembler")),
+        Command("./gradlew instar", output_not_found("instar")),
+        Command("gradle assembler", output_ambiguous("assembler")),
+        Command("gradle instar", output_not_found("instar")),
+    ],
+)
 def test_match(command):
     assert match(command)
 
 
-@pytest.mark.parametrize('command', [
-    Command('./gradlew assemble', ''),
-    Command('gradle assemble', ''),
-    Command('npm assembler', output_ambiguous('assembler')),
-    Command('npm instar', output_not_found('instar'))])
+@pytest.mark.parametrize(
+    "command",
+    [
+        Command("./gradlew assemble", ""),
+        Command("gradle assemble", ""),
+        Command("npm assembler", output_ambiguous("assembler")),
+        Command("npm instar", output_not_found("instar")),
+    ],
+)
 def test_not_match(command):
     assert not match(command)
 
 
-@pytest.mark.parametrize('command, result', [
-    (Command('./gradlew assembler', output_ambiguous('assembler')),
-     './gradlew assemble'),
-    (Command('./gradlew instardebug', output_not_found('instardebug')),
-     './gradlew installDebug'),
-    (Command('gradle assembler', output_ambiguous('assembler')),
-     'gradle assemble'),
-    (Command('gradle instardebug', output_not_found('instardebug')),
-     'gradle installDebug')])
+@pytest.mark.parametrize(
+    "command, result",
+    [
+        (
+            Command("./gradlew assembler", output_ambiguous("assembler")),
+            "./gradlew assemble",
+        ),
+        (
+            Command("./gradlew instardebug", output_not_found("instardebug")),
+            "./gradlew installDebug",
+        ),
+        (Command("gradle assembler", output_ambiguous("assembler")), "gradle assemble"),
+        (
+            Command("gradle instardebug", output_not_found("instardebug")),
+            "gradle installDebug",
+        ),
+    ],
+)
 def test_get_new_command(command, result):
     assert get_new_command(command)[0] == result

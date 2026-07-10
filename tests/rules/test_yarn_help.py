@@ -4,7 +4,7 @@ from thefuck.types import Command
 from thefuck.system import open_command
 
 
-output_clean = '''
+output_clean = """
 
   Usage: yarn [command] [flags]
 
@@ -41,17 +41,22 @@ output_clean = '''
     --network-concurrency <number>  maximum number of concurrent network requests
 
   Visit https://yarnpkg.com/en/docs/cli/clean for documentation about this command.
-'''  # noqa
+"""  # noqa
 
 
-@pytest.mark.parametrize('command', [
-    Command('yarn help clean', output_clean)])
+@pytest.mark.parametrize("command", [Command("yarn help clean", output_clean)])
 def test_match(command):
     assert match(command)
 
 
-@pytest.mark.parametrize('command, url', [
-    (Command('yarn help clean', output_clean),
-     'https://yarnpkg.com/en/docs/cli/clean')])
+@pytest.mark.parametrize(
+    "command, url",
+    [
+        (
+            Command("yarn help clean", output_clean),
+            "https://yarnpkg.com/en/docs/cli/clean",
+        )
+    ],
+)
 def test_get_new_command(command, url):
     assert get_new_command(command) == open_command(url)

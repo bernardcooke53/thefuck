@@ -5,11 +5,11 @@ import pytest
 from thefuck.types import Command
 from thefuck.rules.yarn_command_not_found import match, get_new_command
 
-output = '''
+output = """
 error Command "{}" not found.
-'''.format
+""".format
 
-yarn_help_stdout = b'''
+yarn_help_stdout = b"""
 
   Usage: yarn [command] [flags]
 
@@ -82,34 +82,35 @@ yarn_help_stdout = b'''
 
   Run `yarn help COMMAND` for more information on specific commands.
   Visit https://yarnpkg.com/en/docs/cli/ to learn more about Yarn.
-''' # noqa
+"""  # noqa
 
 
 @pytest.fixture(autouse=True)
 def yarn_help(mocker):
-    patch = mocker.patch('thefuck.rules.yarn_command_not_found.Popen')
+    patch = mocker.patch("thefuck.rules.yarn_command_not_found.Popen")
     patch.return_value.stdout = BytesIO(yarn_help_stdout)
     return patch
 
 
-@pytest.mark.parametrize('command', [
-    Command('yarn whyy webpack', output('whyy'))])
+@pytest.mark.parametrize("command", [Command("yarn whyy webpack", output("whyy"))])
 def test_match(command):
     assert match(command)
 
 
-@pytest.mark.parametrize('command', [
-    Command('npm nuild', output('nuild')),
-    Command('yarn install', '')])
+@pytest.mark.parametrize(
+    "command", [Command("npm nuild", output("nuild")), Command("yarn install", "")]
+)
 def test_not_match(command):
     assert not match(command)
 
 
-@pytest.mark.parametrize('command, result', [
-    (Command('yarn whyy webpack', output('whyy')),
-     'yarn why webpack'),
-    (Command('yarn require lodash', output('require')),
-     'yarn add lodash')])
+@pytest.mark.parametrize(
+    "command, result",
+    [
+        (Command("yarn whyy webpack", output("whyy")), "yarn why webpack"),
+        (Command("yarn require lodash", output("require")), "yarn add lodash"),
+    ],
+)
 def test_get_new_command(command, result):
     fixed_command = get_new_command(command)
     if isinstance(fixed_command, list):

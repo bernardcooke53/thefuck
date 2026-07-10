@@ -1,12 +1,11 @@
 import pytest
 from io import BytesIO
-from thefuck.rules.react_native_command_unrecognized import match, \
-    get_new_command
+from thefuck.rules.react_native_command_unrecognized import match, get_new_command
 from thefuck.types import Command
 
 output = "Unrecognized command '{}'".format
 
-stdout = b'''
+stdout = b"""
 Scanning 615 folders for symlinks in /home/nvbn/work/zcho/BookkaWebView/node_modules (6ms)
 
   Usage: react-native [options] [command]
@@ -34,30 +33,39 @@ Scanning 615 folders for symlinks in /home/nvbn/work/zcho/BookkaWebView/node_mod
     upgrade [options]                  upgrade your app's template files to the latest version; run this after updating the react-native version in your package.json and running npm install
     log-android [options]              starts adb logcat
     log-ios [options]                  starts iOS device syslog tail
-'''
+"""
 
 
-@pytest.mark.parametrize('command', [
-    Command('react-native star', output('star')),
-    Command('react-native android-logs', output('android-logs'))])
+@pytest.mark.parametrize(
+    "command",
+    [
+        Command("react-native star", output("star")),
+        Command("react-native android-logs", output("android-logs")),
+    ],
+)
 def test_match(command):
     assert match(command)
 
 
-@pytest.mark.parametrize('command', [
-    Command('gradle star', output('star')),
-    Command('react-native start', '')])
+@pytest.mark.parametrize(
+    "command",
+    [Command("gradle star", output("star")), Command("react-native start", "")],
+)
 def test_not_match(command):
     assert not match(command)
 
 
-@pytest.mark.parametrize('command, result', [
-    (Command('react-native star', output('star')),
-     'react-native start'),
-    (Command('react-native logsandroid -f', output('logsandroid')),
-     'react-native log-android -f')])
+@pytest.mark.parametrize(
+    "command, result",
+    [
+        (Command("react-native star", output("star")), "react-native start"),
+        (
+            Command("react-native logsandroid -f", output("logsandroid")),
+            "react-native log-android -f",
+        ),
+    ],
+)
 def test_get_new_command(mocker, command, result):
-    patch = mocker.patch(
-        'thefuck.rules.react_native_command_unrecognized.Popen')
+    patch = mocker.patch("thefuck.rules.react_native_command_unrecognized.Popen")
     patch.return_value.stdout = BytesIO(stdout)
     assert get_new_command(command)[0] == result

@@ -1,11 +1,10 @@
 from io import BytesIO
 import pytest
 from thefuck.types import Command
-from thefuck.rules.apt_invalid_operation import match, get_new_command, \
-    _get_operations
+from thefuck.rules.apt_invalid_operation import match, get_new_command, _get_operations
 
-invalid_operation = 'E: Invalid operation {}'.format
-apt_help = b'''apt 1.0.10.2ubuntu1 for amd64 compiled on Oct  5 2015 15:55:05
+invalid_operation = "E: Invalid operation {}".format
+apt_help = b"""apt 1.0.10.2ubuntu1 for amd64 compiled on Oct  5 2015 15:55:05
 Usage: apt [options] command
 
 CLI for apt.
@@ -23,11 +22,20 @@ Basic commands:
  full-upgrade - upgrade the system by removing/installing/upgrading packages
 
  edit-sources - edit the source information file
-'''
-apt_operations = ['list', 'search', 'show', 'update', 'install', 'remove',
-                  'upgrade', 'full-upgrade', 'edit-sources']
+"""
+apt_operations = [
+    "list",
+    "search",
+    "show",
+    "update",
+    "install",
+    "remove",
+    "upgrade",
+    "full-upgrade",
+    "edit-sources",
+]
 
-apt_get_help = b'''apt 1.0.10.2ubuntu1 for amd64 compiled on Oct  5 2015 15:55:05
+apt_get_help = b"""apt 1.0.10.2ubuntu1 for amd64 compiled on Oct  5 2015 15:55:05
 Usage: apt-get [options] command
        apt-get [options] install|remove pkg1 [pkg2 ...]
        apt-get [options] source pkg1 [pkg2 ...]
@@ -70,13 +78,26 @@ Options:
 See the apt-get(8), sources.list(5) and apt.conf(5) manual
 pages for more information and options.
                        This APT has Super Cow Powers.
-'''
-apt_get_operations = ['update', 'upgrade', 'install', 'remove', 'autoremove',
-                      'purge', 'source', 'build-dep', 'dist-upgrade',
-                      'dselect-upgrade', 'clean', 'autoclean', 'check',
-                      'changelog', 'download']
+"""
+apt_get_operations = [
+    "update",
+    "upgrade",
+    "install",
+    "remove",
+    "autoremove",
+    "purge",
+    "source",
+    "build-dep",
+    "dist-upgrade",
+    "dselect-upgrade",
+    "clean",
+    "autoclean",
+    "check",
+    "changelog",
+    "download",
+]
 
-new_apt_get_help = b'''apt 1.6.12 (amd64)
+new_apt_get_help = b"""apt 1.6.12 (amd64)
 Usage: apt-get [options] command
        apt-get [options] install|remove pkg1 [pkg2 ...]
        apt-get [options] source pkg1 [pkg2 ...]
@@ -109,31 +130,48 @@ Information about how to configure sources can be found in sources.list(5).
 Package and version choices can be expressed via apt_preferences(5).
 Security details are available in apt-secure(8).
                                         This APT has Super Cow Powers.
-'''
-new_apt_get_operations = ['update', 'upgrade', 'install', 'remove', 'purge',
-                          'autoremove', 'dist-upgrade', 'dselect-upgrade',
-                          'build-dep', 'clean', 'autoclean', 'check',
-                          'source', 'download', 'changelog']
+"""
+new_apt_get_operations = [
+    "update",
+    "upgrade",
+    "install",
+    "remove",
+    "purge",
+    "autoremove",
+    "dist-upgrade",
+    "dselect-upgrade",
+    "build-dep",
+    "clean",
+    "autoclean",
+    "check",
+    "source",
+    "download",
+    "changelog",
+]
 
 
-@pytest.mark.parametrize('script, output', [
-    ('apt', invalid_operation('saerch')),
-    ('apt-get', invalid_operation('isntall')),
-    ('apt-cache', invalid_operation('rumove'))])
+@pytest.mark.parametrize(
+    "script, output",
+    [
+        ("apt", invalid_operation("saerch")),
+        ("apt-get", invalid_operation("isntall")),
+        ("apt-cache", invalid_operation("rumove")),
+    ],
+)
 def test_match(script, output):
     assert match(Command(script, output))
 
 
-@pytest.mark.parametrize('script, output', [
-    ('vim', invalid_operation('vim')),
-    ('apt-get', "")])
+@pytest.mark.parametrize(
+    "script, output", [("vim", invalid_operation("vim")), ("apt-get", "")]
+)
 def test_not_match(script, output):
     assert not match(Command(script, output))
 
 
 @pytest.fixture
 def set_help(mocker):
-    mock = mocker.patch('subprocess.Popen')
+    mock = mocker.patch("subprocess.Popen")
 
     def _set_text(text):
         mock.return_value.stdout = BytesIO(text)
@@ -141,24 +179,37 @@ def set_help(mocker):
     return _set_text
 
 
-@pytest.mark.parametrize('app, help_text, operations', [
-    ('apt', apt_help, apt_operations),
-    ('apt-get', apt_get_help, apt_get_operations),
-    ('apt-get', new_apt_get_help, new_apt_get_operations)
-])
+@pytest.mark.parametrize(
+    "app, help_text, operations",
+    [
+        ("apt", apt_help, apt_operations),
+        ("apt-get", apt_get_help, apt_get_operations),
+        ("apt-get", new_apt_get_help, new_apt_get_operations),
+    ],
+)
 def test_get_operations(set_help, app, help_text, operations):
     set_help(help_text)
     assert _get_operations(app) == operations
 
 
-@pytest.mark.parametrize('script, output, help_text, result', [
-    ('apt-get isntall vim', invalid_operation('isntall'),
-     apt_get_help, 'apt-get install vim'),
-    ('apt saerch vim', invalid_operation('saerch'),
-     apt_help, 'apt search vim'),
-    ('apt uninstall vim', invalid_operation('uninstall'),
-     apt_help, 'apt remove vim'),
-])
+@pytest.mark.parametrize(
+    "script, output, help_text, result",
+    [
+        (
+            "apt-get isntall vim",
+            invalid_operation("isntall"),
+            apt_get_help,
+            "apt-get install vim",
+        ),
+        ("apt saerch vim", invalid_operation("saerch"), apt_help, "apt search vim"),
+        (
+            "apt uninstall vim",
+            invalid_operation("uninstall"),
+            apt_help,
+            "apt remove vim",
+        ),
+    ],
+)
 def test_get_new_command(set_help, output, script, help_text, result):
     set_help(help_text)
     assert get_new_command(Command(script, output))[0] == result

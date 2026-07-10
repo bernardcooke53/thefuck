@@ -3,7 +3,7 @@ from io import BytesIO
 from thefuck.rules.npm_run_script import match, get_new_command
 from thefuck.types import Command
 
-output = '''
+output = """
 Usage: npm <command>
 
 where <command> is one of:
@@ -29,9 +29,9 @@ Specify configs in the ini-formatted file:
 or on the command line via: npm <command> --key value
 Config info can be viewed via: npm help config
 
-'''
+"""
 
-run_script_stdout = b'''
+run_script_stdout = b"""
 Lifecycle scripts included in code-view-web:
   test
     jest
@@ -44,41 +44,47 @@ available via `npm run-script`:
   watch-test
     jest --verbose --watch
 
-'''
+"""
 
 
 @pytest.fixture(autouse=True)
 def run_script(mocker):
-    patch = mocker.patch('thefuck.specific.npm.Popen')
+    patch = mocker.patch("thefuck.specific.npm.Popen")
     patch.return_value.stdout = BytesIO(run_script_stdout)
     return patch.return_value
 
 
-@pytest.mark.usefixtures('no_memoize')
-@pytest.mark.parametrize('script', [
-    'npm watch-test', 'npm develop'])
+@pytest.mark.usefixtures("no_memoize")
+@pytest.mark.parametrize("script", ["npm watch-test", "npm develop"])
 def test_match(script):
     command = Command(script, output)
     assert match(command)
 
 
-@pytest.mark.usefixtures('no_memoize')
-@pytest.mark.parametrize('command, run_script_out', [
-    (Command('npm test', 'TEST FAIL'), run_script_stdout),
-    (Command('npm watch-test', 'TEST FAIL'), run_script_stdout),
-    (Command('npm test', output), run_script_stdout),
-    (Command('vim watch-test', output), run_script_stdout)])
+@pytest.mark.usefixtures("no_memoize")
+@pytest.mark.parametrize(
+    "command, run_script_out",
+    [
+        (Command("npm test", "TEST FAIL"), run_script_stdout),
+        (Command("npm watch-test", "TEST FAIL"), run_script_stdout),
+        (Command("npm test", output), run_script_stdout),
+        (Command("vim watch-test", output), run_script_stdout),
+    ],
+)
 def test_not_match(run_script, command, run_script_out):
     run_script.stdout = BytesIO(run_script_out)
     assert not match(command)
 
 
-@pytest.mark.usefixtures('no_memoize')
-@pytest.mark.parametrize('script, result', [
-    ('npm watch-test', 'npm run-script watch-test'),
-    ('npm -i develop', 'npm run-script -i develop'),
-    ('npm -i watch-script --path ..',
-     'npm run-script -i watch-script --path ..')])
+@pytest.mark.usefixtures("no_memoize")
+@pytest.mark.parametrize(
+    "script, result",
+    [
+        ("npm watch-test", "npm run-script watch-test"),
+        ("npm -i develop", "npm run-script -i develop"),
+        ("npm -i watch-script --path ..", "npm run-script -i watch-script --path .."),
+    ],
+)
 def test_get_new_command(script, result):
     command = Command(script, output)
     assert get_new_command(command) == result

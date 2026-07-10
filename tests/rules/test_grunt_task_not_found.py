@@ -5,7 +5,7 @@ import pytest
 from thefuck.types import Command
 from thefuck.rules.grunt_task_not_found import match, get_new_command
 
-output = '''
+output = """
 Warning: Task "{}" not found. Use --force to continue.
 
 Aborted due to warnings.
@@ -15,9 +15,9 @@ Execution Time (2016-08-13 21:01:40 UTC+3)
 loading tasks  11ms  ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 92%
 Total 12ms
 
-'''.format
+""".format
 
-grunt_help_stdout = b'''
+grunt_help_stdout = b"""
 Grunt: The JavaScript Task Runner (v0.4.5)
 
 Usage
@@ -96,34 +96,44 @@ The list of available tasks may change based on tasks directories or grunt
 plugins specified in the Gruntfile or via command-line options.
 
 For more information, see http://gruntjs.com/
-'''
+"""
 
 
 @pytest.fixture(autouse=True)
 def grunt_help(mocker):
-    patch = mocker.patch('thefuck.rules.grunt_task_not_found.Popen')
+    patch = mocker.patch("thefuck.rules.grunt_task_not_found.Popen")
     patch.return_value.stdout = BytesIO(grunt_help_stdout)
     return patch
 
 
-@pytest.mark.parametrize('command', [
-    Command('grunt defualt', output('defualt')),
-    Command('grunt buld:css', output('buld:css'))])
+@pytest.mark.parametrize(
+    "command",
+    [
+        Command("grunt defualt", output("defualt")),
+        Command("grunt buld:css", output("buld:css")),
+    ],
+)
 def test_match(command):
     assert match(command)
 
 
-@pytest.mark.parametrize('command', [
-    Command('npm nuild', output('nuild')),
-    Command('grunt rm', '')])
+@pytest.mark.parametrize(
+    "command", [Command("npm nuild", output("nuild")), Command("grunt rm", "")]
+)
 def test_not_match(command):
     assert not match(command)
 
 
-@pytest.mark.parametrize('command, result', [
-    (Command('grunt defualt', output('defualt')), 'grunt default'),
-    (Command('grunt cmpass:all', output('cmpass:all')), 'grunt compass:all'),
-    (Command('grunt cmpass:all --color', output('cmpass:all')),
-     'grunt compass:all --color')])
+@pytest.mark.parametrize(
+    "command, result",
+    [
+        (Command("grunt defualt", output("defualt")), "grunt default"),
+        (Command("grunt cmpass:all", output("cmpass:all")), "grunt compass:all"),
+        (
+            Command("grunt cmpass:all --color", output("cmpass:all")),
+            "grunt compass:all --color",
+        ),
+    ],
+)
 def test_get_new_command(command, result):
     assert get_new_command(command) == result

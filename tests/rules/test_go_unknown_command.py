@@ -6,13 +6,13 @@ from thefuck.types import Command
 
 @pytest.fixture
 def build_misspelled_output():
-    return '''go bulid: unknown command
-Run 'go help' for usage.'''
+    return """go bulid: unknown command
+Run 'go help' for usage."""
 
 
 @pytest.fixture
 def go_stderr(mocker):
-    stderr = b'''Go is a tool for managing Go source code.
+    stderr = b"""Go is a tool for managing Go source code.
 
 Usage:
 
@@ -63,20 +63,20 @@ Additional help topics:
 
 Use "go help <topic>" for more information about that topic.
 
-'''
-    mock = mocker.patch('subprocess.Popen')
+"""
+    mock = mocker.patch("subprocess.Popen")
     mock.return_value.stderr = BytesIO(stderr)
     return mock
 
 
 def test_match(build_misspelled_output):
-    assert match(Command('go bulid', build_misspelled_output))
+    assert match(Command("go bulid", build_misspelled_output))
 
 
 def test_not_match():
-    assert not match(Command('go run', 'go run: no go files listed'))
+    assert not match(Command("go run", "go run: no go files listed"))
 
 
-@pytest.mark.usefixtures('no_memoize', 'go_stderr')
+@pytest.mark.usefixtures("no_memoize", "go_stderr")
 def test_get_new_command(build_misspelled_output):
-    assert get_new_command(Command('go bulid', build_misspelled_output)) == 'go build'
+    assert get_new_command(Command("go bulid", build_misspelled_output)) == "go build"

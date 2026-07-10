@@ -5,7 +5,7 @@ import pytest
 from thefuck.rules.yum_invalid_operation import match, get_new_command, _get_operations
 from thefuck.types import Command
 
-yum_help_text = '''Loaded plugins: extras_suggestions, langpacks, priorities, update-motd
+yum_help_text = """Loaded plugins: extras_suggestions, langpacks, priorities, update-motd
 Usage: yum [options] COMMAND
 
 List of Commands:
@@ -106,11 +106,11 @@ Options:
   Plugin Options:
     --samearch-priorities
                         Priority-exclude packages based on name + arch
-'''
-yum_unsuccessful_search_text = '''Warning: No matches found for: {}
+"""
+yum_unsuccessful_search_text = """Warning: No matches found for: {}
 No matches found
-'''
-yum_successful_vim_search_text = '''================================================== N/S matched: vim ===================================================
+"""
+yum_successful_vim_search_text = """================================================== N/S matched: vim ===================================================
 protobuf-vim.x86_64 : Vim syntax highlighting for Google Protocol Buffers descriptions
 vim-X11.x86_64 : The VIM version of the vi editor for the X Window System - GVim
 vim-common.x86_64 : The common files needed by any version of the VIM editor
@@ -120,54 +120,116 @@ vim-filesystem.noarch : VIM filesystem layout
 vim-minimal.x86_64 : A minimal version of the VIM editor
 
   Name and summary matches only, use "search all" for everything.
-'''
+"""
 
-yum_invalid_op_text = '''Loaded plugins: extras_suggestions, langpacks, priorities, update-motd
+yum_invalid_op_text = """Loaded plugins: extras_suggestions, langpacks, priorities, update-motd
 No such command: {}. Please use /usr/bin/yum --help
-'''
+"""
 
 yum_operations = [
-    'check', 'check-update', 'clean', 'deplist', 'distribution-synchronization', 'downgrade', 'erase', 'fs',
-    'fssnapshot', 'groups', 'help', 'history', 'info', 'install', 'langavailable', 'langinfo', 'langinstall',
-    'langlist', 'langremove', 'list', 'load-transaction', 'makecache', 'provides', 'reinstall', 'repo-pkgs', 'repolist',
-    'search', 'shell', 'swap', 'update', 'update-minimal', 'updateinfo', 'upgrade', 'version', ]
+    "check",
+    "check-update",
+    "clean",
+    "deplist",
+    "distribution-synchronization",
+    "downgrade",
+    "erase",
+    "fs",
+    "fssnapshot",
+    "groups",
+    "help",
+    "history",
+    "info",
+    "install",
+    "langavailable",
+    "langinfo",
+    "langinstall",
+    "langlist",
+    "langremove",
+    "list",
+    "load-transaction",
+    "makecache",
+    "provides",
+    "reinstall",
+    "repo-pkgs",
+    "repolist",
+    "search",
+    "shell",
+    "swap",
+    "update",
+    "update-minimal",
+    "updateinfo",
+    "upgrade",
+    "version",
+]
 
 
-@pytest.mark.parametrize('command', [
-    'saerch', 'uninstall',
-])
+@pytest.mark.parametrize(
+    "command",
+    [
+        "saerch",
+        "uninstall",
+    ],
+)
 def test_match(command):
-    assert match(Command('yum {}'.format(command), yum_invalid_op_text.format(command)))
+    assert match(Command("yum {}".format(command), yum_invalid_op_text.format(command)))
 
 
-@pytest.mark.parametrize('command, output', [
-    ('vim', ''),
-    ('yum', yum_help_text,),
-    ('yum help', yum_help_text,),
-    ('yum search asdf', yum_unsuccessful_search_text.format('asdf'),),
-    ('yum search vim', yum_successful_vim_search_text)
-])
+@pytest.mark.parametrize(
+    "command, output",
+    [
+        ("vim", ""),
+        (
+            "yum",
+            yum_help_text,
+        ),
+        (
+            "yum help",
+            yum_help_text,
+        ),
+        (
+            "yum search asdf",
+            yum_unsuccessful_search_text.format("asdf"),
+        ),
+        ("yum search vim", yum_successful_vim_search_text),
+    ],
+)
 def test_not_match(command, output):
     assert not match(Command(command, output))
 
 
 @pytest.fixture
 def yum_help(mocker):
-    mock = mocker.patch('subprocess.Popen')
-    mock.return_value.stdout = BytesIO(bytes(yum_help_text.encode('utf-8')))
+    mock = mocker.patch("subprocess.Popen")
+    mock.return_value.stdout = BytesIO(bytes(yum_help_text.encode("utf-8")))
     return mock
 
 
-@pytest.mark.usefixtures('no_memoize', 'yum_help')
+@pytest.mark.usefixtures("no_memoize", "yum_help")
 def test_get_operations():
     assert _get_operations() == yum_operations
 
 
-@pytest.mark.usefixtures('no_memoize', 'yum_help')
-@pytest.mark.parametrize('script, output, result', [
-    ('yum uninstall', yum_invalid_op_text.format('uninstall'), 'yum remove',),
-    ('yum saerch asdf', yum_invalid_op_text.format('saerch'), 'yum search asdf',),
-    ('yum hlep', yum_invalid_op_text.format('hlep'), 'yum help',),
-])
+@pytest.mark.usefixtures("no_memoize", "yum_help")
+@pytest.mark.parametrize(
+    "script, output, result",
+    [
+        (
+            "yum uninstall",
+            yum_invalid_op_text.format("uninstall"),
+            "yum remove",
+        ),
+        (
+            "yum saerch asdf",
+            yum_invalid_op_text.format("saerch"),
+            "yum search asdf",
+        ),
+        (
+            "yum hlep",
+            yum_invalid_op_text.format("hlep"),
+            "yum help",
+        ),
+    ],
+)
 def test_get_new_command(script, output, result):
     assert get_new_command(Command(script, output))[0] == result

@@ -14,15 +14,23 @@ no_such_subcommand = """error: no such subcommand
 """
 
 
-@pytest.mark.parametrize('command', [
-    Command('cargo buid', no_such_subcommand_old),
-    Command('cargo buils', no_such_subcommand)])
+@pytest.mark.parametrize(
+    "command",
+    [
+        Command("cargo buid", no_such_subcommand_old),
+        Command("cargo buils", no_such_subcommand),
+    ],
+)
 def test_match(command):
     assert match(command)
 
 
-@pytest.mark.parametrize('command, new_command', [
-    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
-    (Command('cargo buils', no_such_subcommand), 'cargo build')])
+@pytest.mark.parametrize(
+    "command, new_command",
+    [
+        (Command("cargo buid", no_such_subcommand_old), "cargo build"),
+        (Command("cargo buils", no_such_subcommand), "cargo build"),
+    ],
+)
 def test_get_new_command(command, new_command):
     assert get_new_command(command) == new_command
