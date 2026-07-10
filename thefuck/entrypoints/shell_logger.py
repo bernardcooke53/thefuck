@@ -11,10 +11,10 @@ import termios
 import tty
 from functools import partial
 
-from .. import const, logs
+from thefuck import const, logs
 
 
-def _read(f, fd):
+def _read(f, fd) -> bytes:
     data = os.read(fd, 1024)
     try:
         f.write(data)
@@ -27,13 +27,13 @@ def _read(f, fd):
     return data
 
 
-def _set_pty_size(master_fd):
+def _set_pty_size(master_fd) -> None:
     buf = array.array("h", [0, 0, 0, 0])
     fcntl.ioctl(pty.STDOUT_FILENO, termios.TIOCGWINSZ, buf, True)
     fcntl.ioctl(master_fd, termios.TIOCSWINSZ, buf)
 
 
-def _spawn(shell, master_read):
+def _spawn(shell, master_read) -> tuple[int, int]:
     """
     Create a spawned process.
 
@@ -65,7 +65,7 @@ def _spawn(shell, master_read):
     return os.waitpid(pid, 0)[1]
 
 
-def shell_logger(output):
+def shell_logger(output) -> None:
     """
     Logs shell output to the `output`.
 

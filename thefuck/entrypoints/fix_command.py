@@ -5,15 +5,15 @@ import sys
 from difflib import SequenceMatcher
 from pprint import pformat
 
-from .. import const, logs, types
-from ..conf import settings
-from ..corrector import get_corrected_commands
-from ..exceptions import EmptyCommand
-from ..ui import select_command
-from ..utils import get_alias, get_all_executables
+from thefuck import const, logs, types
+from thefuck.conf import settings
+from thefuck.corrector import get_corrected_commands
+from thefuck.exceptions import EmptyCommand
+from thefuck.ui import select_command
+from thefuck.utils import get_alias, get_all_executables
 
 
-def _get_raw_command(known_args):
+def _get_raw_command(known_args) -> list[str]:
     if known_args.force_command:
         return [known_args.force_command]
     if not os.environ.get("TF_HISTORY"):
@@ -28,7 +28,7 @@ def _get_raw_command(known_args):
     return []
 
 
-def fix_command(known_args):
+def fix_command(known_args) -> None:
     """Fixes previous command. Used when `thefuck` called without arguments."""
     settings.init(known_args)
     with logs.debug_time("Total"):

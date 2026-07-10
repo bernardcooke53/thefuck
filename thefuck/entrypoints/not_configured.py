@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from ..system import init_output
+from thefuck.system import init_output
 
 init_output()
 
@@ -15,12 +15,12 @@ from tempfile import gettempdir  # noqa: E402
 
 from psutil import Process  # noqa: E402
 
-from .. import const, logs  # noqa: E402
-from ..conf import settings  # noqa: E402
-from ..shells import shell  # noqa: E402
+from thefuck import const, logs  # noqa: E402
+from thefuck.conf import settings  # noqa: E402
+from thefuck.shells import shell  # noqa: E402
 
 
-def _get_shell_pid():
+def _get_shell_pid() -> int:
     """Returns parent process pid."""
     proc = Process(os.getpid())
 
@@ -30,14 +30,14 @@ def _get_shell_pid():
         return proc.parent.pid
 
 
-def _get_not_configured_usage_tracker_path():
+def _get_not_configured_usage_tracker_path() -> Path:
     """Returns path of special file where we store latest shell pid."""
     return Path(gettempdir()).joinpath(
         f"thefuck.last_not_configured_run_{getpass.getuser()}"
     )
 
 
-def _record_first_run():
+def _record_first_run() -> None:
     """Records shell pid to tracker file."""
     info = {"pid": _get_shell_pid(), "time": time.time()}
 
@@ -46,7 +46,7 @@ def _record_first_run():
         json.dump(info, tracker)
 
 
-def _get_previous_command():
+def _get_previous_command() -> str | None:
     history = shell.get_history()
 
     if history:
@@ -54,7 +54,7 @@ def _get_previous_command():
     return None
 
 
-def _is_second_run():
+def _is_second_run() -> bool:
     """Returns `True` when we know that `fuck` called second time."""
     tracker_path = _get_not_configured_usage_tracker_path()
     if not tracker_path.exists():
@@ -76,14 +76,14 @@ def _is_second_run():
     )
 
 
-def _is_already_configured(configuration_details):
+def _is_already_configured(configuration_details) -> bool:
     """Returns `True` when alias already in shell config."""
     path = Path(configuration_details.path).expanduser()
     with path.open("r") as shell_config:
         return configuration_details.content in shell_config.read()
 
 
-def _configure(configuration_details):
+def _configure(configuration_details) -> None:
     """Adds alias to shell config."""
     path = Path(configuration_details.path).expanduser()
     with path.open("a") as shell_config:
@@ -92,7 +92,7 @@ def _configure(configuration_details):
         shell_config.write("\n")
 
 
-def main():
+def main() -> None:
     """
     Shows useful information about how-to configure alias on a first run
     and configure automatically on a second.

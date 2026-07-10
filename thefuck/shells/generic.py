@@ -35,13 +35,13 @@ class Generic:
         """Prepares command for running in shell."""
         return command_script
 
-    def app_alias(self, alias_name):
+    def app_alias(self, alias_name: str) -> str:
         return (
             f"""alias {alias_name}='eval "$(TF_ALIAS={alias_name} PYTHONIOENCODING=utf-8 """
             """thefuck "$(fc -ln -1)")"'"""
         )
 
-    def instant_mode_alias(self, alias_name):
+    def instant_mode_alias(self, alias_name: str) -> str:
         warn("Instant mode not supported by your shell")
         return self.app_alias(alias_name)
 
