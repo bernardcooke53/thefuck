@@ -31,7 +31,7 @@ def history_without_current(mocker):
     ],
 )
 def test_match(mocker, script, output):
-    mocker.patch("thefuck.rules.no_command.which", return_value=None)
+    mocker.patch("shutil.which", return_value=None)
 
     assert match(Command(script, output))
 
@@ -46,7 +46,7 @@ def test_match(mocker, script, output):
     ],
 )
 def test_not_match(mocker, script, output, which):
-    mocker.patch("thefuck.rules.no_command.which", return_value=which)
+    mocker.patch("shutil.which", return_value=which)
 
     assert not match(Command(script, output))
 

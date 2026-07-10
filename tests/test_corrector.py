@@ -3,7 +3,7 @@
 import pytest
 from tests.utils import Rule, CorrectedCommand
 from thefuck import corrector, const
-from thefuck.system import Path
+from pathlib import Path
 from thefuck.types import Command
 from thefuck.corrector import get_corrected_commands, organize_commands
 
@@ -12,7 +12,7 @@ from thefuck.corrector import get_corrected_commands, organize_commands
 def glob(mocker):
     results = {}
     mocker.patch(
-        "thefuck.system.Path.glob",
+        "pathlib.Path.glob",
         new_callable=lambda: lambda *_: results.pop("value", []),
     )
     return lambda value: results.update({"value": value})

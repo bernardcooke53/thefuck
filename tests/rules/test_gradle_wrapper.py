@@ -18,7 +18,7 @@ def exists(mocker):
     ],
 )
 def test_match(mocker, command):
-    mocker.patch("thefuck.rules.gradle_wrapper.which", return_value=None)
+    mocker.patch("shutil.which", return_value=None)
 
     assert match(command)
 
@@ -32,7 +32,7 @@ def test_match(mocker, command):
     ],
 )
 def test_not_match(mocker, exists, command, gradlew, which):
-    mocker.patch("thefuck.rules.gradle_wrapper.which", return_value=which)
+    mocker.patch("shutil.which", return_value=which)
     exists.return_value = gradlew
 
     assert not match(command)

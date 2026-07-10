@@ -2,7 +2,7 @@ import os
 import sys
 from warnings import warn
 from . import const
-from .system import Path
+from pathlib import Path
 
 import importlib.util
 

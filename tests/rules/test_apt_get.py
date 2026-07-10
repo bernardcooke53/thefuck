@@ -24,7 +24,7 @@ from thefuck.types import Command
     ],
 )
 def test_match(mocker, command, packages):
-    mocker.patch("thefuck.rules.apt_get.which", return_value=None)
+    mocker.patch("shutil.which", return_value=None)
     mocker.patch(
         "thefuck.rules.apt_get._get_packages", create=True, return_value=packages
     )
@@ -43,7 +43,7 @@ def test_match(mocker, command, packages):
     ],
 )
 def test_not_match(mocker, command, packages, which):
-    mocker.patch("thefuck.rules.apt_get.which", return_value=which)
+    mocker.patch("shutil.which", return_value=which)
     mocker.patch(
         "thefuck.rules.apt_get._get_packages", create=True, return_value=packages
     )

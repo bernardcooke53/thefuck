@@ -1,7 +1,7 @@
 import sys
 from .conf import settings
 from .types import Rule
-from .system import Path
+from pathlib import Path
 from . import logs
 
 

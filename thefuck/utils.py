@@ -5,6 +5,7 @@ import re
 import shelve
 import dbm
 import sys
+from pathlib import Path
 
 # TODO: maybe this dep can be removed
 from decorator import decorator
@@ -12,7 +13,6 @@ from difflib import get_close_matches as difflib_get_close_matches
 from functools import wraps
 from .logs import warn, exception
 from .conf import settings
-from .system import Path
 
 DEVNULL = open(os.devnull, "w")
 
