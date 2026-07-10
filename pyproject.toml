@@ -35,7 +35,7 @@ Source = "https://github.com/bernardcooke53/thefuck"
 dev = [
     "tox",
     "ruff",
-    "mypy",
+    "ty>=0.0.58",
     "prek",
     "coverage[toml]>=6.5",
     "pytest",
@@ -214,6 +214,9 @@ check_untyped_defs = true
 cache_dir = "/dev/null"
 plugins = []
 
+[tool.ty.rules]
+missing-type-argument = "error"
+possibly-unresolved-reference = "warn"
 
 [tool.coverage.run]
 source_pkgs = ["thefuck"]
