@@ -16,7 +16,7 @@ def isfile(mocker):
 @pytest.fixture
 def history_lines(mocker, isfile):
     def aux(lines):
-        mock = mocker.patch("io.open")
+        mock = mocker.patch("builtins.open")
         mock.return_value.__enter__.return_value.readlines.return_value = lines
 
     return aux
