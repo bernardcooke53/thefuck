@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import sys
+from collections.abc import Generator
 from contextlib import contextmanager
 from datetime import datetime
 from traceback import format_exception
 from types import TracebackType
-from collections.abc import Generator
 from typing import TypeAlias
 
 import colorama

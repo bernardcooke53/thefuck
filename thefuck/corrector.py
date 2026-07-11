@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from collections.abc import Generator, Iterable, Iterator
 import sys
+from collections.abc import Generator, Iterable, Iterator
 from pathlib import Path
 
 from thefuck import logs

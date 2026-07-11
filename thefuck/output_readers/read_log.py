@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from collections.abc import Generator, Sequence
 import mmap
 import os
 import re
 import shlex
+from collections.abc import Generator, Iterable, Sequence
 from shutil import get_terminal_size
-from typing import Iterable
 
 import pyte
 

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from argparse import Namespace
-from collections.abc import Generator
 import importlib.util
 import os
 import sys
+from argparse import Namespace
+from collections.abc import Generator
 from pathlib import Path
 from types import ModuleType
 from typing import Any, TypeVar

@@ -5,10 +5,10 @@ import sys
 from subprocess import PIPE, Popen
 from time import time
 
-from thefuck.shells.generic import Generic, ShellConfiguration
 from thefuck import logs
 from thefuck.conf import settings
 from thefuck.const import ARGUMENT_PLACEHOLDER
+from thefuck.shells.generic import Generic, ShellConfiguration
 from thefuck.utils import DEVNULL, cache
 
 
@@ -81,7 +81,7 @@ class Fish(Generic):
 
     def _expand_aliases(self, command_script: str) -> str:
         aliases = self.get_aliases()
-        binary = command_script.split(" ")[0]
+        binary = command_script.split(" ", maxsplit=1)[0]
         if binary in aliases and aliases[binary] != binary:
             return command_script.replace(binary, aliases[binary], 1)
         if binary in aliases:

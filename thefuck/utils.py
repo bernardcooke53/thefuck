@@ -7,20 +7,20 @@ import pickle
 import re
 import shelve
 import sys
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Generator, Iterable
 from difflib import get_close_matches as difflib_get_close_matches
 from functools import wraps
+from importlib.metadata import version
 from pathlib import Path
-from typing import Any, Generator, cast
+from typing import Any, cast
 
 # TODO: maybe this dep can be removed
 from decorator import decorator
 
 from thefuck.conf import settings
 from thefuck.logs import exception, warn
-from thefuck.types import Command
 from thefuck.shells import shell
-from importlib.metadata import version
+from thefuck.types import Command
 
 # TODO: can we just use os.devnull?
 DEVNULL = open(os.devnull, "w")

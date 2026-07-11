@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Callable
+from typing import TypeVar
 
-from typing import Any, Callable, TypeVar
 from decorator import decorator
 
 from thefuck.shells import shell

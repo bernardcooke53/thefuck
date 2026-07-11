@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import sys
-from typing import Generator, Iterable
+from collections.abc import Generator, Iterable
 
 from thefuck import const, logs
 from thefuck.conf import settings

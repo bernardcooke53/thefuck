@@ -10,7 +10,7 @@ from thefuck.rules.dirty_untar import (
     match,
     side_effect,
     tar_extensions,
-)  # noqa: E126
+)
 from thefuck.types import Command
 
 

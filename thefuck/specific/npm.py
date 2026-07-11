@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import re
 import shutil
+from collections.abc import Generator
 from subprocess import PIPE, Popen
-from typing import Generator
 
 from thefuck.utils import eager, memoize
 

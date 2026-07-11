@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from collections.abc import Callable, Generator
-from pathlib import Path
 import os
 import sys
+from collections.abc import Callable, Generator
+from pathlib import Path
 
 from thefuck import logs
 from thefuck.conf import load_source, settings

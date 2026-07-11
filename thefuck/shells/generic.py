@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from collections.abc import Generator
 import os
 import shlex
+from collections.abc import Generator
 from pathlib import Path
 from typing import NamedTuple
 
@@ -26,7 +26,7 @@ class Generic:
 
     def _expand_aliases(self, command_script: str) -> str:
         aliases = self.get_aliases()
-        binary = command_script.split(" ")[0]
+        binary = command_script.split(" ", maxsplit=1)[0]
         if binary in aliases:
             return command_script.replace(binary, aliases[binary], 1)
         return command_script

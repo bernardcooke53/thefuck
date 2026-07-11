@@ -5,9 +5,9 @@ from subprocess import PIPE, Popen
 from tempfile import gettempdir
 from uuid import uuid4
 
-from thefuck.shells.generic import Generic, ShellConfiguration
 from thefuck.conf import settings
 from thefuck.const import ARGUMENT_PLACEHOLDER, USER_COMMAND_MARK
+from thefuck.shells.generic import Generic, ShellConfiguration
 from thefuck.utils import DEVNULL, memoize
 
 
