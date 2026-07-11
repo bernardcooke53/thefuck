@@ -2,14 +2,17 @@ from __future__ import annotations
 
 import re
 
+from typing import Any, Callable, TypeVar
 from decorator import decorator
 
-from ..shells import shell
-from ..utils import is_app
+from thefuck.shells import shell
+from thefuck.utils import is_app
+
+_R = TypeVar("_R")
 
 
 @decorator
-def git_support(fn, command):
+def git_support(fn: Callable[[str], _R], command: str) -> _R:
     """Resolves git aliases and supports testing for both git and hub."""
     # supports GitHub's `hub` command
     # which is recommended to be used with `alias git=hub`

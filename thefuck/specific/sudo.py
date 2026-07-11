@@ -1,10 +1,13 @@
 from __future__ import annotations
+from typing import Callable, TypeVar
 
 from decorator import decorator
 
+_R = TypeVar("_R")
+
 
 @decorator
-def sudo_support(fn, command):
+def sudo_support(fn: Callable[[str], _R], command: str) -> _R:
     """Removes sudo before calling fn and adds it after."""
     if not command.script.startswith("sudo "):
         return fn(command)

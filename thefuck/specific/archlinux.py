@@ -5,11 +5,11 @@ from __future__ import annotations
 import shutil
 import subprocess
 
-from .. import utils
+from thefuck import utils
 
 
 @utils.memoize
-def get_pkgfile(command):
+def get_pkgfile(command: str) -> list[str]:
     """
     Gets the packages that provide the given command using `pkgfile`.
 
@@ -36,7 +36,7 @@ def get_pkgfile(command):
         raise err
 
 
-def archlinux_env():
+def archlinux_env() -> tuple[str | bool | None, str | None]:
     if shutil.which("yay"):
         pacman = "yay"
     elif shutil.which("pikaur"):

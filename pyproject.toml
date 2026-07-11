@@ -141,6 +141,7 @@ ignore = [
     "TD002",
     "TD003",
     # tryceratops
+    "TRY201",
     "TRY300",
     "TRY003",
     "TRY401",
