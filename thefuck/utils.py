@@ -7,25 +7,32 @@ import pickle
 import re
 import shelve
 import sys
+from collections.abc import Callable, Iterable
 from difflib import get_close_matches as difflib_get_close_matches
 from functools import wraps
 from pathlib import Path
+from typing import Any, Generator, cast
 
 # TODO: maybe this dep can be removed
 from decorator import decorator
 
-from .conf import settings
-from .logs import exception, warn
+from thefuck.conf import settings
+from thefuck.logs import exception, warn
+from thefuck.types import Command
+from thefuck.shells import shell
+from importlib.metadata import version
 
+# TODO: can we just use os.devnull?
 DEVNULL = open(os.devnull, "w")
 
 
-def memoize(fn):
+# TODO: can we just use functools.cache?
+def memoize(fn: Callable[..., Any]) -> Callable[..., Any]:
     """Caches previous calls to the function."""
     memo = {}
 
     @wraps(fn)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
         if not memoize.disabled:
             key = pickle.dumps((args, kwargs))
             if key not in memo:
@@ -43,7 +50,8 @@ def memoize(fn):
 memoize.disabled = False
 
 
-def default_settings(params):
+# TODO: can we just use the stdlib decorator machinery?
+def default_settings(params: dict[str, str]) -> Callable[..., Any]:
     """
     Adds default values to settings if it not presented.
 
@@ -55,7 +63,9 @@ def default_settings(params):
 
     """
 
-    def _default_settings(fn, command):
+    def _default_settings(
+        fn: Callable[..., dict[str, str]], command: Command
+    ) -> dict[str, str]:
         for k, w in params.items():
             settings.setdefault(k, w)
         return fn(command)
@@ -63,7 +73,12 @@ def default_settings(params):
     return decorator(_default_settings)
 
 
-def get_closest(word, possibilities, cutoff=0.6, fallback_to_first=True):
+def get_closest(
+    word: str,
+    possibilities: Iterable[str],
+    cutoff: float = 0.6,
+    fallback_to_first: bool = True,
+) -> str | None:
     """Returns closest match or just first from possibilities."""
     possibilities = list(possibilities)
     try:
@@ -73,22 +88,22 @@ def get_closest(word, possibilities, cutoff=0.6, fallback_to_first=True):
             return possibilities[0]
 
 
-def get_close_matches(word, possibilities, n=None, cutoff=0.6):
+def get_close_matches(
+    word: str, possibilities: list[str], n: int | None = None, cutoff: float = 0.6
+) -> list[str]:
     """Overrides `difflib.get_close_match` to control argument `n`."""
     if n is None:
-        n = settings.num_close_matches
+        n = cast(int, settings.num_close_matches)
     return difflib_get_close_matches(word, possibilities, n, cutoff)
 
 
-def include_path_in_search(path):
+def include_path_in_search(path: str) -> bool:
     return not any(path.startswith(x) for x in settings.excluded_search_path_prefixes)
 
 
 @memoize
-def get_all_executables():
-    from thefuck.shells import shell
-
-    def _safe(fn, fallback):
+def get_all_executables() -> list[str]:
+    def _safe(fn: Callable[..., Any], fallback: Any) -> Any:
         try:
             return fn()
         except OSError:
@@ -109,7 +124,7 @@ def get_all_executables():
     return bins + aliases
 
 
-def replace_argument(script, from_, to):
+def replace_argument(script: str, from_: str, to: str) -> str:
     """Replaces command line argument."""
     replaced_in_the_end = re.sub(f" {re.escape(from_)}$", f" {to}", script, count=1)
     if replaced_in_the_end != script:
@@ -118,12 +133,14 @@ def replace_argument(script, from_, to):
 
 
 @decorator
-def eager(fn, *args, **kwargs):
+def eager(fn: Callable[..., Any], *args: Any, **kwargs: Any) -> list[Any]:
     return list(fn(*args, **kwargs))
 
 
 @eager
-def get_all_matched_commands(stderr, separator="Did you mean"):
+def get_all_matched_commands(
+    stderr: str, separator: str = "Did you mean"
+) -> Generator[str]:
     if not isinstance(separator, list):
         separator = [separator]
     should_yield = False
@@ -137,7 +154,7 @@ def get_all_matched_commands(stderr, separator="Did you mean"):
                 yield line.strip()
 
 
-def replace_command(command, broken, matched):
+def replace_command(command: Command, broken: str, matched: list[str]) -> list[str]:
     """Helper for *_no_command rules."""
     new_cmds = get_close_matches(broken, matched, cutoff=0.1)
     return [
@@ -147,7 +164,7 @@ def replace_command(command, broken, matched):
 
 
 @memoize
-def is_app(command, *app_names, **kwargs):
+def is_app(command: Command, *app_names: str, **kwargs: Any) -> bool:
     """Returns `True` if command is call to one of passed app names."""
     at_least = kwargs.pop("at_least", 0)
     if kwargs:
@@ -159,10 +176,10 @@ def is_app(command, *app_names, **kwargs):
     return False
 
 
-def for_app(*app_names, **kwargs):
+def for_app(*app_names: str, **kwargs: Any) -> Any:
     """Specifies that matching script is for one of app names."""
 
-    def _for_app(fn, command):
+    def _for_app(fn: Callable[..., Any], command: Command) -> Any:
         if is_app(command, *app_names, **kwargs):
             return fn(command)
         return False
@@ -173,17 +190,17 @@ def for_app(*app_names, **kwargs):
 class Cache:
     """Lazy read cache and save changes at exit."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._db = None
 
-    def _init_db(self):
+    def _init_db(self) -> None:
         try:
             self._setup_db()
         except Exception:
             exception("Unable to init cache", sys.exc_info())
             self._db = {}
 
-    def _setup_db(self):
+    def _setup_db(self) -> None:
         cache_dir = self._get_cache_dir()
         cache_path = Path(cache_dir).joinpath("thefuck").as_posix()
 
@@ -197,7 +214,7 @@ class Cache:
 
         atexit.register(self._db.close)
 
-    def _get_cache_dir(self):
+    def _get_cache_dir(self) -> str:
         default_xdg_cache_dir = os.path.expanduser("~/.cache")
         cache_dir = os.getenv("XDG_CACHE_HOME", default_xdg_cache_dir)
 
@@ -211,17 +228,21 @@ class Cache:
 
         return cache_dir
 
-    def _get_mtime(self, path):
+    def _get_mtime(self, path: str) -> str:
         try:
             return str(os.path.getmtime(path))
         except OSError:
             return "0"
 
-    def _get_key(self, fn, depends_on, args, kwargs):
+    def _get_key(
+        self, fn: Callable[..., Any], depends_on: Any, args: Any, kwargs: Any
+    ) -> str:
         parts = (fn.__module__, repr(fn).split("at")[0], depends_on, args, kwargs)
         return str(pickle.dumps(parts))
 
-    def get_value(self, fn, depends_on, args, kwargs):
+    def get_value(
+        self, fn: Callable[..., Any], depends_on: Any, args: Any, kwargs: Any
+    ) -> Any:
         if self._db is None:
             self._init_db()
 
@@ -241,7 +262,7 @@ class Cache:
 _cache = Cache()
 
 
-def cache(*depends_on):
+def cache(*depends_on: Any) -> Any:
     """
     Caches function result in temporary file.
 
@@ -252,10 +273,10 @@ def cache(*depends_on):
 
     """
 
-    def cache_decorator(fn):
+    def cache_decorator(fn: Callable[..., Any]) -> Callable[..., Any]:
         @memoize
         @wraps(fn)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             if cache.disabled:
                 return fn(*args, **kwargs)
             return _cache.get_value(fn, depends_on, args, kwargs)
@@ -268,23 +289,16 @@ def cache(*depends_on):
 cache.disabled = False
 
 
-def get_installation_version():
-    try:
-        from importlib.metadata import version
-
-        return version("thefuck")
-    except ImportError:
-        import pkg_resources
-
-        return pkg_resources.require("thefuck")[0].version
+def get_installation_version() -> str:
+    return version("thefuck")
 
 
-def get_alias():
+def get_alias() -> str:
     return os.environ.get("TF_ALIAS", "fuck")
 
 
 @memoize
-def get_valid_history_without_current(command):
+def get_valid_history_without_current(command: Command) -> list[str]:
     def _not_corrected(history, tf_alias):
         """Returns all lines from history except that comes before `fuck`."""
         previous = None
@@ -295,8 +309,6 @@ def get_valid_history_without_current(command):
         if history:
             yield history[-1]
 
-    from thefuck.shells import shell
-
     history = shell.get_history()
     tf_alias = get_alias()
     executables = set(get_all_executables()).union(shell.get_builtin_commands())
@@ -305,12 +317,12 @@ def get_valid_history_without_current(command):
         line
         for line in _not_corrected(history, tf_alias)
         if not line.startswith(tf_alias)
-        and not line == command.script
+        and line != command.script
         and line.split(" ")[0] in executables
     ]
 
 
-def format_raw_script(raw_script):
+def format_raw_script(raw_script: list[str]) -> str:
     """
     Creates single script from a list of script parts.
 

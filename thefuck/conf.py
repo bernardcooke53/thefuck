@@ -1,32 +1,39 @@
 from __future__ import annotations
 
+from argparse import Namespace
+from collections.abc import Generator
 import importlib.util
 import os
 import sys
 from pathlib import Path
+from types import ModuleType
+from typing import Any, TypeVar
 from warnings import warn
 
-from . import const
+from thefuck import const
+from thefuck.logs import exception
 
 
-def load_source(name, pathname, _file=None):
+def load_source(name: str, pathname: str, _file: None = None) -> ModuleType:
     module_spec = importlib.util.spec_from_file_location(name, pathname)
     module = importlib.util.module_from_spec(module_spec)
     module_spec.loader.exec_module(module)
     return module
 
 
-class Settings(dict):
-    def __getattr__(self, item):
+_KT = TypeVar("_KT")
+_VT = TypeVar("_VT")
+
+
+class Settings(dict[_KT, _VT]):
+    def __getattr__(self, item: _KT) -> _VT | None:
         return self.get(item)
 
-    def __setattr__(self, key, value):
+    def __setattr__(self, key: _KT, value: _VT) -> None:
         self[key] = value
 
-    def init(self, args=None):
+    def init(self, args=None) -> None:
         """Fills `settings` with values from `settings.py` and env."""
-        from .logs import exception
-
         self._setup_user_dir()
         self._init_settings_file()
 
@@ -42,7 +49,7 @@ class Settings(dict):
 
         self.update(self._settings_from_args(args))
 
-    def _init_settings_file(self):
+    def _init_settings_file(self) -> None:
         settings_path = self.user_dir.joinpath("settings.py")
         if not settings_path.is_file():
             with settings_path.open(mode="w") as settings_file:
@@ -50,7 +57,7 @@ class Settings(dict):
                 for setting in const.DEFAULT_SETTINGS.items():
                     settings_file.write("# {} = {}\n".format(*setting))
 
-    def _get_user_dir_path(self):
+    def _get_user_dir_path(self) -> Path:
         """Returns Path object representing the user config resource"""
         xdg_config_home = os.environ.get("XDG_CONFIG_HOME", "~/.config")
         user_dir = Path(xdg_config_home, "thefuck").expanduser()
@@ -59,12 +66,13 @@ class Settings(dict):
         # For backward compatibility use legacy '~/.thefuck' if it exists:
         if legacy_user_dir.is_dir():
             warn(
-                f"Config path {legacy_user_dir} is deprecated. Please move to {user_dir}"
+                f"Config path {legacy_user_dir} is deprecated. Please move to {user_dir}",
+                stacklevel=2,
             )
             return legacy_user_dir
         return user_dir
 
-    def _setup_user_dir(self):
+    def _setup_user_dir(self) -> None:
         """Returns user config dir, create it when it doesn't exist."""
         user_dir = self._get_user_dir_path()
 
@@ -73,25 +81,25 @@ class Settings(dict):
             rules_dir.mkdir(parents=True)
         self.user_dir = user_dir
 
-    def _settings_from_file(self):
+    def _settings_from_file(self) -> dict[str, Any]:
         """Loads settings from file."""
         settings = load_source("settings", str(self.user_dir.joinpath("settings.py")))
         return {
             key: getattr(settings, key)
-            for key in const.DEFAULT_SETTINGS.keys()
+            for key in const.DEFAULT_SETTINGS
             if hasattr(settings, key)
         }
 
-    def _rules_from_env(self, val):
+    def _rules_from_env(self, val: str) -> list[Any]:
         """Transforms rules list from env-string to python."""
-        val = val.split(":")
-        if "DEFAULT_RULES" in val:
-            val = const.DEFAULT_RULES + [
-                rule for rule in val if rule != "DEFAULT_RULES"
+        split = val.split(":")
+        if "DEFAULT_RULES" in split:
+            split = const.DEFAULT_RULES + [
+                rule for rule in split if rule != "DEFAULT_RULES"
             ]
-        return val
+        return split
 
-    def _priority_from_env(self, val):
+    def _priority_from_env(self, val: str) -> Generator[tuple[str, int]]:
         """Gets priority pairs from env."""
         for part in val.split(":"):
             try:
@@ -100,7 +108,7 @@ class Settings(dict):
             except ValueError:
                 continue
 
-    def _val_from_env(self, env, attr):
+    def _val_from_env(self, env: str, attr: str) -> Any:
         """Transforms env-strings to python."""
         val = os.environ[env]
         if attr in ("rules", "exclude_rules"):
@@ -126,7 +134,7 @@ class Settings(dict):
             return val.split(":")
         return val
 
-    def _settings_from_env(self):
+    def _settings_from_env(self) -> dict[str, Any]:
         """Loads settings from env."""
         return {
             attr: self._val_from_env(env, attr)
@@ -134,7 +142,7 @@ class Settings(dict):
             if env in os.environ
         }
 
-    def _settings_from_args(self, args):
+    def _settings_from_args(self, args: Namespace) -> dict[str, Any]:
         """Loads settings from args."""
         if not args:
             return {}

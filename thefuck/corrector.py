@@ -1,20 +1,17 @@
 from __future__ import annotations
 
+from collections.abc import Generator, Iterable, Iterator
 import sys
 from pathlib import Path
 
-from . import logs
-from .conf import settings
-from .types import Rule
+from thefuck import logs
+from thefuck.conf import settings
+from thefuck.types import Command, CorrectedCommand, Rule
 
 
-def get_loaded_rules(rules_paths):
+def get_loaded_rules(rules_paths: Iterable[Path]) -> Iterable[Rule]:
     """
     Yields all available rules.
-
-    :type rules_paths: [Path]
-    :rtype: Iterable[Rule]
-
     """
     for path in rules_paths:
         if path.name != "__init__.py":
@@ -23,12 +20,9 @@ def get_loaded_rules(rules_paths):
                 yield rule
 
 
-def get_rules_import_paths():
+def get_rules_import_paths() -> Generator[Path]:
     """
     Yields all rules import paths.
-
-    :rtype: Iterable[Path]
-
     """
     # Bundled rules:
     yield Path(__file__).parent.joinpath("rules")
@@ -42,12 +36,9 @@ def get_rules_import_paths():
                 yield contrib_rules
 
 
-def get_rules():
+def get_rules() -> list[Rule]:
     """
     Returns all enabled rules.
-
-    :rtype: [Rule]
-
     """
     paths = [
         rule_path
@@ -57,13 +48,11 @@ def get_rules():
     return sorted(get_loaded_rules(paths), key=lambda rule: rule.priority)
 
 
-def organize_commands(corrected_commands):
+def organize_commands(
+    corrected_commands: Iterator[CorrectedCommand],
+) -> Generator[CorrectedCommand]:
     """
     Yields sorted commands without duplicates.
-
-    :type corrected_commands: Iterable[thefuck.types.CorrectedCommand]
-    :rtype: Iterable[thefuck.types.CorrectedCommand]
-
     """
     try:
         first_command = next(corrected_commands)
@@ -90,7 +79,7 @@ def organize_commands(corrected_commands):
     yield from sorted_commands
 
 
-def get_corrected_commands(command):
+def get_corrected_commands(command: Command) -> Iterator[CorrectedCommand]:
     """
     Returns generator with sorted and unique corrected commands.
 

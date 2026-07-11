@@ -102,6 +102,7 @@ ignore = [
     "D401",
     # First word of docstring should be "This"
     "D404",
+    "D413",
     "D415",
     # flake8-datetimez
     "DTZ",
@@ -132,11 +133,13 @@ ignore = [
     "PTH",
     # flake8-raise
     "RSE",
+    "RET503",
     # ruff
     # This seems to flag a load of false-positives, thinking that the # noqa's are
     # unneeded and trying to fix them even though ruff then flags the errors that
     # were previously ignored
     "RUF100",
+    "TC006",
     # flake8-todos
     "TD002",
     "TD003",

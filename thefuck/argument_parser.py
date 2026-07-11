@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import sys
-from argparse import SUPPRESS, ArgumentParser
+from argparse import SUPPRESS, ArgumentParser, Namespace
 
-from .const import ARGUMENT_PLACEHOLDER
-from .utils import get_alias
+from thefuck.const import ARGUMENT_PLACEHOLDER
+from thefuck.utils import get_alias
 
 
 class Parser:
@@ -14,11 +14,11 @@ class Parser:
 
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._parser = ArgumentParser(prog="thefuck", add_help=False)
         self._add_arguments()
 
-    def _add_arguments(self):
+    def _add_arguments(self) -> None:
         """Adds arguments to parser."""
         self._parser.add_argument(
             "-v",
@@ -53,7 +53,7 @@ class Parser:
             "command", nargs="*", help="command that should be fixed"
         )
 
-    def _add_conflicting_arguments(self):
+    def _add_conflicting_arguments(self) -> None:
         """It's too dangerous to use `-y` and `-r` together."""
         group = self._parser.add_mutually_exclusive_group()
         group.add_argument(
@@ -68,7 +68,7 @@ class Parser:
             "-r", "--repeat", action="store_true", help="repeat on failure"
         )
 
-    def _prepare_arguments(self, argv):
+    def _prepare_arguments(self, argv: list[str]) -> list[str]:
         """
         Prepares arguments by:
 
@@ -77,7 +77,6 @@ class Parser:
 
         - adding `--` before `command`, so our parse would ignore arguments
           of `command`.
-
         """
         if ARGUMENT_PLACEHOLDER in argv:
             index = argv.index(ARGUMENT_PLACEHOLDER)
@@ -86,12 +85,12 @@ class Parser:
             return ["--"] + argv
         return argv
 
-    def parse(self, argv):
+    def parse(self, argv: list[str]) -> Namespace:
         arguments = self._prepare_arguments(argv[1:])
         return self._parser.parse_args(arguments)
 
-    def print_usage(self):
+    def print_usage(self) -> None:
         self._parser.print_usage(sys.stderr)
 
-    def print_help(self):
+    def print_help(self) -> None:
         self._parser.print_help(sys.stderr)
