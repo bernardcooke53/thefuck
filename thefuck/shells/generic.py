@@ -1,37 +1,41 @@
 from __future__ import annotations
 
+from collections.abc import Generator
 import os
 import shlex
-from collections import namedtuple
 from pathlib import Path
+from typing import NamedTuple
 
-from ..conf import settings
-from ..logs import warn
-from ..utils import memoize
+from thefuck.conf import settings
+from thefuck.logs import warn
+from thefuck.utils import memoize
 
-ShellConfiguration = namedtuple(
-    "ShellConfiguration", ("content", "path", "reload", "can_configure_automatically")
-)
+
+class ShellConfiguration(NamedTuple):
+    content: str
+    path: str
+    reload: str
+    can_configure_automatically: bool
 
 
 class Generic:
     friendly_name = "Generic Shell"
 
-    def get_aliases(self):
+    def get_aliases(self) -> dict[str, str]:
         return {}
 
-    def _expand_aliases(self, command_script):
+    def _expand_aliases(self, command_script: str) -> str:
         aliases = self.get_aliases()
         binary = command_script.split(" ")[0]
         if binary in aliases:
             return command_script.replace(binary, aliases[binary], 1)
         return command_script
 
-    def from_shell(self, command_script):
+    def from_shell(self, command_script: str) -> str:
         """Prepares command before running in app."""
         return self._expand_aliases(command_script)
 
-    def to_shell(self, command_script):
+    def to_shell(self, command_script: str) -> str:
         """Prepares command for running in shell."""
         return command_script
 
@@ -45,17 +49,17 @@ class Generic:
         warn("Instant mode not supported by your shell")
         return self.app_alias(alias_name)
 
-    def _get_history_file_name(self):
+    def _get_history_file_name(self) -> str:
         return ""
 
-    def _get_history_line(self, command_script):
+    def _get_history_line(self, command_script: str) -> str:
         return ""
 
     @memoize
-    def get_history(self):
+    def get_history(self) -> list[str]:
         return list(self._get_history_lines())
 
-    def _get_history_lines(self):
+    def _get_history_lines(self) -> Generator[str]:
         """Returns list of history entries."""
         history_file_name = self._get_history_file_name()
         if os.path.isfile(history_file_name):
@@ -71,16 +75,16 @@ class Generic:
                     if prepared:
                         yield prepared
 
-    def and_(self, *commands):
+    def and_(self, *commands: str) -> str:
         return " && ".join(commands)
 
-    def or_(self, *commands):
+    def or_(self, *commands: str) -> str:
         return " || ".join(commands)
 
-    def how_to_configure(self):
+    def how_to_configure(self) -> None:
         return
 
-    def split_command(self, command):
+    def split_command(self, command: str) -> list[str]:
         """Split the command using shell-like syntax."""
         encoded = self.encode_utf8(command)
 
@@ -94,31 +98,28 @@ class Generic:
 
         return self.decode_utf8(splitted)
 
-    def encode_utf8(self, command):
+    def encode_utf8(self, command: str) -> str:
         return command
 
-    def decode_utf8(self, command_parts):
+    def decode_utf8(self, command_parts: list[str]) -> list[str]:
         return command_parts
 
-    def quote(self, s):
+    def quote(self, s: str) -> str:
         """Return a shell-escaped version of the string s."""
-        from shlex import quote
+        return shlex.quote(s)
 
-        return quote(s)
-
-    def _script_from_history(self, line):
+    def _script_from_history(self, line: str) -> str:
         return line
 
-    def put_to_history(self, command):
+    def put_to_history(self, command: str) -> None:
         """
         Adds fixed command to shell history.
 
         In most of shells we change history on shell-level, but not
         all shells support it (Fish).
-
         """
 
-    def get_builtin_commands(self):
+    def get_builtin_commands(self) -> list[str]:
         """Returns shells builtin commands."""
         return [
             "alias",
@@ -179,11 +180,11 @@ class Generic:
             "while",
         ]
 
-    def _get_version(self):
+    def _get_version(self) -> str:
         """Returns the version of the current shell"""
         return ""
 
-    def info(self):
+    def info(self) -> str:
         """Returns the name and version of the current shell"""
         try:
             version = self._get_version()
@@ -192,7 +193,9 @@ class Generic:
             version = ""
         return f"{self.friendly_name} {version}".rstrip()
 
-    def _create_shell_configuration(self, content, path, reload):
+    def _create_shell_configuration(
+        self, content: str, path: str, reload: str
+    ) -> ShellConfiguration:
         return ShellConfiguration(
             content=content,
             path=path,

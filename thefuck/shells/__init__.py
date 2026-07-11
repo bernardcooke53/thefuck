@@ -10,12 +10,12 @@ import os
 
 from psutil import Process
 
-from .bash import Bash
-from .fish import Fish
-from .generic import Generic
-from .powershell import Powershell
-from .tcsh import Tcsh
-from .zsh import Zsh
+from thefuck.shells.bash import Bash
+from thefuck.shells.fish import Fish
+from thefuck.shells.generic import Generic
+from thefuck.shells.powershell import Powershell
+from thefuck.shells.tcsh import Tcsh
+from thefuck.shells.zsh import Zsh
 
 shells = {
     "bash": Bash,
@@ -28,31 +28,23 @@ shells = {
 }
 
 
-def _get_shell_from_env():
+def _get_shell_from_env() -> Generic | None:
     name = os.environ.get("TF_SHELL")
 
     if name in shells:
         return shells[name]()
+    return None
 
 
-def _get_shell_from_proc():
+def _get_shell_from_proc() -> Generic:
     proc = Process(os.getpid())
 
     while proc is not None and proc.pid > 0:
-        try:
-            name = proc.name()
-        except TypeError:
-            name = proc.name
-
-        name = os.path.splitext(name)[0]
+        name = os.path.splitext(proc.name())[0]
 
         if name in shells:
             return shells[name]()
-
-        try:
-            proc = proc.parent()
-        except TypeError:
-            proc = proc.parent
+        proc = proc.parent()
 
     return Generic()
 

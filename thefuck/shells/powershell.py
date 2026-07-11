@@ -2,14 +2,14 @@ from __future__ import annotations
 
 from subprocess import PIPE, Popen
 
-from .generic import Generic, ShellConfiguration
-from ..utils import DEVNULL
+from thefuck.shells.generic import Generic, ShellConfiguration
+from thefuck.utils import DEVNULL
 
 
 class Powershell(Generic):
     friendly_name = "PowerShell"
 
-    def app_alias(self, alias_name):
+    def app_alias(self, alias_name: str) -> str:
         return (
             "function " + alias_name + " {\n"
             "    $history = (Get-History -Count 1).CommandLine;\n"
@@ -24,10 +24,10 @@ class Powershell(Generic):
             "}\n"
         )
 
-    def and_(self, *commands):
+    def and_(self, *commands: str) -> str:
         return " -and ".join(f"({c})" for c in commands)
 
-    def how_to_configure(self):
+    def how_to_configure(self) -> ShellConfiguration:
         return ShellConfiguration(
             content='iex "$(thefuck --alias)"',
             path="$profile",
@@ -35,7 +35,7 @@ class Powershell(Generic):
             can_configure_automatically=False,
         )
 
-    def _get_version(self):
+    def _get_version(self) -> str:
         """Returns the version of the current shell"""
         try:
             proc = Popen(

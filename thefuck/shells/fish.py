@@ -5,22 +5,22 @@ import sys
 from subprocess import PIPE, Popen
 from time import time
 
-from .generic import Generic
-from .. import logs
-from ..conf import settings
-from ..const import ARGUMENT_PLACEHOLDER
-from ..utils import DEVNULL, cache
+from thefuck.shells.generic import Generic, ShellConfiguration
+from thefuck import logs
+from thefuck.conf import settings
+from thefuck.const import ARGUMENT_PLACEHOLDER
+from thefuck.utils import DEVNULL, cache
 
 
 @cache("~/.config/fish/config.fish", "~/.config/fish/functions")
-def _get_functions(overridden):
+def _get_functions(overridden: list[str]) -> dict[str, str]:
     proc = Popen(["fish", "-ic", "functions"], stdout=PIPE, stderr=DEVNULL)
     functions = proc.stdout.read().decode("utf-8").strip().split("\n")
     return {func: func for func in functions if func not in overridden}
 
 
 @cache("~/.config/fish/config.fish")
-def _get_aliases(overridden):
+def _get_aliases(overridden: list[str]) -> dict[str, str]:
     aliases = {}
     proc = Popen(["fish", "-ic", "alias"], stdout=PIPE, stderr=DEVNULL)
     alias_out = proc.stdout.read().decode("utf-8").strip()
@@ -42,7 +42,7 @@ def _get_aliases(overridden):
 class Fish(Generic):
     friendly_name = "Fish Shell"
 
-    def _get_overridden_aliases(self):
+    def _get_overridden_aliases(self) -> list[str]:
         overridden = os.environ.get(
             "THEFUCK_OVERRIDDEN_ALIASES", os.environ.get("TF_OVERRIDDEN_ALIASES", "")
         )
@@ -51,7 +51,7 @@ class Fish(Generic):
             default.add(alias.strip())
         return sorted(default)
 
-    def app_alias(self, alias_name):
+    def app_alias(self, alias_name: str) -> str:
         if settings.alter_history:
             alter_history = (
                 "    builtin history delete --exact"
@@ -72,14 +72,14 @@ class Fish(Generic):
             "end"
         )
 
-    def get_aliases(self):
+    def get_aliases(self) -> dict[str, str]:
         overridden = self._get_overridden_aliases()
         functions = _get_functions(overridden)
         raw_aliases = _get_aliases(overridden)
         functions.update(raw_aliases)
         return functions
 
-    def _expand_aliases(self, command_script):
+    def _expand_aliases(self, command_script: str) -> str:
         aliases = self.get_aliases()
         binary = command_script.split(" ")[0]
         if binary in aliases and aliases[binary] != binary:
@@ -88,42 +88,42 @@ class Fish(Generic):
             return 'fish -ic "{}"'.format(command_script.replace('"', r"\""))
         return command_script
 
-    def _get_history_file_name(self):
+    def _get_history_file_name(self) -> str:
         return os.path.expanduser("~/.config/fish/fish_history")
 
-    def _get_history_line(self, command_script):
+    def _get_history_line(self, command_script: str) -> str:
         return f"- cmd: {command_script}\n   when: {int(time())}\n"
 
-    def _script_from_history(self, line):
+    def _script_from_history(self, line: str) -> str:
         if "- cmd: " in line:
             return line.split("- cmd: ", 1)[1]
         return ""
 
-    def and_(self, *commands):
+    def and_(self, *commands: str) -> str:
         return "; and ".join(commands)
 
-    def or_(self, *commands):
+    def or_(self, *commands: str) -> str:
         return "; or ".join(commands)
 
-    def how_to_configure(self):
+    def how_to_configure(self) -> ShellConfiguration:
         return self._create_shell_configuration(
             content="thefuck --alias | source",
             path="~/.config/fish/config.fish",
             reload="fish",
         )
 
-    def _get_version(self):
+    def _get_version(self) -> str:
         """Returns the version of the current shell"""
         proc = Popen(["fish", "--version"], stdout=PIPE, stderr=DEVNULL)
         return proc.stdout.read().decode("utf-8").split()[-1]
 
-    def put_to_history(self, command):
+    def put_to_history(self, command: str) -> None:
         try:
             return self._put_to_history(command)
         except OSError:
             logs.exception("Can't update history", sys.exc_info())
 
-    def _put_to_history(self, command_script):
+    def _put_to_history(self, command_script: str) -> None:
         """Puts command script to shell history."""
         history_file_name = self._get_history_file_name()
         if os.path.isfile(history_file_name):
