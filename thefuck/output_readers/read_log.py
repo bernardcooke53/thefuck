@@ -1,18 +1,20 @@
 from __future__ import annotations
 
+from collections.abc import Generator, Sequence
 import mmap
 import os
 import re
 import shlex
 from shutil import get_terminal_size
+from typing import Iterable
 
 import pyte
 
-from .. import const, logs
-from ..exceptions import ScriptNotInLog
+from thefuck import const, logs
+from thefuck.exceptions import ScriptNotInLog
 
 
-def _group_by_calls(log):
+def _group_by_calls(log: Iterable[str]) -> Generator[tuple[str, list[str]]]:
     ps1 = os.environ["PS1"]
     ps1_newlines = ps1.count("\\n") + ps1.count("\n")
     ps1_counter = 0
@@ -39,7 +41,9 @@ def _group_by_calls(log):
         yield script_line, lines
 
 
-def _get_script_group_lines(grouped, script):
+def _get_script_group_lines(
+    grouped: Sequence[tuple[str, list[str]]], script: str
+) -> list[str]:
     parts = shlex.split(script)
     for script_line, lines in reversed(grouped):
         if all(part in script_line for part in parts):
@@ -48,7 +52,7 @@ def _get_script_group_lines(grouped, script):
     raise ScriptNotInLog
 
 
-def _get_output_lines(script, log_file):
+def _get_output_lines(script: str, log_file: mmap.mmap) -> list[str]:
     data = log_file.read().decode()
     data = re.sub(r"\x00+$", "", data)
     lines = data.split("\n")
@@ -60,19 +64,15 @@ def _get_output_lines(script, log_file):
     return screen.display
 
 
-def _skip_old_lines(log_file):
+def _skip_old_lines(log_file: mmap.mmap) -> None:
     size = os.path.getsize(os.environ["THEFUCK_OUTPUT_LOG"])
     if size > const.LOG_SIZE_IN_BYTES:
         log_file.seek(size - const.LOG_SIZE_IN_BYTES)
 
 
-def get_output(script):
+def get_output(script: str) -> str | None:
     """
     Reads script output from log.
-
-    :type script: str
-    :rtype: str | None
-
     """
     if "THEFUCK_OUTPUT_LOG" not in os.environ:
         logs.warn("Output log isn't specified")

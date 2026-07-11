@@ -6,17 +6,14 @@ from subprocess import PIPE, STDOUT, Popen
 
 from psutil import AccessDenied, Process, TimeoutExpired
 
-from .. import logs
-from ..conf import settings
+from thefuck import logs
+from thefuck.conf import settings
 
 
-def _kill_process(proc):
+def _kill_process(proc: Process) -> None:
     """
     Tries to kill the process otherwise just logs a debug message, the
     process will be killed when thefuck terminates.
-
-    :type proc: Process
-
     """
     try:
         proc.kill()
@@ -26,16 +23,12 @@ def _kill_process(proc):
         )
 
 
-def _wait_output(popen, is_slow):
+def _wait_output(popen: Popen, is_slow: bool) -> bool:
     """
     Returns `True` if we can get output of the command in the
     `settings.wait_command` time.
 
     Command will be killed if it wasn't finished in the time.
-
-    :type popen: Popen
-    :rtype: bool
-
     """
     proc = Process(popen.pid)
     try:
@@ -48,14 +41,9 @@ def _wait_output(popen, is_slow):
         return False
 
 
-def get_output(script, expanded):
+def get_output(script: str, expanded: str) -> str | None:
     """
     Runs the script and obtains stdin/stderr.
-
-    :type script: str
-    :type expanded: str
-    :rtype: str | None
-
     """
     env = dict(os.environ)
     env.update(settings.env)

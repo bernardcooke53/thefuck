@@ -7,19 +7,16 @@ from shutil import get_terminal_size
 
 import pyte
 
-from .. import const, logs
+from thefuck import const, logs
 
 
-def _get_socket_path():
+def _get_socket_path() -> str | None:
     return os.environ.get(const.SHELL_LOGGER_SOCKET_ENV)
 
 
-def is_available():
+def is_available() -> bool:
     """
     Returns `True` if shell logger socket available.
-
-    :rtype: book
-
     """
     path = _get_socket_path()
     if not path:
@@ -28,8 +25,9 @@ def is_available():
     return os.path.exists(path)
 
 
-def _get_last_n(n):
+def _get_last_n(n: int) -> list[str]:
     with socket.socket(socket.AF_UNIX) as client:
+        # TODO: optional but None is not allowed
         client.connect(_get_socket_path())
         request = (
             json.dumps(
@@ -45,7 +43,7 @@ def _get_last_n(n):
         return json.loads(response)["commands"]
 
 
-def _get_output_lines(output):
+def _get_output_lines(output: str) -> list[str]:
     lines = output.split("\n")
     screen = pyte.Screen(get_terminal_size().columns, len(lines))
     stream = pyte.Stream(screen)
@@ -53,7 +51,7 @@ def _get_output_lines(output):
     return screen.display
 
 
-def get_output(script):
+def get_output(script: str) -> str | None:
     """Gets command output from shell logger."""
     with logs.debug_time("Read output from external shell logger"):
         commands = _get_last_n(const.SHELL_LOGGER_LIMIT)
