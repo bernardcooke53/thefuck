@@ -18,8 +18,10 @@ from thefuck.types import Command
         (False, "ls", "ls", False),
     ],
 )
-def test_sudo_support(return_value, command, called, result):
-    def fn(command):
+def test_sudo_support(
+    return_value: str, command: str, called: str, result: str
+) -> None:
+    def fn(command: Command) -> str:
         assert command == Command(called, "")
         return return_value
 

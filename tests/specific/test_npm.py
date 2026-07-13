@@ -3,6 +3,7 @@ from __future__ import annotations
 from io import BytesIO
 
 import pytest
+import pytest_mock
 
 from thefuck.specific.npm import get_scripts
 
@@ -19,11 +20,11 @@ available via `npm run-script`:
   watch-test
     jest --verbose --watch
 
-"""
+"""  # noqa: E501
 
 
 @pytest.mark.usefixtures("no_memoize")
-def test_get_scripts(mocker):
+def test_get_scripts(mocker: pytest_mock.MockerFixture) -> None:
     patch = mocker.patch("thefuck.specific.npm.Popen")
     patch.return_value.stdout = BytesIO(run_script_stdout)
     assert get_scripts() == ["build", "develop", "watch-test"]

@@ -4,6 +4,7 @@ import os
 import sys
 from collections.abc import Callable, Generator
 from pathlib import Path
+from typing import cast
 
 from thefuck import logs
 from thefuck.conf import load_source, settings
@@ -17,7 +18,7 @@ from thefuck.utils import format_raw_script, get_alias
 class Command:
     """Command that should be fixed."""
 
-    def __init__(self, script: str, output: str) -> str:
+    def __init__(self, script: str, output: str | None) -> None:
         """
         Initializes command with given values.
         """
@@ -25,12 +26,12 @@ class Command:
         self.output = output
 
     @property
-    def stdout(self) -> str:
+    def stdout(self) -> str | None:
         logs.warn("`stdout` is deprecated, please use `output` instead")
         return self.output
 
     @property
-    def stderr(self) -> str:
+    def stderr(self) -> str | None:
         logs.warn("`stderr` is deprecated, please use `output` instead")
         return self.output
 
@@ -55,13 +56,15 @@ class Command:
     def __repr__(self) -> str:
         return f"Command(script={self.script}, output={self.output})"
 
-    def update(self, **kwargs: str) -> Command:
+    def update(self, **kwargs: str | None) -> Command:
         """
         Returns new command with replaced fields.
         """
         kwargs.setdefault("script", self.script)
         kwargs.setdefault("output", self.output)
-        return Command(**kwargs)
+        script = cast(str, kwargs["script"])
+        output = kwargs["output"]
+        return Command(script=script, output=output)
 
     @classmethod
     def from_raw_script(cls, raw_script: list[str]) -> Command:
