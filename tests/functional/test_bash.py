@@ -12,10 +12,7 @@ from tests.functional.plots import (
     without_confirmation,
 )
 
-python_3 = ("thefuck/python3", "", "sh")
-
-python_2 = ("thefuck/python2", "", "sh")
-
+pytestmark = pytest.mark.functional
 
 init_bashrc = """echo '
 export SHELL=/bin/bash
@@ -26,10 +23,10 @@ echo "instant mode ready: $THEFUCK_INSTANT_MODE"
 ' > ~/.bashrc"""
 
 
-@pytest.fixture(params=[(python_3, False), (python_3, True), (python_2, False)])
-def proc(request, spawnu, TIMEOUT):
-    container, instant_mode = request.param
-    proc = spawnu(*container)
+@pytest.fixture(params=[False, True])
+def proc(request: pytest.FixtureRequest, spawnu, TIMEOUT):
+    instant_mode = request.param
+    proc = spawnu("thefuck/python3", "", "sh")
     proc.sendline(
         init_bashrc.format("--enable-experimental-instant-mode" if instant_mode else "")
     )
@@ -39,31 +36,26 @@ def proc(request, spawnu, TIMEOUT):
     return proc
 
 
-@pytest.mark.functional
 def test_with_confirmation(proc, TIMEOUT):
     with_confirmation(proc, TIMEOUT)
     history_changed(proc, TIMEOUT, "echo test")
 
 
-@pytest.mark.functional
 def test_select_command_with_arrows(proc, TIMEOUT):
     select_command_with_arrows(proc, TIMEOUT)
     history_changed(proc, TIMEOUT, "git help", "git hook")
 
 
-@pytest.mark.functional
 def test_refuse_with_confirmation(proc, TIMEOUT):
     refuse_with_confirmation(proc, TIMEOUT)
     history_not_changed(proc, TIMEOUT)
 
 
-@pytest.mark.functional
 def test_without_confirmation(proc, TIMEOUT):
     without_confirmation(proc, TIMEOUT)
     history_changed(proc, TIMEOUT, "echo test")
 
 
-@pytest.mark.functional
 def test_how_to_configure_alias(proc, TIMEOUT):
     proc.sendline("unset -f fuck")
     how_to_configure(proc, TIMEOUT)

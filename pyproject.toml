@@ -50,7 +50,8 @@ dev = [
     "bandit[toml]>=1.7.5",
 ]
 
-[tool.pytest.ini_options]
+[tool.pytest]
+strict_markers = true
 addopts = [
     "-ra",
     "--cache-clear",
@@ -60,6 +61,7 @@ addopts = [
     "--cov-report",
     "term",
 ]
+markers = ["functional: mark test as functional"]
 python_files = ["tests/test_*.py", "tests/**/test_*.py"]
 
 [tool.bandit]

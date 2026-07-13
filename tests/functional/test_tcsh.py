@@ -9,12 +9,10 @@ from tests.functional.plots import (
     without_confirmation,
 )
 
-containers = (("thefuck/python3", "", "tcsh"), ("thefuck/python2", "", "tcsh"))
 
-
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
+@pytest.fixture
+def proc(spawnu, TIMEOUT):
+    proc = spawnu("thefuck/python3", "", "tcsh")
     proc.sendline("tcsh")
     proc.sendline("setenv PYTHONIOENCODING utf8")
     proc.sendline("eval `thefuck --alias`")

@@ -12,9 +12,6 @@ from tests.functional.plots import (
     without_confirmation,
 )
 
-python_3 = ("thefuck/python3", "", "sh")
-python_2 = ("thefuck/python2", "", "sh")
-
 
 init_zshrc = """echo '
 export SHELL=/usr/bin/zsh
@@ -28,10 +25,10 @@ echo "instant mode ready: $THEFUCK_INSTANT_MODE"
 ' > ~/.zshrc"""
 
 
-@pytest.fixture(params=[(python_3, False), (python_3, True), (python_2, False)])
+@pytest.fixture(params=[False, True])
 def proc(request, spawnu, TIMEOUT):
-    container, instant_mode = request.param
-    proc = spawnu(*container)
+    instant_mode = request.param
+    proc = spawnu("thefuck/python3", "", "sh")
     proc.sendline(
         init_zshrc.format("--enable-experimental-instant-mode" if instant_mode else "")
     )

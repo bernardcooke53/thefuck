@@ -9,12 +9,10 @@ from tests.functional.plots import (
     without_confirmation,
 )
 
-containers = (("thefuck/python3", "", "fish"), ("thefuck/python2", "", "fish"))
 
-
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
+@pytest.fixture
+def proc(spawnu, TIMEOUT):
+    proc = spawnu("thefuck/python3", "", "fish")
     proc.sendline("thefuck --alias > ~/.config/fish/config.fish")
     proc.sendline("fish")
     return proc
