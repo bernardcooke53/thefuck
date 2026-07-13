@@ -4,7 +4,7 @@ import os
 import sys
 from collections.abc import Callable, Generator
 from pathlib import Path
-from typing import cast
+from typing import Any, cast
 
 from thefuck import logs
 from thefuck.conf import load_source, settings
@@ -211,7 +211,7 @@ class CorrectedCommand:
     def __init__(
         self,
         script: str,
-        side_effect: Callable[[Command, str], None] | None,
+        side_effect: Callable[[Command, str], Any] | None,
         priority: int,
     ) -> None:
         self.script = script

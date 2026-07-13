@@ -37,7 +37,7 @@ def no_memoize(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 @pytest.fixture(autouse=True)
-def settings() -> Generator[Any]:
+def settings() -> Generator[conf.Settings]:
     try:
         conf.settings.user_dir = Path("~/.thefuck")
         yield conf.settings

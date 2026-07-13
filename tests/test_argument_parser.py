@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Any
 
 import pytest
 
@@ -6,7 +7,7 @@ from thefuck.argument_parser import Parser
 from thefuck.const import ARGUMENT_PLACEHOLDER
 
 
-def _args(**override):
+def _args(**override: Any) -> dict[str, Any]:
     args = {
         "alias": None,
         "command": [],
@@ -55,5 +56,5 @@ def _args(**override):
         (["thefuck", "--shell-logger", "/tmp/log"], _args(shell_logger="/tmp/log")),
     ],
 )
-def test_parse(argv, result):
+def test_parse(argv: list[str], result: dict[str, Any]) -> None:
     assert vars(Parser().parse(argv)) == result

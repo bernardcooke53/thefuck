@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+from pathlib import Path
 
-def test_readme(source_root):
+
+def test_readme(source_root: Path) -> None:
     with source_root.joinpath("README.md").open() as f:
         readme = f.read()
 
