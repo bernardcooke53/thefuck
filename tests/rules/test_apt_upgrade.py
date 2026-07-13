@@ -18,7 +18,7 @@ Listing... Done
 """
 
 
-def test_match():
+def test_match() -> None:
     assert match(Command("apt list --upgradable", match_output))
     assert match(Command("sudo apt list --upgradable", match_output))
 
@@ -30,11 +30,11 @@ def test_match():
         Command("sudo apt list --upgradable", no_match_output),
     ],
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
-def test_get_new_command():
+def test_get_new_command() -> None:
     new_command = get_new_command(Command("apt list --upgradable", match_output))
     assert new_command == "apt upgrade"
 

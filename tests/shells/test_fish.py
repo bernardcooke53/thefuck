@@ -6,6 +6,7 @@ from typing import Any
 import pytest
 import pytest_mock
 
+from thefuck.conf import Settings
 from thefuck.const import ARGUMENT_PLACEHOLDER
 from thefuck.shells import Fish
 
@@ -132,7 +133,7 @@ def test_app_alias(shell: Fish) -> None:
 
 
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
-def test_app_alias_alter_history(settings: Any, shell: Fish) -> None:
+def test_app_alias_alter_history(settings: Settings, shell: Fish) -> None:
     settings.alter_history = True
     assert (
         "builtin history delete --exact --case-sensitive -- $fucked_up_command\n"

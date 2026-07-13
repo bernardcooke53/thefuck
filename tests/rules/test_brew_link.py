@@ -28,15 +28,15 @@ def new_command(formula):
 
 
 @pytest.mark.parametrize("script", ["brew link coreutils", "brew ln coreutils"])
-def test_match(output, script):
+def test_match(output, script) -> None:
     assert match(Command(script, output))
 
 
 @pytest.mark.parametrize("script", ["brew link coreutils"])
-def test_not_match(script):
+def test_not_match(script) -> None:
     assert not match(Command(script, ""))
 
 
 @pytest.mark.parametrize("script, formula, ", [("brew link coreutils", "coreutils")])
-def test_get_new_command(output, new_command, script, formula):
+def test_get_new_command(output, new_command, script, formula) -> None:
     assert get_new_command(Command(script, output)) == new_command

@@ -33,7 +33,7 @@ def brew_already_installed():
     return """Warning: git-2.3.5 already installed"""
 
 
-def test_suggestions():
+def test_suggestions() -> None:
     assert _get_suggestions("one") == ["one"]
     assert _get_suggestions("one or two") == ["one", "two"]
     assert _get_suggestions("one, two or three") == ["one", "two", "three"]

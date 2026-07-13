@@ -47,7 +47,7 @@ package_not_found_error = (
         Command("cinst chocolatey -y", package_not_found_error),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -77,7 +77,7 @@ def test_match(command):
         Command("cuninst chocolatey -y", ""),
     ],
 )
-def not_test_match(command):
+def not_test_match(command) -> None:
     assert not match(command)
 
 
@@ -105,5 +105,5 @@ def not_test_match(command):
         ("cinst chocolatey -y", "cinst chocolatey.install -y"),
     ],
 )
-def test_get_new_command(before, after):
+def test_get_new_command(before, after) -> None:
     assert get_new_command(Command(before, "")) == after

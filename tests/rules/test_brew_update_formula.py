@@ -11,13 +11,13 @@ output = (
 )
 
 
-def test_match():
+def test_match() -> None:
     command = Command("brew update thefuck", output)
     assert match(command)
 
 
 @pytest.mark.parametrize("script", ["brew upgrade foo", "brew update"])
-def test_not_match(script):
+def test_not_match(script) -> None:
     assert not match(Command(script, ""))
 
 
@@ -25,7 +25,7 @@ def test_not_match(script):
     "script, formula, ",
     [("brew update foo", "foo"), ("brew update bar zap", "bar zap")],
 )
-def test_get_new_command(script, formula):
+def test_get_new_command(script, formula) -> None:
     command = Command(script, output)
     new_command = f"brew upgrade {formula}"
     assert get_new_command(command) == new_command

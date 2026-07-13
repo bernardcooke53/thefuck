@@ -15,15 +15,15 @@ def output():
 
 
 @pytest.mark.parametrize("script", ["ag \\("])
-def test_match(script, output):
+def test_match(script, output) -> None:
     assert match(Command(script, output))
 
 
 @pytest.mark.parametrize("script", ["ag foo"])
-def test_not_match(script):
+def test_not_match(script) -> None:
     assert not match(Command(script, ""))
 
 
 @pytest.mark.parametrize("script, new_cmd", [("ag \\(", "ag -Q \\(")])
-def test_get_new_command(script, new_cmd, output):
+def test_get_new_command(script, new_cmd, output) -> None:
     assert get_new_command(Command(script, output)) == new_cmd

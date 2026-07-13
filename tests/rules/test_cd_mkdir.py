@@ -15,12 +15,12 @@ from thefuck.types import Command
         Command("cd /foo/bar/", 'cd: The directory "/foo/bar/" does not exist'),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
 @pytest.mark.parametrize("command", [Command("cd foo", ""), Command("", "")])
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -31,5 +31,5 @@ def test_not_match(command):
         (Command("cd foo/bar/baz", ""), "mkdir -p foo/bar/baz && cd foo/bar/baz"),
     ],
 )
-def test_get_new_command(command, new_command):
+def test_get_new_command(command, new_command) -> None:
     assert get_new_command(command) == new_command

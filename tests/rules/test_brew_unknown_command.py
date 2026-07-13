@@ -16,13 +16,13 @@ def brew_unknown_cmd2():
     return """Error: Unknown command: instaa"""
 
 
-def test_match(brew_unknown_cmd):
+def test_match(brew_unknown_cmd) -> None:
     assert match(Command("brew inst", brew_unknown_cmd))
     for command in _brew_commands():
         assert not match(Command("brew " + command, ""))
 
 
-def test_get_new_command(brew_unknown_cmd, brew_unknown_cmd2):
+def test_get_new_command(brew_unknown_cmd, brew_unknown_cmd2) -> None:
     assert get_new_command(Command("brew inst", brew_unknown_cmd)) == [
         "brew list",
         "brew install",

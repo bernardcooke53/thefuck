@@ -15,7 +15,7 @@ You can download from:
 Error: An unsatisfied requirement failed this build."""
 
 
-def test_match():
+def test_match() -> None:
     command = Command("brew install sshfs", output)
     assert match(command)
 
@@ -24,7 +24,7 @@ def test_match():
     "script, output",
     [("brew link sshfs", output), ("cat output", output), ("brew install sshfs", "")],
 )
-def test_not_match(script, output):
+def test_not_match(script, output) -> None:
     command = Command(script, output)
     assert not match(command)
 
@@ -33,6 +33,6 @@ def test_not_match(script, output):
     "before, after",
     [("brew install sshfs", "brew cask install osxfuse && brew install sshfs")],
 )
-def test_get_new_command(before, after):
+def test_get_new_command(before, after) -> None:
     command = Command(before, output)
     assert get_new_command(command) == after

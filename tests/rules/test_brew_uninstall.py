@@ -23,16 +23,16 @@ def new_command(formula):
 @pytest.mark.parametrize(
     "script", ["brew uninstall tbb", "brew rm tbb", "brew remove tbb"]
 )
-def test_match(output, script):
+def test_match(output, script) -> None:
     assert match(Command(script, output))
 
 
 @pytest.mark.parametrize("script", ["brew remove gnuplot"])
-def test_not_match(script):
+def test_not_match(script) -> None:
     output = "Uninstalling /usr/local/Cellar/gnuplot/5.0.4_1... (44 files, 2.3M)\n"
     assert not match(Command(script, output))
 
 
 @pytest.mark.parametrize("script, formula, ", [("brew uninstall tbb", "tbb")])
-def test_get_new_command(output, new_command, script, formula):
+def test_get_new_command(output, new_command, script, formula) -> None:
     assert get_new_command(Command(script, output)) == new_command

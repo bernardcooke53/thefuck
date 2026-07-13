@@ -10,14 +10,14 @@ from thefuck.types import Command
     "script, output",
     [("cp", "cp: directory foo does not exist\n"), ("mv", "No such file or directory")],
 )
-def test_match(script, output):
+def test_match(script, output) -> None:
     assert match(Command(script, output))
 
 
 @pytest.mark.parametrize(
     "script, output", [("cp", ""), ("mv", ""), ("ls", "No such file or directory")]
 )
-def test_not_match(script, output):
+def test_not_match(script, output) -> None:
     assert not match(Command(script, output))
 
 
@@ -37,5 +37,5 @@ def test_not_match(script, output):
         ),
     ],
 )
-def test_get_new_command(script, output, new_command):
+def test_get_new_command(script, output, new_command) -> None:
     assert get_new_command(Command(script, output)) == new_command

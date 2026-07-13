@@ -162,14 +162,14 @@ new_apt_get_operations = [
         ("apt-cache", invalid_operation("rumove")),
     ],
 )
-def test_match(script, output):
+def test_match(script, output) -> None:
     assert match(Command(script, output))
 
 
 @pytest.mark.parametrize(
     "script, output", [("vim", invalid_operation("vim")), ("apt-get", "")]
 )
-def test_not_match(script, output):
+def test_not_match(script, output) -> None:
     assert not match(Command(script, output))
 
 
@@ -191,7 +191,7 @@ def set_help(mocker):
         ("apt-get", new_apt_get_help, new_apt_get_operations),
     ],
 )
-def test_get_operations(set_help, app, help_text, operations):
+def test_get_operations(set_help, app, help_text, operations) -> None:
     set_help(help_text)
     assert _get_operations(app) == operations
 
@@ -214,6 +214,6 @@ def test_get_operations(set_help, app, help_text, operations):
         ),
     ],
 )
-def test_get_new_command(set_help, output, script, help_text, result):
+def test_get_new_command(set_help, output, script, help_text, result) -> None:
     set_help(help_text)
     assert get_new_command(Command(script, output))[0] == result

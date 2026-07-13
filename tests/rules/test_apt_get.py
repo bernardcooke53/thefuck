@@ -26,7 +26,7 @@ from thefuck.types import Command
         ),
     ],
 )
-def test_match(mocker, command, packages):
+def test_match(mocker, command, packages) -> None:
     mocker.patch("shutil.which", return_value=None)
     mocker.patch(
         "thefuck.rules.apt_get._get_packages", create=True, return_value=packages
@@ -45,7 +45,7 @@ def test_match(mocker, command, packages):
         (Command("sudo vim", "vim: command not found"), ["vim"], "/usr/bin/vim"),
     ],
 )
-def test_not_match(mocker, command, packages, which):
+def test_not_match(mocker, command, packages, which) -> None:
     mocker.patch("shutil.which", return_value=which)
     mocker.patch(
         "thefuck.rules.apt_get._get_packages", create=True, return_value=packages
@@ -85,7 +85,7 @@ def test_not_match(mocker, command, packages, which):
         ),
     ],
 )
-def test_get_new_command(mocker, command, new_command, packages):
+def test_get_new_command(mocker, command, new_command, packages) -> None:
     mocker.patch(
         "thefuck.rules.apt_get._get_packages", create=True, return_value=packages
     )

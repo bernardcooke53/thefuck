@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output():
+def output() -> str:
     return """Android Debug Bridge version 1.0.31
 
  -d                            - directs command to the only connected USB device
@@ -21,12 +21,12 @@ def output():
 
 
 @pytest.mark.parametrize("script", [("adb lgcat"), ("adb puhs")])
-def test_match(output, script):
+def test_match(output: str, script: str) -> None:
     assert match(Command(script, output))
 
 
 @pytest.mark.parametrize("script", ["git branch foo", "abd push"])
-def test_not_match(script):
+def test_not_match(script) -> None:
     assert not match(Command(script, ""))
 
 
@@ -40,5 +40,5 @@ def test_not_match(script):
         ("adb -e reboott", "adb -e reboot"),
     ],
 )
-def test_get_new_command(script, output, new_command):
+def test_get_new_command(script, output, new_command) -> None:
     assert get_new_command(Command(script, output)) == new_command

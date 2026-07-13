@@ -24,7 +24,7 @@ def file_access(mocker):
         ("./install.sh --help", "install.sh: permission denied"),
     ],
 )
-def test_match(script, output):
+def test_match(script, output) -> None:
     assert match(Command(script, output))
 
 
@@ -37,7 +37,7 @@ def test_match(script, output):
         ("gradlew build", "gradlew: Permission denied", True, False),
     ],
 )
-def test_not_match(file_exists, file_access, script, output, exists, callable):
+def test_not_match(file_exists, file_access, script, output, exists, callable) -> None:
     file_exists.return_value = exists
     file_access.return_value = callable
     assert not match(Command(script, output))
@@ -50,5 +50,5 @@ def test_not_match(file_exists, file_access, script, output, exists, callable):
         ("./install.sh --help", "chmod +x install.sh && ./install.sh --help"),
     ],
 )
-def test_get_new_command(script, result):
+def test_get_new_command(script, result) -> None:
     assert get_new_command(Command(script, "")) == result

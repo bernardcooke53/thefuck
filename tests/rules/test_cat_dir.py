@@ -19,7 +19,7 @@ def isdir(mocker):
         Command("cat cat/", "cat: cat/: Is a directory\n"),
     ],
 )
-def test_match(command, isdir):
+def test_match(command, isdir) -> None:
     isdir.return_value = True
     assert match(command)
 
@@ -32,7 +32,7 @@ def test_match(command, isdir):
         Command("notcat foo bar", "some output"),
     ],
 )
-def test_not_match(command, isdir):
+def test_not_match(command, isdir) -> None:
     isdir.return_value = False
     assert not match(command)
 
@@ -45,6 +45,6 @@ def test_not_match(command, isdir):
         (Command("cat cat", "cat: cat: Is a directory\n"), "ls cat"),
     ],
 )
-def test_get_new_command(command, new_command):
+def test_get_new_command(command, new_command) -> None:
     isdir.return_value = True
     assert get_new_command(command) == new_command
