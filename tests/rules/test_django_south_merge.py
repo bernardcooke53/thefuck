@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output():
+def output() -> str:
     return """Running migrations for app:
  ! Migration app:0003_auto... should not have been applied before app:0002_auto__add_field_query_due_date_ but was.
 Traceback (most recent call last):
@@ -30,10 +30,10 @@ Traceback (most recent call last):
 south.exceptions.InconsistentMigrationHistory: Inconsistent migration history
 The following options are available:
     --merge: will just attempt the migration ignoring any potential dependency conflicts.
-"""
+"""  # noqa: E501
 
 
-def test_match(output):
+def test_match(output: str) -> None:
     assert match(Command("./manage.py migrate", output))
     assert match(Command("python manage.py migrate", output))
     assert not match(Command("./manage.py migrate", ""))
@@ -41,7 +41,7 @@ def test_match(output):
     assert not match(Command("./manage.py test", output))
 
 
-def test_get_new_command():
+def test_get_new_command() -> None:
     assert (
         get_new_command(Command("./manage.py migrate auth", ""))
         == "./manage.py migrate auth --merge"

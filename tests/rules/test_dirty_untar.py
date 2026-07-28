@@ -66,7 +66,7 @@ parametrize_script = pytest.mark.parametrize(
 @parametrize_extensions
 @parametrize_filename
 @parametrize_script
-def test_match(ext, tar_error, filename, unquoted, quoted, script, fixed):
+def test_match(ext, tar_error, filename, unquoted, quoted, script, fixed) -> None:
     tar_error(unquoted.format(ext))
     assert match(Command(script.format(filename.format(ext)), ""))
 
@@ -74,7 +74,7 @@ def test_match(ext, tar_error, filename, unquoted, quoted, script, fixed):
 @parametrize_extensions
 @parametrize_filename
 @parametrize_script
-def test_side_effect(ext, tar_error, filename, unquoted, quoted, script, fixed):
+def test_side_effect(ext, tar_error, filename, unquoted, quoted, script, fixed) -> None:
     tar_error(unquoted.format(ext))
     side_effect(Command(script.format(filename.format(ext)), ""), None)
     assert set(os.listdir(".")) == {unquoted.format(ext), "d"}
@@ -83,7 +83,9 @@ def test_side_effect(ext, tar_error, filename, unquoted, quoted, script, fixed):
 @parametrize_extensions
 @parametrize_filename
 @parametrize_script
-def test_get_new_command(ext, tar_error, filename, unquoted, quoted, script, fixed):
+def test_get_new_command(
+    ext, tar_error, filename, unquoted, quoted, script, fixed
+) -> None:
     tar_error(unquoted.format(ext))
     assert get_new_command(
         Command(script.format(filename.format(ext)), "")

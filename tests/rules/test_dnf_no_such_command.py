@@ -1,4 +1,6 @@
 from __future__ import annotations
+import pytest_mock
+from collections.abc import Callable
 
 from io import BytesIO
 
@@ -132,7 +134,7 @@ Optional arguments:
                         Include security relevant packages matching the
                         severity, in updates
   --forcearch ARCH      Force the use of an architecture
-"""
+"""  # noqa: E501
 
 dnf_operations = [
     "autoremove",
@@ -178,7 +180,7 @@ dnf_operations = [
 ]
 
 
-def invalid_command(command):
+def invalid_command(command: str) -> str:
     return f"""No such command: {command}. Please use /usr/bin/dnf --help
 It could be a DNF plugin command, try: "dnf install 'dnf-command({command})'"
 """
@@ -187,19 +189,19 @@ It could be a DNF plugin command, try: "dnf install 'dnf-command({command})'"
 @pytest.mark.parametrize(
     "output", [(invalid_command("saerch")), (invalid_command("isntall"))]
 )
-def test_match(output):
+def test_match(output: str) -> None:
     assert match(Command("dnf", output))
 
 
 @pytest.mark.parametrize(
     "script, output", [("pip", invalid_command("isntall")), ("vim", "")]
 )
-def test_not_match(script, output):
+def test_not_match(script, output) -> None:
     assert not match(Command(script, output))
 
 
 @pytest.fixture
-def set_help(mocker):
+def set_help(mocker: pytest_mock.MockerFixture) -> Callable[[bytes], None]:
     mock = mocker.patch("subprocess.Popen")
 
     def _set_text(text):
@@ -208,7 +210,7 @@ def set_help(mocker):
     return _set_text
 
 
-def test_get_operations(set_help):
+def test_get_operations(set_help: Callable[[bytes], None]) -> None:
     set_help(help_text)
     assert _get_operations() == dnf_operations
 
@@ -220,6 +222,8 @@ def test_get_operations(set_help):
         ("dnf saerch vim", invalid_command("saerch"), "dnf search vim"),
     ],
 )
-def test_get_new_command(set_help, output, script, result):
+def test_get_new_command(
+    set_help: Callable[[bytes], None], output: str, script: str, result: str
+) -> None:
     set_help(help_text)
     assert result in get_new_command(Command(script, output))

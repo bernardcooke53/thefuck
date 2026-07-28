@@ -9,7 +9,7 @@ from thefuck.types import Command
 @pytest.mark.parametrize(
     "command", [Command("cd cd foo", ""), Command("git git push origin/master", "")]
 )
-def test_match(command):
+def test_match(command: str) -> None:
     assert match(command)
 
 
@@ -20,5 +20,5 @@ def test_match(command):
         (Command("git git push origin/master", ""), "git push origin/master"),
     ],
 )
-def test_get_new_command(command, new_command):
+def test_get_new_command(command: str, new_command: str) -> None:
     assert get_new_command(command) == new_command

@@ -1,4 +1,6 @@
 from __future__ import annotations
+import unittest.mock
+import pytest_mock
 
 from io import BytesIO
 
@@ -48,8 +50,8 @@ Run 'docker image COMMAND --help' for more information on a command.
 
 
 @pytest.fixture
-def docker_help(mocker):
-    help = b"""Usage: docker [OPTIONS] COMMAND [arg...]
+def docker_help(mocker: pytest_mock.MockerFixture) -> unittest.mock.MagicMock:
+    help_text = b"""Usage: docker [OPTIONS] COMMAND [arg...]
 
 A self-sufficient runtime for linux containers.
 
@@ -143,12 +145,12 @@ Commands:
 Run 'docker COMMAND --help' for more information on a command.
 """
     mock = mocker.patch("subprocess.Popen")
-    mock.return_value.stdout = BytesIO(help)
+    mock.return_value.stdout = BytesIO(help_text)
     return mock
 
 
 @pytest.fixture
-def docker_help_new(mocker):
+def docker_help_new(mocker: pytest_mock.MockerFixture) -> unittest.mock.MagicMock:
     helptext_new = b"""
 Usage:	docker [OPTIONS] COMMAND
 
@@ -228,18 +230,18 @@ Commands:
   wait        Block until one or more containers stop, then print their exit codes
 
 Run 'docker COMMAND --help' for more information on a command.
-"""
+"""  # noqa: E501
     mock = mocker.patch("subprocess.Popen")
     mock.return_value.stdout = BytesIO(b"")
     mock.return_value.stderr = BytesIO(helptext_new)
     return mock
 
 
-def output(cmd):
+def output(cmd: str) -> str:
     return f"docker: '{cmd}' is not a docker command.\nSee 'docker --help'."
 
 
-def test_match():
+def test_match() -> None:
     assert match(Command("docker pes", output("pes")))
 
 
@@ -249,7 +251,7 @@ def test_match():
     "script, output",
     [("docker swarn", output("swarn")), ("docker imge", output("imge"))],
 )
-def test_match_management_cmd(script, output):
+def test_match_management_cmd(script: str, output: str) -> None:
     assert match(Command(script, output))
 
 
@@ -262,14 +264,14 @@ def test_match_management_cmd(script, output):
         ("docker image la", _DOCKER_IMAGE_OUTPUT),
     ],
 )
-def test_match_management_subcmd(script, output):
+def test_match_management_subcmd(script: str, output: str) -> None:
     assert match(Command(script, output))
 
 
 @pytest.mark.parametrize(
     "script, output", [("docker ps", ""), ("cat pes", output("pes"))]
 )
-def test_not_match(script, output):
+def test_not_match(script: str, output: str) -> None:
     assert not match(Command(script, output))
 
 
@@ -278,7 +280,7 @@ def test_not_match(script, output):
     "wrong, fixed",
     [("pes", ["ps", "push", "pause"]), ("tags", ["tag", "stats", "images"])],
 )
-def test_get_new_command(wrong, fixed):
+def test_get_new_command(wrong: str, fixed: str) -> None:
     command = Command(f"docker {wrong}", output(wrong))
     assert get_new_command(command) == [f"docker {x}" for x in fixed]
 
@@ -288,7 +290,7 @@ def test_get_new_command(wrong, fixed):
     "wrong, fixed",
     [("swarn", ["swarm", "start", "search"]), ("inage", ["image", "images", "rename"])],
 )
-def test_get_new_management_command(wrong, fixed):
+def test_get_new_management_command(wrong: str, fixed: str) -> None:
     command = Command(f"docker {wrong}", output(wrong))
     assert get_new_command(command) == [f"docker {x}" for x in fixed]
 
@@ -305,6 +307,8 @@ def test_get_new_management_command(wrong, fixed):
         ("image la", ["image load", "image ls", "image tag"], _DOCKER_IMAGE_OUTPUT),
     ],
 )
-def test_get_new_management_command_subcommand(wrong, fixed, output):
+def test_get_new_management_command_subcommand(
+    wrong: str, fixed: str, output: str
+) -> None:
     command = Command(f"docker {wrong}", output)
     assert get_new_command(command) == [f"docker {x}" for x in fixed]

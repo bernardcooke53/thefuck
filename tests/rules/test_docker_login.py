@@ -4,7 +4,7 @@ from thefuck.rules.docker_login import get_new_command, match
 from thefuck.types import Command
 
 
-def test_match():
+def test_match() -> None:
     err_response1 = """
     Sending build context to Docker daemon  118.8kB
 Step 1/6 : FROM foo/bar:fdb7c6d
@@ -38,7 +38,7 @@ cb95fa0faeb1: Layer already exists
     )
 
 
-def test_get_new_command():
+def test_get_new_command() -> None:
     assert (
         get_new_command(
             Command("docker build -t artifactory:9090/foo/bar:fdb7c6d .", "")

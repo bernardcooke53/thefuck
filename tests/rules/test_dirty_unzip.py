@@ -1,4 +1,6 @@
 from __future__ import annotations
+from pathlib import Path
+from collections.abc import Callable
 
 import os
 import zipfile
@@ -11,11 +13,11 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def zip_error(tmpdir):
-    def zip_error_inner(filename):
+def zip_error(tmpdir: Path) -> Callable[[str], None]:
+    def zip_error_inner(filename: str) -> None:
         path = os.path.join(str(tmpdir), filename)
 
-        def reset(path):
+        def reset(path: str) -> None:
             with zipfile.ZipFile(path, "w") as archive:
                 archive.writestr("a", "1")
                 archive.writestr("b", "2")
@@ -47,7 +49,7 @@ def zip_error(tmpdir):
         ("unzip foo.zip", "foo.zip"),
     ],
 )
-def test_match(zip_error, script, filename):
+def test_match(zip_error: Callable[[str], None], script: str, filename: str) -> None:
     zip_error(filename)
     assert match(Command(script, ""))
 
@@ -61,7 +63,9 @@ def test_match(zip_error, script, filename):
         ("unzip foo.zip", "foo.zip"),
     ],
 )
-def test_side_effect(zip_error, script, filename):
+def test_side_effect(
+    zip_error: Callable[[str], None], script: str, filename: str
+) -> None:
     zip_error(filename)
     side_effect(Command(script, ""), None)
 
@@ -81,6 +85,8 @@ def test_side_effect(zip_error, script, filename):
         ("unzip foo.zip", "unzip foo.zip -d foo", "foo.zip"),
     ],
 )
-def test_get_new_command(zip_error, script, fixed, filename):
+def test_get_new_command(
+    zip_error: Callable[[str], None], script: str, fixed: str, filename: str
+) -> None:
     zip_error(filename)
     assert get_new_command(Command(script, "")) == fixed

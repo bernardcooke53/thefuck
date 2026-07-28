@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output():
+def output() -> str:
     return """Traceback (most recent call last):
   File "/home/nvbn/work/.../bin/python", line 42, in <module>
     exec(compile(__file__f.read(), __file__, "exec"))
@@ -40,10 +40,10 @@ south.exceptions.GhostMigrations:
  ! I'm not trusting myself; either fix this yourself by fiddling
  ! with the south_migrationhistory table, or pass --delete-ghost-migrations
  ! to South to have it delete ALL of these records (this may not be good).
-"""  # noqa
+"""  # noqa: E501
 
 
-def test_match(output):
+def test_match(output: str) -> None:
     assert match(Command("./manage.py migrate", output))
     assert match(Command("python manage.py migrate", output))
     assert not match(Command("./manage.py migrate", ""))
@@ -51,7 +51,7 @@ def test_match(output):
     assert not match(Command("./manage.py test", output))
 
 
-def test_get_new_command():
+def test_get_new_command() -> None:
     assert (
         get_new_command(Command("./manage.py migrate auth", ""))
         == "./manage.py migrate auth --delete-ghost-migrations"
