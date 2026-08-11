@@ -30,7 +30,7 @@ def test_match() -> None:
         Command("sudo apt list --upgradable", no_match_output),
     ],
 )
-def test_not_match(command) -> None:
+def test_not_match(command: Command) -> None:
     assert not match(command)
 
 

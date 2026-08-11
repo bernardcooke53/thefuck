@@ -24,7 +24,7 @@ def test_match() -> None:
     "script, output",
     [("brew link sshfs", output), ("cat output", output), ("brew install sshfs", "")],
 )
-def test_not_match(script, output) -> None:
+def test_not_match(script: str, output: str) -> None:
     command = Command(script, output)
     assert not match(command)
 
@@ -33,6 +33,6 @@ def test_not_match(script, output) -> None:
     "before, after",
     [("brew install sshfs", "brew cask install osxfuse && brew install sshfs")],
 )
-def test_get_new_command(before, after) -> None:
+def test_get_new_command(before: str, after: str) -> None:
     command = Command(before, output)
     assert get_new_command(command) == after

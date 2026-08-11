@@ -85,7 +85,7 @@ Invalid choice: 't-item', maybe you meant:
         Command("aws dynamodb t-item", misspelled_subcommand_with_multiple_options),
     ],
 )
-def test_match(command) -> None:
+def test_match(command: Command) -> None:
     assert match(command)
 
 
@@ -104,5 +104,5 @@ def test_not_match() -> None:
         ),
     ],
 )
-def test_get_new_command(command, result) -> None:
+def test_get_new_command(command: Command, result: list[str]) -> None:
     assert get_new_command(command) == result

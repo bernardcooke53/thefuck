@@ -33,7 +33,7 @@ The most similar choice to 'lis' is:
         Command("az provider lis", misspelled_subcommand),
     ],
 )
-def test_match(command) -> None:
+def test_match(command: Command) -> None:
     assert match(command)
 
 
@@ -48,5 +48,5 @@ def test_not_match() -> None:
         (Command("az provider lis", misspelled_subcommand), ["az provider list"]),
     ],
 )
-def test_get_new_command(command, result) -> None:
+def test_get_new_command(command: Command, result: list[str]) -> None:
     assert get_new_command(command) == result

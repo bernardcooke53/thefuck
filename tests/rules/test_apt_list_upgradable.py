@@ -57,7 +57,7 @@ All packages are up to date.
 
 
 @pytest.mark.parametrize("output", match_output)
-def test_match(output) -> None:
+def test_match(output: str) -> None:
     assert match(Command("sudo apt update", output))
 
 
@@ -75,12 +75,12 @@ def test_match(output) -> None:
         Command("sudo apt update", no_match_output),
     ],
 )
-def test_not_match(command) -> None:
+def test_not_match(command: Command) -> None:
     assert not match(command)
 
 
 @pytest.mark.parametrize("output", match_output)
-def test_get_new_command(output) -> None:
+def test_get_new_command(output: str) -> None:
     new_command = get_new_command(Command("sudo apt update", output))
     assert new_command == "sudo apt list --upgradable"
 

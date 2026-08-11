@@ -7,29 +7,29 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def brew_no_available_formula_one():
+def brew_no_available_formula_one() -> str:
     return """Warning: No available formula with the name "giss". Did you mean gist?"""
 
 
 @pytest.fixture
-def brew_no_available_formula_two():
+def brew_no_available_formula_two() -> str:
     return """Warning: No available formula with the name "elasticserar". Did you mean elasticsearch or elasticsearch@6?"""
 
 
 @pytest.fixture
-def brew_no_available_formula_three():
+def brew_no_available_formula_three() -> str:
     return """Warning: No available formula with the name "gitt". Did you mean git, gitg or gist?"""
 
 
 @pytest.fixture
-def brew_install_no_argument():
+def brew_install_no_argument() -> str:
     return (
         """Install a formula or cask. Additional options specific to a formula may be"""
     )
 
 
 @pytest.fixture
-def brew_already_installed():
+def brew_already_installed() -> str:
     return """Warning: git-2.3.5 already installed"""
 
 
@@ -40,12 +40,12 @@ def test_suggestions() -> None:
 
 
 def test_match(
-    brew_no_available_formula_one,
-    brew_no_available_formula_two,
-    brew_no_available_formula_three,
-    brew_already_installed,
-    brew_install_no_argument,
-):
+    brew_no_available_formula_one: str,
+    brew_no_available_formula_two: str,
+    brew_no_available_formula_three: str,
+    brew_already_installed: str,
+    brew_install_no_argument: str,
+) -> None:
     assert match(Command("brew install giss", brew_no_available_formula_one))
     assert match(Command("brew install elasticserar", brew_no_available_formula_two))
     assert match(Command("brew install gitt", brew_no_available_formula_three))
@@ -54,10 +54,10 @@ def test_match(
 
 
 def test_get_new_command(
-    brew_no_available_formula_one,
-    brew_no_available_formula_two,
-    brew_no_available_formula_three,
-):
+    brew_no_available_formula_one: str,
+    brew_no_available_formula_two: str,
+    brew_no_available_formula_three: str,
+) -> None:
     assert get_new_command(
         Command("brew install giss", brew_no_available_formula_one)
     ) == ["brew install gist"]
