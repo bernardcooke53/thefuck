@@ -26,7 +26,7 @@ def test_match(output: str, script: str) -> None:
 
 
 @pytest.mark.parametrize("script", ["git branch foo", "abd push"])
-def test_not_match(script) -> None:
+def test_not_match(script: str) -> None:
     assert not match(Command(script, ""))
 
 
@@ -40,5 +40,5 @@ def test_not_match(script) -> None:
         ("adb -e reboott", "adb -e reboot"),
     ],
 )
-def test_get_new_command(script, output, new_command) -> None:
+def test_get_new_command(script: str, output: str, new_command: str) -> None:
     assert get_new_command(Command(script, output)) == new_command

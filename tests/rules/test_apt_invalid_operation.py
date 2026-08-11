@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from io import BytesIO
 
 import pytest
+import pytest_mock
 
 from thefuck.rules.apt_invalid_operation import _get_operations, get_new_command, match
 from thefuck.types import Command
@@ -162,19 +164,19 @@ new_apt_get_operations = [
         ("apt-cache", invalid_operation("rumove")),
     ],
 )
-def test_match(script, output) -> None:
+def test_match(script: str, output: str) -> None:
     assert match(Command(script, output))
 
 
 @pytest.mark.parametrize(
     "script, output", [("vim", invalid_operation("vim")), ("apt-get", "")]
 )
-def test_not_match(script, output) -> None:
+def test_not_match(script: str, output: str) -> None:
     assert not match(Command(script, output))
 
 
 @pytest.fixture
-def set_help(mocker):
+def set_help(mocker: pytest_mock.MockFixture):
     mock = mocker.patch("subprocess.Popen")
 
     def _set_text(text):
@@ -191,7 +193,9 @@ def set_help(mocker):
         ("apt-get", new_apt_get_help, new_apt_get_operations),
     ],
 )
-def test_get_operations(set_help, app, help_text, operations) -> None:
+def test_get_operations(
+    set_help: Callable[[str], None], app: str, help_text: str, operations: list[str]
+) -> None:
     set_help(help_text)
     assert _get_operations(app) == operations
 
@@ -214,6 +218,12 @@ def test_get_operations(set_help, app, help_text, operations) -> None:
         ),
     ],
 )
-def test_get_new_command(set_help, output, script, help_text, result) -> None:
+def test_get_new_command(
+    set_help: Callable[[str], None],
+    output: str,
+    script: str,
+    help_text: str,
+    result: str,
+) -> None:
     set_help(help_text)
     assert get_new_command(Command(script, output))[0] == result

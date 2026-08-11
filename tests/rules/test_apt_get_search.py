@@ -23,7 +23,7 @@ def test_match() -> None:
         Command("apt-get update", ""),
     ],
 )
-def test_not_match(command) -> None:
+def test_not_match(command: Command) -> None:
     assert not match(command)
 
 

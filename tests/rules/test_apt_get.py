@@ -1,4 +1,5 @@
 from __future__ import annotations
+import pytest_mock
 
 import pytest
 
@@ -26,7 +27,9 @@ from thefuck.types import Command
         ),
     ],
 )
-def test_match(mocker, command, packages) -> None:
+def test_match(
+    mocker: pytest_mock.MockFixture, command: str, packages: list[str]
+) -> None:
     mocker.patch("shutil.which", return_value=None)
     mocker.patch(
         "thefuck.rules.apt_get._get_packages", create=True, return_value=packages
@@ -45,7 +48,12 @@ def test_match(mocker, command, packages) -> None:
         (Command("sudo vim", "vim: command not found"), ["vim"], "/usr/bin/vim"),
     ],
 )
-def test_not_match(mocker, command, packages, which) -> None:
+def test_not_match(
+    mocker: pytest_mock.MockFixture,
+    command: str,
+    packages: list[str],
+    which: str | None,
+) -> None:
     mocker.patch("shutil.which", return_value=which)
     mocker.patch(
         "thefuck.rules.apt_get._get_packages", create=True, return_value=packages
@@ -85,7 +93,9 @@ def test_not_match(mocker, command, packages, which) -> None:
         ),
     ],
 )
-def test_get_new_command(mocker, command, new_command, packages) -> None:
+def test_get_new_command(
+    mocker: pytest_mock.MockFixture, command: str, new_command: str, packages: list[str]
+) -> None:
     mocker.patch(
         "thefuck.rules.apt_get._get_packages", create=True, return_value=packages
     )
