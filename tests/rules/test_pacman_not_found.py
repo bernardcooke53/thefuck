@@ -26,7 +26,7 @@ extra/llvm35 3.5.2-13/usr/bin/llc"""
         Command("sudo pacman llc", "error: target not found: llc"),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -41,7 +41,7 @@ def test_match(command):
     ],
 )
 @patch("thefuck.specific.archlinux.subprocess")
-def test_match_mocked(subp_mock, command):
+def test_match_mocked(subp_mock, command) -> None:
     subp_mock.check_output.return_value = PKGFILE_OUTPUT_LLC
     assert match(command)
 
@@ -75,7 +75,7 @@ def test_match_mocked(subp_mock, command):
         ),
     ],
 )
-def test_get_new_command(command, fixed):
+def test_get_new_command(command, fixed) -> None:
     assert get_new_command(command) == fixed
 
 
@@ -105,6 +105,6 @@ def test_get_new_command(command, fixed):
     ],
 )
 @patch("thefuck.specific.archlinux.subprocess")
-def test_get_new_command_mocked(subp_mock, command, fixed):
+def test_get_new_command_mocked(subp_mock, command, fixed) -> None:
     subp_mock.check_output.return_value = PKGFILE_OUTPUT_LLC
     assert get_new_command(command) == fixed

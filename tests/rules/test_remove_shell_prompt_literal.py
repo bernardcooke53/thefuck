@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output():
+def output() -> str:
     return "$: command not found"
 
 
@@ -20,7 +20,7 @@ def output():
         " $ $ cd newdir",
     ],
 )
-def test_match(script, output):
+def test_match(script, output) -> None:
     assert match(Command(script, output))
 
 
@@ -34,7 +34,7 @@ def test_match(script, output):
         Command("", ""),
     ],
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -47,5 +47,5 @@ def test_not_match(command):
         (" $ $ $ python3 -m virtualenv env", "python3 -m virtualenv env"),
     ],
 )
-def test_get_new_command(script, new_command, output):
+def test_get_new_command(script, new_command, output) -> None:
     assert get_new_command(Command(script, output)) == new_command

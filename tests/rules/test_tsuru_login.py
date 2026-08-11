@@ -21,7 +21,7 @@ error_msg = (
         Command("tsuru app-log -f", error_msg[1]),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -33,7 +33,7 @@ def test_match(command):
         Command("tsuru app-log -f", "Error: unparseable data"),
     ],
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -44,5 +44,5 @@ def test_not_match(command):
         (Command("tsuru app-log -f", error_msg[1]), "tsuru login && tsuru app-log -f"),
     ],
 )
-def test_get_new_command(command, new_command):
+def test_get_new_command(command, new_command) -> None:
     assert get_new_command(command) == new_command

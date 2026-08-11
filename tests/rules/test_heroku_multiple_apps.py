@@ -37,18 +37,18 @@ Add-on:                postgresql-round-12345
 
 
 @pytest.mark.parametrize("cmd", ["pg"])
-def test_match(cmd):
+def test_match(cmd) -> None:
     assert match(Command(f"heroku {cmd}", suggest_output))
 
 
 @pytest.mark.parametrize("script, output", [("heroku pg", not_match_output)])
-def test_not_match(script, output):
+def test_not_match(script, output) -> None:
     assert not match(Command(script, output))
 
 
 @pytest.mark.parametrize(
     "cmd, result", [("pg", ["heroku pg --app myapp", "heroku pg --app myapp-dev"])]
 )
-def test_get_new_command(cmd, result):
+def test_get_new_command(cmd, result) -> None:
     command = Command(f"heroku {cmd}", suggest_output)
     assert get_new_command(command) == result

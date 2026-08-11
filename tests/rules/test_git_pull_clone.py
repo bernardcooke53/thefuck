@@ -14,7 +14,7 @@ Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
 @pytest.mark.parametrize(
     "command", [Command("git pull git@github.com:mcarton/thefuck.git", git_err)]
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -27,5 +27,5 @@ def test_match(command):
         )
     ],
 )
-def test_get_new_command(command, output):
+def test_get_new_command(command, output) -> None:
     assert get_new_command(command) == output

@@ -179,7 +179,7 @@ def test_not_match(script: str, output: str) -> None:
 def set_help(mocker: pytest_mock.MockFixture):
     mock = mocker.patch("subprocess.Popen")
 
-    def _set_text(text):
+    def _set_text(text: str) -> None:
         mock.return_value.stdout = BytesIO(text)
 
     return _set_text

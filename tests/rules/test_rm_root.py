@@ -6,7 +6,7 @@ from thefuck.rules.rm_root import get_new_command, match
 from thefuck.types import Command
 
 
-def test_match():
+def test_match() -> None:
     assert match(Command("rm -rf /", "add --no-preserve-root"))
 
 
@@ -18,9 +18,9 @@ def test_match():
         Command("rm -rf /", ""),
     ],
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
-def test_get_new_command():
+def test_get_new_command() -> None:
     assert get_new_command(Command("rm -rf /", "")) == "rm -rf / --no-preserve-root"

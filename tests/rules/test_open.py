@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output(script):
+def output(script) -> str:
     return "The file {} does not exist.\n".format(script.split(" ", 1)[1])
 
 
@@ -26,12 +26,12 @@ def output(script):
         "open www.foo.ru",
     ],
 )
-def test_is_arg_url(script):
+def test_is_arg_url(script) -> None:
     assert is_arg_url(Command(script, ""))
 
 
 @pytest.mark.parametrize("script", ["open foo", "open bar.txt", "open egg.doc"])
-def test_not_is_arg_url(script):
+def test_not_is_arg_url(script) -> None:
     assert not is_arg_url(Command(script, ""))
 
 
@@ -45,7 +45,7 @@ def test_not_is_arg_url(script):
         "open nonest",
     ],
 )
-def test_match(script, output):
+def test_match(script, output) -> None:
     assert match(Command(script, output))
 
 
@@ -59,5 +59,5 @@ def test_match(script, output):
         ("open nonest", ["touch nonest && open nonest", "mkdir nonest && open nonest"]),
     ],
 )
-def test_get_new_command(script, new_command, output):
+def test_get_new_command(script, new_command, output) -> None:
     assert get_new_command(Command(script, output)) == new_command

@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output(branch_name):
+def output(branch_name: str) -> str:
     if not branch_name:
         return ""
     return f"""fatal: The current branch {branch_name} has no upstream branch.
@@ -19,7 +19,7 @@ To push the current branch and set the remote as upstream, use
 
 
 @pytest.fixture
-def output_bitbucket():
+def output_bitbucket() -> str:
     return """Total 0 (delta 0), reused 0 (delta 0)
 remote:
 remote: Create pull request for feature/set-upstream:
@@ -34,18 +34,18 @@ Branch feature/set-upstream set up to track remote branch feature/set-upstream f
 @pytest.mark.parametrize(
     "script, branch_name", [("git push", "master"), ("git push origin", "master")]
 )
-def test_match(output, script, branch_name):
+def test_match(output, script, branch_name: str) -> None:
     assert match(Command(script, output))
 
 
-def test_match_bitbucket(output_bitbucket):
+def test_match_bitbucket(output_bitbucket) -> None:
     assert not match(Command("git push origin", output_bitbucket))
 
 
 @pytest.mark.parametrize(
     "script, branch_name", [("git push master", None), ("ls", "master")]
 )
-def test_not_match(output, script, branch_name):
+def test_not_match(output, script, branch_name: str) -> None:
     assert not match(Command(script, output))
 
 
@@ -82,5 +82,5 @@ def test_not_match(output, script, branch_name):
         ),
     ],
 )
-def test_get_new_command(output, script, branch_name, new_command):
+def test_get_new_command(output, script, branch_name: str, new_command) -> None:
     assert get_new_command(Command(script, output)) == new_command

@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def tmux_ambiguous():
+def tmux_ambiguous() -> str:
     return (
         "ambiguous command: list, could be: "
         "list-buffers, list-clients, list-commands, list-keys, "
@@ -15,11 +15,11 @@ def tmux_ambiguous():
     )
 
 
-def test_match(tmux_ambiguous):
+def test_match(tmux_ambiguous) -> None:
     assert match(Command("tmux list", tmux_ambiguous))
 
 
-def test_get_new_command(tmux_ambiguous):
+def test_get_new_command(tmux_ambiguous) -> None:
     assert get_new_command(Command("tmux list", tmux_ambiguous)) == [
         "tmux list-keys",
         "tmux list-panes",

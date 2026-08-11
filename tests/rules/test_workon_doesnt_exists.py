@@ -17,14 +17,14 @@ def envs(mocker):
 @pytest.mark.parametrize(
     "script", ["workon tehfuck", "workon code-view", "workon new-env"]
 )
-def test_match(script):
+def test_match(script) -> None:
     assert match(Command(script, ""))
 
 
 @pytest.mark.parametrize(
     "script", ["workon thefuck", "workon code_view", "work on tehfuck"]
 )
-def test_not_match(script):
+def test_not_match(script) -> None:
     assert not match(Command(script, ""))
 
 
@@ -36,5 +36,5 @@ def test_not_match(script):
         ("workon zzzz", "mkvirtualenv zzzz"),
     ],
 )
-def test_get_new_command(script, result):
+def test_get_new_command(script, result) -> None:
     assert get_new_command(Command(script, ""))[0] == result

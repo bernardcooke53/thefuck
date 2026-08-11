@@ -47,7 +47,7 @@ output_clean = """
 
 
 @pytest.mark.parametrize("command", [Command("yarn help clean", output_clean)])
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -60,5 +60,5 @@ def test_match(command):
         )
     ],
 )
-def test_get_new_command(command, url):
+def test_get_new_command(command, url) -> None:
     assert get_new_command(command) == open_command(url)

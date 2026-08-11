@@ -9,7 +9,7 @@ output = "grep: {}: No such file or directory".format
 
 
 @pytest.fixture(autouse=True)
-def os_path(monkeypatch):
+def os_path(monkeypatch) -> None:
     monkeypatch.setattr("os.path.isfile", lambda x: not x.startswith("-"))
 
 
@@ -22,7 +22,7 @@ def os_path(monkeypatch):
         ("egrep -lir . test", "test"),
     ],
 )
-def test_match(script, file):
+def test_match(script, file) -> None:
     assert match(Command(script, output(file)))
 
 
@@ -36,7 +36,7 @@ def test_match(script, file):
         ("egrep -lir test .", ""),
     ],
 )
-def test_not_match(script, output):
+def test_not_match(script, output) -> None:
     assert not match(Command(script, output))
 
 
@@ -51,5 +51,5 @@ def test_not_match(script, output):
         ("egrep . test -lir", output("test"), "egrep test -lir ."),
     ],
 )
-def test_get_new_command(script, output, result):
+def test_get_new_command(script, output, result) -> None:
     assert get_new_command(Command(script, output)) == result

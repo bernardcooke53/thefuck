@@ -13,7 +13,7 @@ from thefuck.types import Command
         ("git commit", "no changes added to commit"),
     ],
 )
-def test_match(output, script):
+def test_match(output, script) -> None:
     assert match(Command(script, output))
 
 
@@ -26,7 +26,7 @@ def test_match(output, script):
         ("git push", ""),
     ],
 )
-def test_not_match(output, script):
+def test_not_match(output, script) -> None:
     assert not match(Command(script, output))
 
 
@@ -37,5 +37,5 @@ def test_not_match(output, script):
         ('git commit -m "foo"', ['git commit -a -m "foo"', 'git commit -p -m "foo"']),
     ],
 )
-def test_get_new_command(script, new_command):
+def test_get_new_command(script, new_command) -> None:
     assert get_new_command(Command(script, "")) == new_command

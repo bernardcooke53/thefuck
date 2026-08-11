@@ -292,7 +292,7 @@ E       NameError: name 'mocker' is not defined
 
 @pytest.mark.parametrize("test", tests)
 @pytest.mark.usefixtures("no_memoize")
-def test_match(mocker, monkeypatch, test):
+def test_match(mocker, monkeypatch, test) -> None:
     mocker.patch("os.path.isfile", return_value=True)
     monkeypatch.setenv("EDITOR", "dummy_editor")
     assert match(Command("", test.output))
@@ -300,7 +300,7 @@ def test_match(mocker, monkeypatch, test):
 
 @pytest.mark.parametrize("test", tests)
 @pytest.mark.usefixtures("no_memoize")
-def test_no_editor(mocker, monkeypatch, test):
+def test_no_editor(mocker, monkeypatch, test) -> None:
     mocker.patch("os.path.isfile", return_value=True)
     if "EDITOR" in os.environ:
         monkeypatch.delenv("EDITOR")
@@ -310,7 +310,7 @@ def test_no_editor(mocker, monkeypatch, test):
 
 @pytest.mark.parametrize("test", tests)
 @pytest.mark.usefixtures("no_memoize")
-def test_not_file(mocker, monkeypatch, test):
+def test_not_file(mocker, monkeypatch, test) -> None:
     mocker.patch("os.path.isfile", return_value=False)
     monkeypatch.setenv("EDITOR", "dummy_editor")
 
@@ -319,14 +319,14 @@ def test_not_file(mocker, monkeypatch, test):
 
 @pytest.mark.parametrize("test", tests)
 @pytest.mark.usefixtures("no_memoize")
-def test_get_new_command(mocker, monkeypatch, test):
+def test_get_new_command(mocker, monkeypatch, test) -> None:
     mocker.patch("os.path.isfile", return_value=True)
     monkeypatch.setenv("EDITOR", "dummy_editor")
 
 
 @pytest.mark.parametrize("test", tests)
 @pytest.mark.usefixtures("no_memoize")
-def test_get_new_command_with_settings(mocker, monkeypatch, test, settings):
+def test_get_new_command_with_settings(mocker, monkeypatch, test, settings) -> None:
     mocker.patch("os.path.isfile", return_value=True)
     monkeypatch.setenv("EDITOR", "dummy_editor")
 

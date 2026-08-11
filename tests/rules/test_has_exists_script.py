@@ -6,7 +6,7 @@ from thefuck.rules.has_exists_script import get_new_command, match
 from thefuck.types import Command
 
 
-def test_match():
+def test_match() -> None:
     with patch("os.path.exists", return_value=True):
         assert match(Command("main", "main: command not found"))
         assert match(Command("main --help", "main: command not found"))
@@ -16,5 +16,5 @@ def test_match():
         assert not match(Command("main", "main: command not found"))
 
 
-def test_get_new_command():
+def test_get_new_command() -> None:
     assert get_new_command(Command("main --help", "")) == "./main --help"

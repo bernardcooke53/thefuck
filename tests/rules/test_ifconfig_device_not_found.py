@@ -35,7 +35,7 @@ def ifconfig(mocker):
         ("ifconfig -s eth0", output.format("eth0")),
     ],
 )
-def test_match(script, output):
+def test_match(script, output) -> None:
     assert match(Command(script, output))
 
 
@@ -49,7 +49,7 @@ def test_match(script, output):
         ("ifconfig eth0", ""),
     ],
 )
-def test_not_match(script, output):
+def test_not_match(script, output) -> None:
     assert not match(Command(script, output))
 
 
@@ -60,6 +60,6 @@ def test_not_match(script, output):
         ("ifconfig -s wlan0", ["ifconfig -s wlp2s0"]),
     ],
 )
-def test_get_new_comman(script, result):
+def test_get_new_comman(script, result) -> None:
     new_command = get_new_command(Command(script, output.format("wlan0")))
     assert new_command == result

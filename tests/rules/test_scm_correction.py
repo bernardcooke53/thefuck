@@ -28,7 +28,7 @@ def get_actual_scm_mock(mocker):
         ),
     ],
 )
-def test_match(get_actual_scm_mock, script, output, actual_scm):
+def test_match(get_actual_scm_mock, script, output, actual_scm) -> None:
     get_actual_scm_mock.return_value = actual_scm
     assert match(Command(script, output))
 
@@ -54,7 +54,7 @@ def test_match(get_actual_scm_mock, script, output, actual_scm):
         ),
     ],
 )
-def test_not_match(get_actual_scm_mock, script, output, actual_scm):
+def test_not_match(get_actual_scm_mock, script, output, actual_scm) -> None:
     get_actual_scm_mock.return_value = actual_scm
     assert not match(Command(script, output))
 
@@ -63,7 +63,7 @@ def test_not_match(get_actual_scm_mock, script, output, actual_scm):
     "script, actual_scm, result",
     [("git log", "hg", "hg log"), ("hg log", "git", "git log")],
 )
-def test_get_new_command(get_actual_scm_mock, script, actual_scm, result):
+def test_get_new_command(get_actual_scm_mock, script, actual_scm, result) -> None:
     get_actual_scm_mock.return_value = actual_scm
     new_command = get_new_command(Command(script, ""))
     assert new_command == result

@@ -23,7 +23,7 @@ def error_msg(localbranch, remotebranch):
     return output % (remotebranch, localbranch)
 
 
-def test_match():
+def test_match() -> None:
     assert match(Command("git push", error_msg("foo", "bar")))
 
 
@@ -35,10 +35,10 @@ def test_match():
         Command("git push", ""),
     ],
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
-def test_get_new_command():
+def test_get_new_command() -> None:
     new_command = get_new_command(Command("git push", error_msg("foo", "bar")))
     assert new_command == "git push origin HEAD:bar"

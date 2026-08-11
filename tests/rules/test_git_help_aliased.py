@@ -13,7 +13,7 @@ from thefuck.types import Command
         ("git help ds", "`git ds' is aliased to `diff --staged'"),
     ],
 )
-def test_match(script, output):
+def test_match(script, output) -> None:
     assert match(Command(script, output))
 
 
@@ -24,7 +24,7 @@ def test_match(script, output):
         ("git help diff", "GIT-DIFF(1)...Git Manual...GIT-DIFF(1)"),
     ],
 )
-def test_not_match(script, output):
+def test_not_match(script, output) -> None:
     assert not match(Command(script, output))
 
 
@@ -35,5 +35,5 @@ def test_not_match(script, output):
         ("git help ds", "`git ds' is aliased to `diff --staged'", "git help diff"),
     ],
 )
-def test_get_new_command(script, output, new_command):
+def test_get_new_command(script, output, new_command) -> None:
     assert get_new_command(Command(script, output)) == new_command

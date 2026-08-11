@@ -23,11 +23,11 @@ from thefuck.types import Command
         "error: [Errno 13] Permission denied: '/usr/local/lib/python2.7/dist-packages/ipaddr.py'",
     ],
 )
-def test_match(output):
+def test_match(output) -> None:
     assert match(Command("", output))
 
 
-def test_not_match():
+def test_not_match() -> None:
     assert not match(Command("", ""))
     assert not match(Command("sudo ls", "Permission denied"))
 
@@ -41,5 +41,5 @@ def test_not_match():
         ("mkdir && touch a", 'sudo sh -c "mkdir && touch a"'),
     ],
 )
-def test_get_new_command(before, after):
+def test_get_new_command(before, after) -> None:
     assert get_new_command(Command(before, "")) == after

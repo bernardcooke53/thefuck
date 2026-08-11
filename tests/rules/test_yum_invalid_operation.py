@@ -173,7 +173,7 @@ yum_operations = [
         "uninstall",
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(Command(f"yum {command}", yum_invalid_op_text.format(command)))
 
 
@@ -196,7 +196,7 @@ def test_match(command):
         ("yum search vim", yum_successful_vim_search_text),
     ],
 )
-def test_not_match(command, output):
+def test_not_match(command, output) -> None:
     assert not match(Command(command, output))
 
 
@@ -208,7 +208,7 @@ def yum_help(mocker):
 
 
 @pytest.mark.usefixtures("no_memoize", "yum_help")
-def test_get_operations():
+def test_get_operations() -> None:
     assert _get_operations() == yum_operations
 
 
@@ -233,5 +233,5 @@ def test_get_operations():
         ),
     ],
 )
-def test_get_new_command(script, output, result):
+def test_get_new_command(script, output, result) -> None:
     assert get_new_command(Command(script, output))[0] == result

@@ -16,7 +16,7 @@ error = "hard link not allowed for directory"
         ("sudo ln -nbi a b", "ln: ‘a’: {}"),
     ],
 )
-def test_match(script, output):
+def test_match(script, output) -> None:
     command = Command(script, output.format(error))
     assert match(command)
 
@@ -30,7 +30,7 @@ def test_match(script, output):
         ("a b", error),
     ],
 )
-def test_not_match(script, output):
+def test_not_match(script, output) -> None:
     command = Command(script, output)
     assert not match(command)
 
@@ -46,6 +46,6 @@ def test_not_match(script, output):
         ("sudo ln a ln", "sudo ln -s a ln"),
     ],
 )
-def test_get_new_command(script, result):
+def test_get_new_command(script, result) -> None:
     command = Command(script, "")
     assert get_new_command(command) == result

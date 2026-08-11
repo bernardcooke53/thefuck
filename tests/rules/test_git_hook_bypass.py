@@ -16,7 +16,7 @@ from thefuck.types import Command
         Command("git push -u foo bar", ""),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -28,7 +28,7 @@ def test_match(command):
         Command("git diff foo bar", ""),
     ],
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -42,5 +42,5 @@ def test_not_match(command):
         (Command("git push -p", ""), "git push --no-verify -p"),
     ],
 )
-def test_get_new_command(command, new_command):
+def test_get_new_command(command, new_command) -> None:
     assert get_new_command(command) == new_command

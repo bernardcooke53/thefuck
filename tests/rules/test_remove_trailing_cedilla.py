@@ -10,7 +10,7 @@ from thefuck.types import Command
     "command",
     [Command("wrong" + CEDILLA, ""), Command("wrong with args" + CEDILLA, "")],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -21,5 +21,5 @@ def test_match(command):
         (Command("wrong with args" + CEDILLA, ""), "wrong with args"),
     ],
 )
-def test_get_new_command(command, new_command):
+def test_get_new_command(command, new_command) -> None:
     assert get_new_command(command) == new_command

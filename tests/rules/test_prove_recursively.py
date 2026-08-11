@@ -17,7 +17,7 @@ def isdir(mocker):
 @pytest.mark.parametrize(
     "script, output", [("prove -lv t", output), ("prove app/t", output)]
 )
-def test_match(isdir, script, output):
+def test_match(isdir, script, output) -> None:
     isdir.return_value = True
     command = Command(script, output)
     assert match(command)
@@ -31,7 +31,7 @@ def test_match(isdir, script, output):
         ("prove --recurse t", output, True),
     ],
 )
-def test_not_match(isdir, script, output, isdir_result):
+def test_not_match(isdir, script, output, isdir_result) -> None:
     isdir.return_value = isdir_result
     command = Command(script, output)
     assert not match(command)
@@ -40,6 +40,6 @@ def test_not_match(isdir, script, output, isdir_result):
 @pytest.mark.parametrize(
     "before, after", [("prove -lv t", "prove -r -lv t"), ("prove t", "prove -r t")]
 )
-def test_get_new_command(before, after):
+def test_get_new_command(before, after) -> None:
     command = Command(before, output)
     assert get_new_command(command) == after

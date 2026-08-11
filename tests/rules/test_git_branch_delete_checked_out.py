@@ -7,17 +7,17 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output():
+def output() -> str:
     return "error: Cannot delete branch 'foo' checked out at '/bar/foo'"
 
 
 @pytest.mark.parametrize("script", ["git branch -d foo", "git branch -D foo"])
-def test_match(script, output):
+def test_match(script, output) -> None:
     assert match(Command(script, output))
 
 
 @pytest.mark.parametrize("script", ["git branch -d foo", "git branch -D foo"])
-def test_not_match(script):
+def test_not_match(script) -> None:
     assert not match(Command(script, "Deleted branch foo (was a1b2c3d)."))
 
 
@@ -28,5 +28,5 @@ def test_not_match(script):
         ("git branch -D foo", "git checkout master && git branch -D foo"),
     ],
 )
-def test_get_new_command(script, new_command, output):
+def test_get_new_command(script, new_command, output) -> None:
     assert get_new_command(Command(script, output)) == new_command

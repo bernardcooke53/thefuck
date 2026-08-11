@@ -7,20 +7,20 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output():
+def output() -> str:
     return """error: The branch 'branch' is not fully merged.
 If you are sure you want to delete it, run 'git branch -D branch'.
 
 """
 
 
-def test_match(output):
+def test_match(output) -> None:
     assert match(Command("git branch -d branch", output))
     assert not match(Command("git branch -d branch", ""))
     assert not match(Command("ls", output))
 
 
-def test_get_new_command(output):
+def test_get_new_command(output) -> None:
     assert (
         get_new_command(Command("git branch -d branch", output))
         == "git branch -D branch"

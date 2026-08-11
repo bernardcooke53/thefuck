@@ -20,7 +20,7 @@ def exists(mocker):
         Command("gradle build", "gradle: not found"),
     ],
 )
-def test_match(mocker, command):
+def test_match(mocker, command) -> None:
     mocker.patch("shutil.which", return_value=None)
 
     assert match(command)
@@ -34,7 +34,7 @@ def test_match(mocker, command):
         (Command("npm tasks", "npm: not found"), True, None),
     ],
 )
-def test_not_match(mocker, exists, command, gradlew, which):
+def test_not_match(mocker, exists, command, gradlew, which) -> None:
     mocker.patch("shutil.which", return_value=which)
     exists.return_value = gradlew
 
@@ -49,6 +49,6 @@ def test_not_match(mocker, exists, command, gradlew, which):
         ("gradle build -c", "./gradlew build -c"),
     ],
 )
-def test_get_new_command(script, result):
+def test_get_new_command(script, result) -> None:
     command = Command(script, "")
     assert get_new_command(command) == result

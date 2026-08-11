@@ -29,7 +29,7 @@ from thefuck.types import Command
         ),
     ],
 )
-def test_match(script, output):
+def test_match(script, output) -> None:
     assert match(Command(script, output))
 
 
@@ -44,7 +44,7 @@ def test_match(script, output):
         ),
     ],
 )
-def test_not_match(script, output):
+def test_not_match(script, output) -> None:
     assert not match(Command(script, output=output))
 
 
@@ -55,5 +55,5 @@ def test_not_match(script, output):
         (Command("terraform apply", ""), "terraform init && terraform apply"),
     ],
 )
-def test_get_new_command(command, new_command):
+def test_get_new_command(command, new_command) -> None:
     assert get_new_command(command) == new_command

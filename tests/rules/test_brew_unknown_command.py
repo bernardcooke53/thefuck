@@ -7,12 +7,12 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def brew_unknown_cmd():
+def brew_unknown_cmd() -> str:
     return """Error: Unknown command: inst"""
 
 
 @pytest.fixture
-def brew_unknown_cmd2():
+def brew_unknown_cmd2() -> str:
     return """Error: Unknown command: instaa"""
 
 

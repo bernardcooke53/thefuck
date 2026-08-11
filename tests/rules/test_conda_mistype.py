@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def mistype_response():
+def mistype_response() -> str:
     return """
 
 CommandNotFoundError: No command 'conda lst'.

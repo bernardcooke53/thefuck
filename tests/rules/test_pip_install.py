@@ -4,7 +4,7 @@ from thefuck.rules.pip_install import get_new_command, match
 from thefuck.types import Command
 
 
-def test_match():
+def test_match() -> None:
     response1 = """
     Could not install packages due to an EnvironmentError: [Errno 13] Permission denied: '/Library/Python/2.7/site-packages/entrypoints.pyc'
 Consider using the `--user` option or check the permissions.
@@ -22,7 +22,7 @@ Successfully installed bacon-0.3.1
     assert not match(Command("pip install bacon", response2))
 
 
-def test_get_new_command():
+def test_get_new_command() -> None:
     assert (
         get_new_command(Command("pip install -r requirements.txt", ""))
         == "pip install --user -r requirements.txt"

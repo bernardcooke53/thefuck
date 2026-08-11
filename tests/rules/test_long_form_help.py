@@ -7,11 +7,11 @@ from thefuck.types import Command
 
 
 @pytest.mark.parametrize("output", ["Try 'grep --help' for more information."])
-def test_match(output):
+def test_match(output) -> None:
     assert match(Command("grep -h", output))
 
 
-def test_not_match():
+def test_not_match() -> None:
     assert not match(Command("", ""))
 
 
@@ -24,5 +24,5 @@ def test_not_match():
         ("cut -h", "cut --help"),
     ],
 )
-def test_get_new_command(before, after):
+def test_get_new_command(before, after) -> None:
     assert get_new_command(Command(before, "")) == after

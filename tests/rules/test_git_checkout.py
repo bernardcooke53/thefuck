@@ -8,7 +8,7 @@ from thefuck.rules.git_checkout import get_branches, get_new_command, match
 from thefuck.types import Command
 
 
-def did_not_match(target, did_you_forget=False):
+def did_not_match(target, did_you_forget: bool=False):
     error = f"error: pathspec '{target}' did not match any file(s) known to git."
     if did_you_forget:
         error = f"{error}\nDid you forget to 'git add'?'"
@@ -29,7 +29,7 @@ def git_branch(mocker, branches):
         Command("git commit unknown", did_not_match("unknown")),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -41,7 +41,7 @@ def test_match(command):
         Command("git commit known", ""),
     ],
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -64,7 +64,7 @@ def test_not_match(command):
         ),
     ],
 )
-def test_get_branches(branches, branch_list, git_branch):
+def test_get_branches(branches, branch_list, git_branch) -> None:
     git_branch(branches)
     assert list(get_branches()) == branch_list
 
@@ -99,6 +99,6 @@ def test_get_branches(branches, branch_list, git_branch):
         ),
     ],
 )
-def test_get_new_command(branches, command, new_command, git_branch):
+def test_get_new_command(branches, command, new_command, git_branch) -> None:
     git_branch(branches)
     assert get_new_command(command) == new_command

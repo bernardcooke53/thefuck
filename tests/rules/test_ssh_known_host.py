@@ -12,7 +12,7 @@ from thefuck.types import Command
 def ssh_error(tmpdir):
     path = os.path.join(str(tmpdir), "known_hosts")
 
-    def reset(path):
+    def reset(path) -> None:
         with open(path, "w") as fh:
             lines = [
                 "123.234.567.890 asdjkasjdakjsd\n"
@@ -44,7 +44,7 @@ Host key verification failed.""".format(path, "98.765.432.321")
     return errormsg, path, reset, known_hosts
 
 
-def test_match(ssh_error):
+def test_match(ssh_error) -> None:
     errormsg, _, _, _ = ssh_error
     assert match(Command("ssh", errormsg))
     assert match(Command("ssh", errormsg))
@@ -56,7 +56,7 @@ def test_match(ssh_error):
 
 
 @pytest.mark.skipif(os.name == "nt", reason="Skip if testing on Windows")
-def test_side_effect(ssh_error):
+def test_side_effect(ssh_error) -> None:
     errormsg, path, reset, known_hosts = ssh_error
     command = Command("ssh user@host", errormsg)
     side_effect(command, None)
@@ -64,6 +64,6 @@ def test_side_effect(ssh_error):
     assert known_hosts(path) == expected
 
 
-def test_get_new_command(ssh_error, monkeypatch):
+def test_get_new_command(ssh_error, monkeypatch) -> None:
     errormsg, _, _, _ = ssh_error
     assert get_new_command(Command("ssh user@host", errormsg)) == "ssh user@host"

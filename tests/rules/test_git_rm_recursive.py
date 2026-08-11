@@ -7,19 +7,19 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output(target):
+def output(target) -> str:
     return f"fatal: not removing '{target}' recursively without -r"
 
 
 @pytest.mark.parametrize(
     "script, target", [("git rm foo", "foo"), ("git rm foo bar", "foo bar")]
 )
-def test_match(output, script, target):
+def test_match(output, script, target) -> None:
     assert match(Command(script, output))
 
 
 @pytest.mark.parametrize("script", ["git rm foo", "git rm foo bar"])
-def test_not_match(script):
+def test_not_match(script) -> None:
     assert not match(Command(script, ""))
 
 
@@ -30,5 +30,5 @@ def test_not_match(script):
         ("git rm foo bar", "foo bar", "git rm -r foo bar"),
     ],
 )
-def test_get_new_command(output, script, target, new_command):
+def test_get_new_command(output, script, target, new_command) -> None:
     assert get_new_command(Command(script, output)) == new_command

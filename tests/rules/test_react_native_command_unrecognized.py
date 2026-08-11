@@ -47,7 +47,7 @@ Scanning 615 folders for symlinks in /home/nvbn/work/zcho/BookkaWebView/node_mod
         Command("react-native android-logs", output("android-logs")),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -55,7 +55,7 @@ def test_match(command):
     "command",
     [Command("gradle star", output("star")), Command("react-native start", "")],
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -69,7 +69,7 @@ def test_not_match(command):
         ),
     ],
 )
-def test_get_new_command(mocker, command, result):
+def test_get_new_command(mocker, command, result) -> None:
     patch = mocker.patch("thefuck.rules.react_native_command_unrecognized.Popen")
     patch.return_value.stdout = BytesIO(stdout)
     assert get_new_command(command)[0] == result

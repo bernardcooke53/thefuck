@@ -204,7 +204,7 @@ def test_not_match(script, output) -> None:
 def set_help(mocker: pytest_mock.MockerFixture) -> Callable[[bytes], None]:
     mock = mocker.patch("subprocess.Popen")
 
-    def _set_text(text):
+    def _set_text(text: str) -> None:
         mock.return_value.stdout = BytesIO(text)
 
     return _set_text

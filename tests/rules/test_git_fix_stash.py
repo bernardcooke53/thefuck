@@ -20,11 +20,11 @@ usage: git stash list [<options>]
 @pytest.mark.parametrize(
     "wrong", ["git stash opp", "git stash Some message", "git stash saev Some message"]
 )
-def test_match(wrong):
+def test_match(wrong) -> None:
     assert match(Command(wrong, git_stash_err))
 
 
-def test_not_match():
+def test_not_match() -> None:
     assert not match(Command("git", git_stash_err))
 
 
@@ -36,5 +36,5 @@ def test_not_match():
         ("git stash saev Some message", "git stash save Some message"),
     ],
 )
-def test_get_new_command(wrong, fixed):
+def test_get_new_command(wrong, fixed) -> None:
     assert get_new_command(Command(wrong, git_stash_err)) == fixed

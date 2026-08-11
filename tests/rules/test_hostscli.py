@@ -21,7 +21,7 @@ type `hostscli websites` to see a list of websites that you can block/unblock
     "command",
     [Command("hostscli block a_website_that_does_not_exist", no_website_long)],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -34,5 +34,5 @@ def test_match(command):
         )
     ],
 )
-def test_get_new_command(command, result):
+def test_get_new_command(command, result) -> None:
     assert get_new_command(command) == result

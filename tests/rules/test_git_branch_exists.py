@@ -7,12 +7,12 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output(src_branch_name):
+def output(src_branch_name: str) -> str:
     return f"fatal: A branch named '{src_branch_name}' already exists."
 
 
 @pytest.fixture
-def new_command(branch_name):
+def new_command(branch_name: str):
     return [
         cmd.format(branch_name)
         for cmd in [
@@ -37,7 +37,7 @@ def new_command(branch_name):
         ),
     ],
 )
-def test_match(output, script, branch_name):
+def test_match(output, script, branch_name: str) -> None:
     assert match(Command(script, output))
 
 
@@ -45,7 +45,7 @@ def test_match(output, script, branch_name):
     "script",
     ["git branch foo", "git checkout bar", 'git checkout -b "let\'s-push-this"'],
 )
-def test_not_match(script):
+def test_not_match(script) -> None:
     assert not match(Command(script, ""))
 
 
@@ -57,5 +57,5 @@ def test_not_match(script):
         ('git checkout -b "let\'s-push-this"', "let's-push-this", "let\\'s-push-this"),
     ],
 )
-def test_get_new_command(output, new_command, script, src_branch_name, branch_name):
+def test_get_new_command(output, new_command, script, src_branch_name: str, branch_name: str) -> None:
     assert get_new_command(Command(script, output)) == new_command

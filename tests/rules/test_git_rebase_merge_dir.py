@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output():
+def output() -> str:
     return (
         "\n\nIt seems that there is already a rebase-merge directory, and\n"
         "I wonder if you are in the middle of another rebase.  If that is the\n"
@@ -23,12 +23,12 @@ def output():
 @pytest.mark.parametrize(
     "script", ["git rebase master", "git rebase -skip", "git rebase"]
 )
-def test_match(output, script):
+def test_match(output, script) -> None:
     assert match(Command(script, output))
 
 
 @pytest.mark.parametrize("script", ["git rebase master", "git rebase -abort"])
-def test_not_match(script):
+def test_not_match(script) -> None:
     assert not match(Command(script, ""))
 
 
@@ -64,5 +64,5 @@ def test_not_match(script):
         ),
     ],
 )
-def test_get_new_command(output, script, result):
+def test_get_new_command(output, script, result) -> None:
     assert get_new_command(Command(script, output)) == result

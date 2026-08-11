@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output(pyenv_cmd):
+def output(pyenv_cmd) -> str:
     return f"pyenv: no such command `{pyenv_cmd}'"
 
 
@@ -34,11 +34,11 @@ def Popen(mocker):
         ("pyenv list", "list"),
     ],
 )
-def test_match(script, pyenv_cmd, output):
+def test_match(script, pyenv_cmd, output) -> None:
     assert match(Command(script, output=output))
 
 
-def test_match_goenv_output_quote():
+def test_match_goenv_output_quote() -> None:
     """Test goenv's specific output with quotes (')"""
     assert match(Command("goenv list", output="goenv: no such command 'list'"))
 
@@ -51,7 +51,7 @@ def test_match_goenv_output_quote():
         ("pyenv install --list", "  3.7.0\n  3.7.1\n  3.7.2\n"),
     ],
 )
-def test_not_match(script, output):
+def test_not_match(script, output) -> None:
     assert not match(Command(script, output=output))
 
 
@@ -64,5 +64,5 @@ def test_not_match(script, output):
         ("pyenv remove 3.8.0", "remove", "pyenv uninstall 3.8.0"),
     ],
 )
-def test_get_new_command(script, pyenv_cmd, output, result):
+def test_get_new_command(script, pyenv_cmd, output, result) -> None:
     assert result in get_new_command(Command(script, output))

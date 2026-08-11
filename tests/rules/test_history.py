@@ -15,15 +15,15 @@ def history_without_current(mocker):
 
 
 @pytest.mark.parametrize("script", ["ls cet", "daff x"])
-def test_match(script):
+def test_match(script) -> None:
     assert match(Command(script, ""))
 
 
 @pytest.mark.parametrize("script", ["apt-get", "nocommand y"])
-def test_not_match(script):
+def test_not_match(script) -> None:
     assert not match(Command(script, ""))
 
 
 @pytest.mark.parametrize("script, result", [("ls cet", "ls cat"), ("daff x", "diff x")])
-def test_get_new_command(script, result):
+def test_get_new_command(script, result) -> None:
     assert get_new_command(Command(script, "")) == result

@@ -49,7 +49,7 @@ To /tmp/bar
         Command("git push nvbn master", git_err2),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -64,7 +64,7 @@ def test_match(command):
         Command("git push nvbn master", git_uptodate),
     ],
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -85,5 +85,5 @@ def test_not_match(command):
         ),
     ],
 )
-def test_get_new_command(command, output):
+def test_get_new_command(command, output) -> None:
     assert get_new_command(command) == output

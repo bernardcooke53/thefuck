@@ -46,7 +46,7 @@ from thefuck.types import Command
         ),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -82,7 +82,7 @@ def test_match(command):
         Command("tsuru env-get", "Error: App thefuck not found."),
     ],
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -138,5 +138,5 @@ def test_not_match(command):
         ),
     ],
 )
-def test_get_new_command(command, new_commands):
+def test_get_new_command(command, new_commands) -> None:
     assert get_new_command(command) == new_commands

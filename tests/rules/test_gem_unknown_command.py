@@ -67,14 +67,14 @@ def gem_help_commands(mocker):
 @pytest.mark.parametrize(
     "script, command", [("gem isntall jekyll", "isntall"), ("gem last --local", "last")]
 )
-def test_match(script, command):
+def test_match(script, command) -> None:
     assert match(Command(script, output.format(command)))
 
 
 @pytest.mark.parametrize(
     "script, output", [("gem install jekyll", ""), ("git log", output.format("log"))]
 )
-def test_not_match(script, output):
+def test_not_match(script, output) -> None:
     assert not match(Command(script, output))
 
 
@@ -85,6 +85,6 @@ def test_not_match(script, output):
         ("gem last --local", output.format("last"), "gem list --local"),
     ],
 )
-def test_get_new_command(script, output, result):
+def test_get_new_command(script, output, result) -> None:
     new_command = get_new_command(Command(script, output))
     assert new_command[0] == result

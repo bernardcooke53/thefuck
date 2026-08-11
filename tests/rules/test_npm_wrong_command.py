@@ -38,7 +38,7 @@ npm@2.14.7 /opt/node/lib/node_modules/npm
 @pytest.mark.parametrize(
     "script", ["npm urgrdae", "npm urgrade -g", "npm -f urgrade -g", "npm urg"]
 )
-def test_match(script):
+def test_match(script) -> None:
     assert match(Command(script, output))
 
 
@@ -51,7 +51,7 @@ def test_match(script):
         ("npm -e", output),
     ],
 )
-def test_not_match(script, output):
+def test_not_match(script, output) -> None:
     assert not match(Command(script, output))
 
 
@@ -63,5 +63,5 @@ def test_not_match(script, output):
         ("npm isntall -g gulp", "npm install -g gulp"),
     ],
 )
-def test_get_new_command(script, result):
+def test_get_new_command(script, result) -> None:
     assert get_new_command(Command(script, output)) == result

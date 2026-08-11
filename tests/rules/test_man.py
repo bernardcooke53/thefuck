@@ -18,12 +18,12 @@ from thefuck.types import Command
         Command("man -s 3 read", ""),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
 @pytest.mark.parametrize("command", [Command("man", ""), Command("man ", "")])
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -40,5 +40,5 @@ def test_not_match(command):
         (Command("man -s 3 read", ""), "man -s 2 read"),
     ],
 )
-def test_get_new_command(command, new_command):
+def test_get_new_command(command, new_command) -> None:
     assert get_new_command(command) == new_command

@@ -83,7 +83,7 @@ def logs(mocker: pytest_mock.MockerFixture) -> pytest_mock.MockType:
     )
 
 
-def test_for_generic_shell(shell: pytest_mock.MockType, logs: pytest_mock.MockType):
+def test_for_generic_shell(shell: pytest_mock.MockType, logs: pytest_mock.MockType) -> None:
     shell.how_to_configure.return_value = None
     main()
     logs.how_to_configure_alias.assert_called_once()
@@ -94,7 +94,7 @@ def test_on_first_run(
     usage_tracker_exists,
     shell_pid: pytest_mock.MockType,
     logs: pytest_mock.MockType,
-):
+) -> None:
     shell_pid.return_value = 12
     main()
     usage_tracker_exists.return_value = False
@@ -107,7 +107,7 @@ def test_on_run_after_other_commands(
     shell_pid: pytest_mock.MockType,
     shell: pytest_mock.MockType,
     logs: pytest_mock.MockType,
-):
+) -> None:
     shell_pid.return_value = 12
     shell.get_history.return_value = ["fuck", "ls"]
     _change_tracker(usage_tracker_io, 12)
@@ -120,7 +120,7 @@ def test_on_first_run_from_current_shell(
     shell_pid: pytest_mock.MockType,
     shell: pytest_mock.MockType,
     logs: pytest_mock.MockType,
-):
+) -> None:
     shell.get_history.return_value = ["fuck"]
     shell_pid.return_value = 12
     main()
@@ -132,7 +132,7 @@ def test_when_cant_configure_automatically(
     shell_pid: pytest_mock.MockType,
     shell: pytest_mock.MockType,
     logs: pytest_mock.MockType,
-):
+) -> None:
     shell_pid.return_value = 12
     shell.how_to_configure.return_value = ShellConfiguration(
         content="eval $(thefuck --alias)",
@@ -150,7 +150,7 @@ def test_when_already_configured(
     shell: pytest_mock.MockType,
     shell_config: pytest_mock.MockType,
     logs: pytest_mock.MockType,
-):
+) -> None:
     shell.get_history.return_value = ["fuck"]
     shell_pid.return_value = 12
     _change_tracker(usage_tracker_io, 12)
@@ -165,7 +165,7 @@ def test_when_successfully_configured(
     shell: pytest_mock.MockType,
     shell_config: pytest_mock.MockType,
     logs: pytest_mock.MockType,
-):
+) -> None:
     shell.get_history.return_value = ["fuck"]
     shell_pid.return_value = 12
     _change_tracker(usage_tracker_io, 12)

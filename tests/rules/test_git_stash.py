@@ -25,7 +25,7 @@ rebase_error = (
         Command("git rebase -i HEAD~7", rebase_error),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -33,7 +33,7 @@ def test_match(command):
     "command",
     [Command("git cherry-pick a1b2c3d", ""), Command("git rebase -i HEAD~7", "")],
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -50,5 +50,5 @@ def test_not_match(command):
         ),
     ],
 )
-def test_get_new_command(command, new_command):
+def test_get_new_command(command, new_command) -> None:
     assert get_new_command(command) == new_command

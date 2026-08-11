@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def composer_not_command():
+def composer_not_command() -> str:
     # that weird spacing is part of the actual command output
     return (
         "\n"
@@ -24,7 +24,7 @@ def composer_not_command():
 
 
 @pytest.fixture
-def composer_not_command_one_of_this():
+def composer_not_command_one_of_this() -> str:
     # that weird spacing is part of the actual command output
     return (
         "\n"
@@ -43,7 +43,7 @@ def composer_not_command_one_of_this():
 
 
 @pytest.fixture
-def composer_require_instead_of_install():
+def composer_require_instead_of_install() -> str:
     return 'Invalid argument package. Use "composer require package" instead to add packages to your composer.json.'
 
 
@@ -51,7 +51,7 @@ def test_match(
     composer_not_command,
     composer_not_command_one_of_this,
     composer_require_instead_of_install,
-):
+) -> None:
     assert match(Command("composer udpate", composer_not_command))
     assert match(Command("composer pdate", composer_not_command_one_of_this))
     assert match(
@@ -64,7 +64,7 @@ def test_get_new_command(
     composer_not_command,
     composer_not_command_one_of_this,
     composer_require_instead_of_install,
-):
+) -> None:
     assert (
         get_new_command(Command("composer udpate", composer_not_command))
         == "composer update"

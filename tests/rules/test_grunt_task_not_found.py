@@ -115,14 +115,14 @@ def grunt_help(mocker):
         Command("grunt buld:css", output("buld:css")),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
 @pytest.mark.parametrize(
     "command", [Command("npm nuild", output("nuild")), Command("grunt rm", "")]
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -137,5 +137,5 @@ def test_not_match(command):
         ),
     ],
 )
-def test_get_new_command(command, result):
+def test_get_new_command(command, result) -> None:
     assert get_new_command(command) == result

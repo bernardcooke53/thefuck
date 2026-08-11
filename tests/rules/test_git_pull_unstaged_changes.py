@@ -7,19 +7,19 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output():
+def output() -> str:
     return (
         """error: Cannot pull with rebase: Your index contains uncommitted changes."""
     )
 
 
-def test_match(output):
+def test_match(output) -> None:
     assert match(Command("git pull", output))
     assert not match(Command("git pull", ""))
     assert not match(Command("ls", output))
 
 
-def test_get_new_command(output):
+def test_get_new_command(output) -> None:
     assert (
         get_new_command(Command("git pull", output))
         == "git stash && git pull && git stash pop"

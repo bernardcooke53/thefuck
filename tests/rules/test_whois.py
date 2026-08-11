@@ -14,11 +14,11 @@ from thefuck.types import Command
         Command("whois meta.unix.stackexchange.com", ""),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
-def test_not_match():
+def test_not_match() -> None:
     assert not match(Command("whois", ""))
 
 
@@ -37,5 +37,5 @@ def test_not_match():
         ),
     ],
 )
-def test_get_new_command(command, new_command):
+def test_get_new_command(command, new_command) -> None:
     assert get_new_command(command) == new_command

@@ -126,7 +126,7 @@ def test_from_path_excluded_rule(mocker: pytest_mock.MockerFixture, settings) ->
         (["git"], Rule("git", enabled_by_default=False), True),
     ],
 )
-def test_is_enabled(settings, rules, rule, is_enabled) -> None:
+def test_is_enabled(settings, rules, rule, is_enabled: bool) -> None:
     settings.update(rules=rules)
     assert rule.is_enabled == is_enabled
 

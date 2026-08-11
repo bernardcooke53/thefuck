@@ -17,7 +17,7 @@ class Rule(types.Rule):
         side_effect: Callable[[types.Command, str], Any] | None = None,
         priority: int = DEFAULT_PRIORITY,
         requires_output: bool = True,
-    ):
+    ) -> None:
         super().__init__(
             name,
             match,

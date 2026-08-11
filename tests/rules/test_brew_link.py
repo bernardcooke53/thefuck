@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output():
+def output() -> str:
     return (
         "Error: Could not symlink bin/gcp\n"
         "Target /usr/local/bin/gcp\n"
@@ -23,7 +23,7 @@ def output():
 
 
 @pytest.fixture
-def new_command(formula):
+def new_command(formula) -> str:
     return f"brew link --overwrite --dry-run {formula}"
 
 

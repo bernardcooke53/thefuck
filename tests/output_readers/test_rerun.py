@@ -72,7 +72,7 @@ def test_wait_output_timeout_children(proc_mock: Mock, kill_process_mock: Mock) 
     assert kill_process_mock.call_count == 3
 
 
-def test_kill_process():
+def test_kill_process() -> None:
     proc = Mock()
     rerun._kill_process(proc)
     proc.kill.assert_called_once_with()

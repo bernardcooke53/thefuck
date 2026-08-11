@@ -7,16 +7,16 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output():
+def output() -> str:
     return """error: Your local changes to the following files would be overwritten by merge:"""
 
 
-def test_match(output):
+def test_match(output) -> None:
     assert match(Command("git stash pop", output))
     assert not match(Command("git stash", ""))
 
 
-def test_get_new_command(output):
+def test_get_new_command(output) -> None:
     assert (
         get_new_command(Command("git stash pop", output))
         == "git add --update && git stash pop && git reset ."

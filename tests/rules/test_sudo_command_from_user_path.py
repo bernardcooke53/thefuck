@@ -20,7 +20,7 @@ def which(mocker):
         ("sudo -u app appcfg update .", output.format("appcfg")),
     ],
 )
-def test_match(script, output):
+def test_match(script, output) -> None:
     assert match(Command(script, output))
 
 
@@ -32,7 +32,7 @@ def test_match(script, output):
         ("sudo npm --version", output.format("npm"), None),
     ],
 )
-def test_not_match(which, script, output, which_result):
+def test_not_match(which, script, output, which_result) -> None:
     which.return_value = which_result
     assert not match(Command(script, output))
 
@@ -52,5 +52,5 @@ def test_not_match(which, script, output, which_result):
         ),
     ],
 )
-def test_get_new_command(script, output, result):
+def test_get_new_command(script, output, result) -> None:
     assert get_new_command(Command(script, output)) == result

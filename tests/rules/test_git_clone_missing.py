@@ -33,21 +33,21 @@ outputs = [
 
 @pytest.mark.parametrize("cmd", valid_urls)
 @pytest.mark.parametrize("output", outputs)
-def test_match(cmd, output):
+def test_match(cmd, output) -> None:
     c = Command(cmd, output)
     assert match(c)
 
 
 @pytest.mark.parametrize("cmd", invalid_urls)
 @pytest.mark.parametrize("output", outputs + ["some other output"])
-def test_not_match(cmd, output):
+def test_not_match(cmd, output) -> None:
     c = Command(cmd, output)
     assert not match(c)
 
 
 @pytest.mark.parametrize("script", valid_urls)
 @pytest.mark.parametrize("output", outputs)
-def test_get_new_command(script, output):
+def test_get_new_command(script, output) -> None:
     command = Command(script, output)
     new_command = "git clone " + script
     assert get_new_command(command) == new_command

@@ -8,7 +8,7 @@ from thefuck.types import Command
 output = "fatal: refusing to merge unrelated histories"
 
 
-def test_match():
+def test_match() -> None:
     assert match(Command("git merge test", output))
     assert not match(Command("git merge master", ""))
     assert not match(Command("ls", output))
@@ -31,5 +31,5 @@ def test_match():
         ),
     ],
 )
-def test_get_new_command(command, new_command):
+def test_get_new_command(command, new_command) -> None:
     assert get_new_command(command) == new_command

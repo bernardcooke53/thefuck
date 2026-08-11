@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output():
+def output() -> str:
     return (
         "The following paths are ignored by one of your .gitignore files:\n"
         "dist/app.js\n"
@@ -17,12 +17,12 @@ def output():
     )
 
 
-def test_match(output):
+def test_match(output) -> None:
     assert match(Command("git add dist/*.js", output))
     assert not match(Command("git add dist/*.js", ""))
 
 
-def test_get_new_command(output):
+def test_get_new_command(output) -> None:
     assert (
         get_new_command(Command("git add dist/*.js", output))
         == "git add --force dist/*.js"

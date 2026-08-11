@@ -29,7 +29,7 @@ def path_exists(mocker):
         ("cd project", "can't cd to project"),
     ],
 )
-def test_match(script, output):
+def test_match(script, output) -> None:
     assert match(Command(script, output))
 
 
@@ -40,7 +40,7 @@ def test_match(script, output):
         ("cd project", ""),
     ],
 )
-def test_not_match(script, output):
+def test_not_match(script, output) -> None:
     assert not match(Command(script, output))
 
 
@@ -51,6 +51,6 @@ def test_not_match(script, output):
         ("cd java", "can't cd to java", "cd /opt/java"),
     ],
 )
-def test_get_new_command(script, output, result):
+def test_get_new_command(script, output, result) -> None:
     new_command = get_new_command(Command(script, output))
     assert new_command[0] == result

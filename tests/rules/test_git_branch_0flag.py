@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output_branch_exists():
+def output_branch_exists() -> str:
     return "fatal: A branch named 'bar' already exists."
 
 
@@ -23,7 +23,7 @@ def output_branch_exists():
         "git branch 0D foo",
     ],
 )
-def test_match(script, output_branch_exists):
+def test_match(script, output_branch_exists) -> None:
     assert match(Command(script, output_branch_exists))
 
 
@@ -37,7 +37,7 @@ def test_match(script, output_branch_exists):
         "git branch -D foo",
     ],
 )
-def test_not_match(script, output_branch_exists):
+def test_not_match(script, output_branch_exists) -> None:
     assert not match(Command(script, ""))
 
 
@@ -52,12 +52,12 @@ def test_not_match(script, output_branch_exists):
         ("git branch 0u upstream", "git branch -D 0u && git branch -u upstream"),
     ],
 )
-def test_get_new_command_branch_exists(script, output_branch_exists, new_command):
+def test_get_new_command_branch_exists(script, output_branch_exists, new_command) -> None:
     assert get_new_command(Command(script, output_branch_exists)) == new_command
 
 
 @pytest.fixture
-def output_not_valid_object():
+def output_not_valid_object() -> str:
     return "fatal: Not a valid object name: 'bar'."
 
 
@@ -68,5 +68,5 @@ def output_not_valid_object():
         ("git branch 0u upstream", "git branch -u upstream"),
     ],
 )
-def test_get_new_command_not_valid_object(script, output_not_valid_object, new_command):
+def test_get_new_command_not_valid_object(script, output_not_valid_object, new_command) -> None:
     assert get_new_command(Command(script, output_not_valid_object)) == new_command

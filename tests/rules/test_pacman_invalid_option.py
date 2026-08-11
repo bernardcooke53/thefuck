@@ -13,21 +13,21 @@ bad_output = "error: invalid option '-"
 
 
 @pytest.mark.parametrize("option", "SURQFDVT")
-def test_not_match_good_output(option):
+def test_not_match_good_output(option) -> None:
     assert not match(Command(f"pacman -{option}s meat", good_output))
 
 
 @pytest.mark.parametrize("option", "azxcbnm")
-def test_not_match_bad_output(option):
+def test_not_match_bad_output(option) -> None:
     assert not match(Command(f"pacman -{option}v meat", bad_output))
 
 
 @pytest.mark.parametrize("option", "surqfdvt")
-def test_match(option):
+def test_match(option) -> None:
     assert match(Command(f"pacman -{option}v meat", bad_output))
 
 
 @pytest.mark.parametrize("option", "surqfdvt")
-def test_get_new_command(option):
+def test_get_new_command(option) -> None:
     new_command = get_new_command(Command(f"pacman -{option}v meat", ""))
     assert new_command == f"pacman -{option.upper()}v meat"

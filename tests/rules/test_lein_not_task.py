@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def is_not_task():
+def is_not_task() -> str:
     return """'rpl' is not a task. See 'lein help'.
 
 Did you mean this?
@@ -16,12 +16,12 @@ Did you mean this?
 """
 
 
-def test_match(is_not_task):
+def test_match(is_not_task: bool) -> None:
     assert match(Command("lein rpl", is_not_task))
     assert not match(Command("ls", is_not_task))
 
 
-def test_get_new_command(is_not_task):
+def test_get_new_command(is_not_task: bool) -> None:
     assert get_new_command(Command("lein rpl --help", is_not_task)) == [
         "lein repl --help",
         "lein jar --help",

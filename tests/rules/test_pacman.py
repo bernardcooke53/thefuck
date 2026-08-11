@@ -31,7 +31,7 @@ extra/vim-python3 7.4.712-1 \t/usr/bin/vim"""
         Command("sudo vim", "sudo: vim: command not found"),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -44,7 +44,7 @@ def test_match(command):
 )
 @patch("thefuck.specific.archlinux.subprocess")
 @patch.multiple(pacman, create=True, pacman=pacman_cmd)
-def test_match_mocked(subp_mock, command, return_value):
+def test_match_mocked(subp_mock, command, return_value) -> None:
     subp_mock.check_output.return_value = return_value
     assert match(command)
 
@@ -53,7 +53,7 @@ def test_match_mocked(subp_mock, command, return_value):
     "command",
     [Command("vim", ""), Command("", ""), Command("sudo vim", ""), Command("", "")],
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -95,7 +95,7 @@ vim_possibilities = [s.format(pacman_cmd) for s in vim_possibilities]
         ),
     ],
 )
-def test_get_new_command(command, new_command, mocker):
+def test_get_new_command(command, new_command, mocker) -> None:
     assert get_new_command(command) == new_command
 
 
@@ -123,6 +123,6 @@ def test_get_new_command(command, new_command, mocker):
 )
 @patch("thefuck.specific.archlinux.subprocess")
 @patch.multiple(pacman, create=True, pacman=pacman_cmd)
-def test_get_new_command_mocked(subp_mock, command, new_command, return_value):
+def test_get_new_command_mocked(subp_mock, command, new_command, return_value) -> None:
     subp_mock.check_output.return_value = return_value
     assert get_new_command(command) == new_command

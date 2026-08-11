@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Callable
+from typing import Sequence, Callable
 
 import pytest
 import pytest_mock
@@ -29,7 +29,7 @@ def load_source(monkeypatch) -> None:
     monkeypatch.setattr("thefuck.types.load_source", lambda x, _: Rule(x))
 
 
-def _compare_names(rules, names) -> None:
+def _compare_names(rules, names: Sequence[str]) -> None:
     assert {r.name for r in rules} == set(names)
 
 

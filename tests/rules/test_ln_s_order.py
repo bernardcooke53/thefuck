@@ -23,7 +23,7 @@ get_output = "ln: failed to create symbolic link '{}': File exists".format
         ("ln -s dest source", get_output("source"), False),
     ],
 )
-def test_not_match(file_exists, script, output, exists):
+def test_not_match(file_exists, script, output, exists) -> None:
     file_exists.return_value = exists
     assert not match(Command(script, output))
 
@@ -37,7 +37,7 @@ def test_not_match(file_exists, script, output, exists):
         ("ln dest source -s", "ln source -s dest"),
     ],
 )
-def test_match(script, result):
+def test_match(script, result) -> None:
     output = get_output("source")
     assert match(Command(script, output))
     assert get_new_command(Command(script, output)) == result

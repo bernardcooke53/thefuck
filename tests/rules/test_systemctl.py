@@ -4,7 +4,7 @@ from thefuck.rules.systemctl import get_new_command, match
 from thefuck.types import Command
 
 
-def test_match():
+def test_match() -> None:
     assert match(Command("systemctl nginx start", "Unknown operation 'nginx'."))
     assert match(Command("sudo systemctl nginx start", "Unknown operation 'nginx'."))
     assert not match(Command("systemctl start nginx", ""))
@@ -19,7 +19,7 @@ def test_match():
     )
 
 
-def test_get_new_command():
+def test_get_new_command() -> None:
     assert (
         get_new_command(Command("systemctl nginx start", "")) == "systemctl start nginx"
     )

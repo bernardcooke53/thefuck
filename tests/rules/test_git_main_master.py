@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output(branch_name):
+def output(branch_name: str):
     if not branch_name:
         return ""
     output_str = "error: pathspec '{}' did not match any file(s) known to git"
@@ -22,7 +22,7 @@ def output(branch_name):
         ("git show main", "main"),
     ],
 )
-def test_match(script, branch_name, output):
+def test_match(script, branch_name: str, output) -> None:
     assert match(Command(script, output))
 
 
@@ -34,7 +34,7 @@ def test_match(script, branch_name, output):
         ("git checkout wibble", "wibble"),
     ],
 )
-def test_not_match(script, branch_name, output):
+def test_not_match(script, branch_name: str, output) -> None:
     assert not match(Command(script, output))
 
 
@@ -46,5 +46,5 @@ def test_not_match(script, branch_name, output):
         ("git checkout wibble", "wibble", "git checkout wibble"),
     ],
 )
-def test_get_new_command(script, branch_name, new_command, output):
+def test_get_new_command(script, branch_name: str, new_command, output) -> None:
     assert get_new_command(Command(script, output)) == new_command

@@ -9,7 +9,7 @@ from thefuck.types import Command
 @pytest.mark.parametrize(
     "command", [Command("git diff foo", ""), Command("git diff", "")]
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -22,7 +22,7 @@ def test_match(command):
         Command("git log", ""),
     ],
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -33,5 +33,5 @@ def test_not_match(command):
         (Command("git diff foo", ""), "git diff --staged foo"),
     ],
 )
-def test_get_new_command(command, new_command):
+def test_get_new_command(command, new_command) -> None:
     assert get_new_command(command) == new_command

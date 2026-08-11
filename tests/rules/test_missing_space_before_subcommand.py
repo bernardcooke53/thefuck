@@ -15,12 +15,12 @@ def all_executables(mocker):
 
 
 @pytest.mark.parametrize("script", ["gitbranch", "ls-la", "npminstall", "watchls"])
-def test_match(script):
+def test_match(script) -> None:
     assert match(Command(script, ""))
 
 
 @pytest.mark.parametrize("script", ["git branch", "vimfile"])
-def test_not_match(script):
+def test_not_match(script) -> None:
     assert not match(Command(script, ""))
 
 
@@ -33,5 +33,5 @@ def test_not_match(script):
         ("watchls", "watch ls"),
     ],
 )
-def test_get_new_command(script, result):
+def test_get_new_command(script, result) -> None:
     assert get_new_command(Command(script, "")) == result

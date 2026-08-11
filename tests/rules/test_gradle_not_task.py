@@ -140,7 +140,7 @@ def tasks(mocker):
         Command("gradle instar", output_not_found("instar")),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -153,7 +153,7 @@ def test_match(command):
         Command("npm instar", output_not_found("instar")),
     ],
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -175,5 +175,5 @@ def test_not_match(command):
         ),
     ],
 )
-def test_get_new_command(command, result):
+def test_get_new_command(command, result) -> None:
     assert get_new_command(command)[0] == result

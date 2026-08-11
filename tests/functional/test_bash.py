@@ -36,26 +36,26 @@ def proc(request: pytest.FixtureRequest, spawnu, TIMEOUT):
     return proc
 
 
-def test_with_confirmation(proc, TIMEOUT):
+def test_with_confirmation(proc, TIMEOUT) -> None:
     with_confirmation(proc, TIMEOUT)
     history_changed(proc, TIMEOUT, "echo test")
 
 
-def test_select_command_with_arrows(proc, TIMEOUT):
+def test_select_command_with_arrows(proc, TIMEOUT) -> None:
     select_command_with_arrows(proc, TIMEOUT)
     history_changed(proc, TIMEOUT, "git help", "git hook")
 
 
-def test_refuse_with_confirmation(proc, TIMEOUT):
+def test_refuse_with_confirmation(proc, TIMEOUT) -> None:
     refuse_with_confirmation(proc, TIMEOUT)
     history_not_changed(proc, TIMEOUT)
 
 
-def test_without_confirmation(proc, TIMEOUT):
+def test_without_confirmation(proc, TIMEOUT) -> None:
     without_confirmation(proc, TIMEOUT)
     history_changed(proc, TIMEOUT, "echo test")
 
 
-def test_how_to_configure_alias(proc, TIMEOUT):
+def test_how_to_configure_alias(proc, TIMEOUT) -> None:
     proc.sendline("unset -f fuck")
     how_to_configure(proc, TIMEOUT)

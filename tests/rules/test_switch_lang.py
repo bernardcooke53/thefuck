@@ -16,7 +16,7 @@ from thefuck.types import Command
         Command("녀애 ㅣㄴ", "command not found: 녀애 ㅣㄴ"),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert switch_lang.match(command)
 
 
@@ -31,7 +31,7 @@ def test_match(command):
         Command("녀애 ㅣㄴ", "some info"),
     ],
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not switch_lang.match(command)
 
 
@@ -47,5 +47,5 @@ def test_not_match(command):
         (Command("ㅔㅁㅅ촤", ""), "patchk"),
     ],
 )
-def test_get_new_command(command, new_command):
+def test_get_new_command(command, new_command) -> None:
     assert switch_lang.get_new_command(command) == new_command

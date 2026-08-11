@@ -31,7 +31,7 @@ from thefuck.types import Command
         ),
     ],
 )
-def test_git_support(called: str, command: str, output: str):
+def test_git_support(called: str, command: str, output: str) -> None:
     @git_support
     def fn(command):
         return command.script
@@ -54,7 +54,7 @@ def test_git_support(called: str, command: str, output: str):
 @pytest.mark.parametrize("output", ["", None])
 def test_git_support_match(command: str, is_git: bool, output: str | None) -> None:
     @git_support
-    def fn(command: Command):
+    def fn(command: Command) -> bool:
         return True
 
     assert fn(Command(command, output)) == is_git

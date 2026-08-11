@@ -4,18 +4,18 @@ from thefuck.rules.git_push_without_commits import get_new_command, match
 from thefuck.types import Command
 
 
-def test_match():
+def test_match() -> None:
     script = "git push -u origin master"
     output = "error: src refspec master does not match any\nerror: failed to..."
     assert match(Command(script, output))
 
 
-def test_not_match():
+def test_not_match() -> None:
     script = "git push -u origin master"
     assert not match(Command(script, "Everything up-to-date"))
 
 
-def test_get_new_command():
+def test_get_new_command() -> None:
     script = "git push -u origin master"
     output = "error: src refspec master does not match any\nerror: failed to..."
     new_command = 'git commit -m "Initial commit" && git push -u origin master'

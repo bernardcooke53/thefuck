@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture(autouse=True)
-def get_all_executables(mocker):
+def get_all_executables(mocker) -> None:
     mocker.patch(
         "thefuck.rules.wrong_hyphen_before_subcommand.get_all_executables",
         return_value=["git", "apt", "apt-get", "ls", "pwd"],
@@ -15,12 +15,12 @@ def get_all_executables(mocker):
 
 
 @pytest.mark.parametrize("script", ["git-log", "apt-install python"])
-def test_match(script):
+def test_match(script) -> None:
     assert match(Command(script, ""))
 
 
 @pytest.mark.parametrize("script", ["ls -la", "git2-make", "apt-get install python"])
-def test_not_match(script):
+def test_not_match(script) -> None:
     assert not match(Command(script, ""))
 
 
@@ -28,5 +28,5 @@ def test_not_match(script):
     "script, new_command",
     [("git-log", "git log"), ("apt-install python", "apt install python")],
 )
-def test_get_new_command(script, new_command):
+def test_get_new_command(script, new_command) -> None:
     assert get_new_command(Command(script, "")) == new_command

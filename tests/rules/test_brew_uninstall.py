@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output():
+def output() -> str:
     return (
         "Uninstalling /usr/local/Cellar/tbb/4.4-20160916... (118 files, 1.9M)\n"
         "tbb 4.4-20160526, 4.4-20160722 are still installed.\n"
@@ -16,7 +16,7 @@ def output():
 
 
 @pytest.fixture
-def new_command(formula):
+def new_command(formula) -> str:
     return f"brew uninstall --force {formula}"
 
 

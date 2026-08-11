@@ -7,26 +7,26 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def pip_unknown_cmd_without_recommend():
+def pip_unknown_cmd_without_recommend() -> str:
     return '''ERROR: unknown command "i"'''
 
 
 @pytest.fixture
-def broken():
+def broken() -> str:
     return "instatl"
 
 
 @pytest.fixture
-def suggested():
+def suggested() -> str:
     return "install"
 
 
 @pytest.fixture
-def pip_unknown_cmd(broken, suggested):
+def pip_unknown_cmd(broken, suggested) -> str:
     return f'ERROR: unknown command "{broken}" - maybe you meant "{suggested}"'
 
 
-def test_match(pip_unknown_cmd, pip_unknown_cmd_without_recommend):
+def test_match(pip_unknown_cmd, pip_unknown_cmd_without_recommend) -> None:
     assert match(Command("pip instatl", pip_unknown_cmd))
     assert not match(Command("pip i", pip_unknown_cmd_without_recommend))
 
@@ -38,5 +38,5 @@ def test_match(pip_unknown_cmd, pip_unknown_cmd_without_recommend):
         ("pip instatl", "instatl", "install", "pip install"),
     ],
 )
-def test_get_new_command(script, new_cmd, pip_unknown_cmd):
+def test_get_new_command(script, new_cmd, pip_unknown_cmd) -> None:
     assert get_new_command(Command(script, pip_unknown_cmd)) == new_cmd

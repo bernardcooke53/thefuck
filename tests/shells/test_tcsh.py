@@ -77,7 +77,7 @@ def test_get_history(history_lines: Callable[[list[str]], None], shell: Tcsh) ->
 
 
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
-def test_how_to_configure(shell: Tcsh, config_exists: pytest_mock.MockType):
+def test_how_to_configure(shell: Tcsh, config_exists: pytest_mock.MockType) -> None:
     config_exists.return_value = True
     assert shell.how_to_configure().can_configure_automatically
 
@@ -85,7 +85,7 @@ def test_how_to_configure(shell: Tcsh, config_exists: pytest_mock.MockType):
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
 def test_how_to_configure_when_config_not_found(
     shell: Tcsh, config_exists: pytest_mock.MockType
-):
+) -> None:
     config_exists.return_value = False
     assert not shell.how_to_configure().can_configure_automatically
 

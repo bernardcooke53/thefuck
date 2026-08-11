@@ -95,14 +95,14 @@ def yarn_help(mocker):
 
 
 @pytest.mark.parametrize("command", [Command("yarn whyy webpack", output("whyy"))])
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
 @pytest.mark.parametrize(
     "command", [Command("npm nuild", output("nuild")), Command("yarn install", "")]
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -113,7 +113,7 @@ def test_not_match(command):
         (Command("yarn require lodash", output("require")), "yarn add lodash"),
     ],
 )
-def test_get_new_command(command, result):
+def test_get_new_command(command, result) -> None:
     fixed_command = get_new_command(command)
     if isinstance(fixed_command, list):
         fixed_command = fixed_command[0]

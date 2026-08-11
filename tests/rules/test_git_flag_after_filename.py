@@ -29,14 +29,14 @@ command6 = Command(
 @pytest.mark.parametrize(
     "command", [command1, command2, command3, command4, command5, command6]
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
 @pytest.mark.parametrize(
     "command", [Command("git log README.md", ""), Command("git log -p README.md", "")]
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -51,5 +51,5 @@ def test_not_match(command):
         (command6, "git log -p --name-only README.md"),
     ],
 )
-def test_get_new_command(command, result):
+def test_get_new_command(command, result) -> None:
     assert get_new_command(command) == result

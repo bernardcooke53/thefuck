@@ -6,7 +6,7 @@ from thefuck.rules.git_remote_delete import get_new_command, match
 from thefuck.types import Command
 
 
-def test_match():
+def test_match() -> None:
     assert match(Command("git remote delete foo", ""))
 
 
@@ -18,7 +18,7 @@ def test_match():
         Command("git commit", ""),
     ],
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -29,5 +29,5 @@ def test_not_match(command):
         (Command("git remote delete delete", ""), "git remote remove delete"),
     ],
 )
-def test_get_new_command(command, new_command):
+def test_get_new_command(command, new_command) -> None:
     assert get_new_command(command) == new_command

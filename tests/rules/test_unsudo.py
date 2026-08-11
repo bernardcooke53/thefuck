@@ -7,11 +7,11 @@ from thefuck.types import Command
 
 
 @pytest.mark.parametrize("output", ["you cannot perform this operation as root"])
-def test_match(output):
+def test_match(output) -> None:
     assert match(Command("sudo ls", output))
 
 
-def test_not_match():
+def test_not_match() -> None:
     assert not match(Command("", ""))
     assert not match(Command("sudo ls", "Permission denied"))
     assert not match(Command("ls", "you cannot perform this operation as root"))
@@ -21,5 +21,5 @@ def test_not_match():
     "before, after",
     [("sudo ls", "ls"), ("sudo pacaur -S helloworld", "pacaur -S helloworld")],
 )
-def test_get_new_command(before, after):
+def test_get_new_command(before, after) -> None:
     assert get_new_command(Command(before, "")) == after

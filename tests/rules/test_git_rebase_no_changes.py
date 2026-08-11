@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output():
+def output() -> str:
     return """Applying: Test commit
 No changes - did you forget to use 'git add'?
 If there is nothing left to stage, chances are that something else
@@ -20,13 +20,13 @@ To check out the original branch and stop rebasing, run "git rebase --abort".
 """
 
 
-def test_match(output):
+def test_match(output) -> None:
     assert match(Command("git rebase --continue", output))
     assert not match(Command("git rebase --continue", ""))
     assert not match(Command("git rebase --skip", ""))
 
 
-def test_get_new_command(output):
+def test_get_new_command(output) -> None:
     assert (
         get_new_command(Command("git rebase --continue", output)) == "git rebase --skip"
     )

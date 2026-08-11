@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def module_error_output(filename, module_name):
+def module_error_output(filename, module_name: str) -> str:
     return f"""Traceback (most recent call last):
   File "{filename}", line 1, in <module>
     import {module_name}
@@ -27,7 +27,7 @@ NameError: name 'pritn' is not defined""",
         ),
     ],
 )
-def test_not_match(test):
+def test_not_match(test) -> None:
     assert not match(test)
 
 
@@ -50,7 +50,7 @@ positive_tests = [
 @pytest.mark.parametrize(
     "script, filename, module_name, corrected_script", positive_tests
 )
-def test_match(script, filename, module_name, corrected_script, module_error_output):
+def test_match(script, filename, module_name: str, corrected_script, module_error_output) -> None:
     assert match(Command(script, module_error_output))
 
 
@@ -58,6 +58,6 @@ def test_match(script, filename, module_name, corrected_script, module_error_out
     "script, filename, module_name, corrected_script", positive_tests
 )
 def test_get_new_command(
-    script, filename, module_name, corrected_script, module_error_output
-):
+    script, filename, module_name: str, corrected_script, module_error_output
+) -> None:
     assert get_new_command(Command(script, module_error_output)) == corrected_script

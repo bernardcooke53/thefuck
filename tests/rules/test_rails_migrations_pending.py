@@ -24,7 +24,7 @@ Migrations are pending. To resolve this issue, run:
         Command("", output_env_test),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -37,7 +37,7 @@ def test_match(command):
         ),
     ],
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -54,5 +54,5 @@ def test_not_match(command):
         ),
     ],
 )
-def test_get_new_command(command, new_command):
+def test_get_new_command(command, new_command) -> None:
     assert get_new_command(command) == new_command

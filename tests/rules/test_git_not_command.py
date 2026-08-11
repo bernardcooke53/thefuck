@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def git_not_command():
+def git_not_command() -> str:
     return """git: 'brnch' is not a git command. See 'git --help'.
 
 The most similar command is
@@ -16,7 +16,7 @@ branch
 
 
 @pytest.fixture
-def git_not_command_one_of_this():
+def git_not_command_one_of_this() -> str:
     return """git: 'st' is not a git command. See 'git --help'.
 
 The most similar commands are
@@ -29,7 +29,7 @@ stats
 
 
 @pytest.fixture
-def git_not_command_closest():
+def git_not_command_closest() -> str:
     return """git: 'tags' is not a git command. See 'git --help'.
 
 The most similar commands are
@@ -39,11 +39,11 @@ The most similar commands are
 
 
 @pytest.fixture
-def git_command():
+def git_command() -> str:
     return "* master"
 
 
-def test_match(git_not_command, git_command, git_not_command_one_of_this):
+def test_match(git_not_command, git_command, git_not_command_one_of_this) -> None:
     assert match(Command("git brnch", git_not_command))
     assert match(Command("git st", git_not_command_one_of_this))
     assert not match(Command("ls brnch", git_not_command))
@@ -52,7 +52,7 @@ def test_match(git_not_command, git_command, git_not_command_one_of_this):
 
 def test_get_new_command(
     git_not_command, git_not_command_one_of_this, git_not_command_closest
-):
+) -> None:
     assert get_new_command(Command("git brnch", git_not_command)) == ["git branch"]
     assert get_new_command(Command("git st", git_not_command_one_of_this)) == [
         "git stats",

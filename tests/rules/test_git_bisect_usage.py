@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def output():
+def output() -> str:
     return (
         "usage: git bisect [help|start|bad|good|new|old"
         "|terms|skip|next|reset|visualize|replay|log|run]"
@@ -17,14 +17,14 @@ def output():
 @pytest.mark.parametrize(
     "script", ["git bisect strt", "git bisect rset", "git bisect goood"]
 )
-def test_match(output, script):
+def test_match(output, script) -> None:
     assert match(Command(script, output))
 
 
 @pytest.mark.parametrize(
     "script", ["git bisect", "git bisect start", "git bisect good"]
 )
-def test_not_match(script):
+def test_not_match(script) -> None:
     assert not match(Command(script, ""))
 
 
@@ -36,6 +36,6 @@ def test_not_match(script):
         ("git bisect rset", ["reset", "next", "start"]),
     ],
 )
-def test_get_new_command(output, script, new_cmd):
+def test_get_new_command(output, script, new_cmd) -> None:
     new_cmd = ["git bisect %s" % cmd for cmd in new_cmd]
     assert get_new_command(Command(script, output)) == new_cmd

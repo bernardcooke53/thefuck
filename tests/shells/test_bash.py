@@ -21,7 +21,7 @@ def Popen(mocker):
 
 
 @pytest.fixture(autouse=True)
-def shell_aliases():
+def shell_aliases() -> None:
     os.environ["TF_SHELL_ALIASES"] = (
         "alias fuck='eval $(thefuck $(fc -ln -1))'\n"
         "alias l='ls -CF'\n"
@@ -40,27 +40,27 @@ def shell_aliases():
         ("ll", "ls -alF"),
     ],
 )
-def test_from_shell(before: str, after: str, shell: Bash):
+def test_from_shell(before: str, after: str, shell: Bash) -> None:
     assert shell.from_shell(before) == after
 
 
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
-def test_to_shell(shell: Bash):
+def test_to_shell(shell: Bash) -> None:
     assert shell.to_shell("pwd") == "pwd"
 
 
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
-def test_and_(shell: Bash):
+def test_and_(shell: Bash) -> None:
     assert shell.and_("ls", "cd") == "ls && cd"
 
 
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
-def test_or_(shell: Bash):
+def test_or_(shell: Bash) -> None:
     assert shell.or_("ls", "cd") == "ls || cd"
 
 
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
-def test_get_aliases(shell: Bash):
+def test_get_aliases(shell: Bash) -> None:
     assert shell.get_aliases() == {
         "fuck": "eval $(thefuck $(fc -ln -1))",
         "l": "ls -CF",
@@ -70,7 +70,7 @@ def test_get_aliases(shell: Bash):
 
 
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
-def test_app_alias(shell: Bash):
+def test_app_alias(shell: Bash) -> None:
     assert "fuck () {" in shell.app_alias("fuck")
     assert "FUCK () {" in shell.app_alias("FUCK")
     assert "thefuck" in shell.app_alias("fuck")
@@ -78,7 +78,7 @@ def test_app_alias(shell: Bash):
 
 
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
-def test_app_alias_variables_correctly_set(shell: Bash):
+def test_app_alias_variables_correctly_set(shell: Bash) -> None:
     alias = shell.app_alias("fuck")
     assert "fuck () {" in alias
     assert "TF_SHELL=bash" in alias
@@ -88,38 +88,38 @@ def test_app_alias_variables_correctly_set(shell: Bash):
 
 
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
-def test_get_history(history_lines: Callable[[list[str]], None], shell: Bash):
+def test_get_history(history_lines: Callable[[list[str]], None], shell: Bash) -> None:
     history_lines(["ls", "rm"])
     assert list(shell.get_history()) == ["ls", "rm"]
 
 
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
-def test_split_command(shell: Bash):
+def test_split_command(shell: Bash) -> None:
     command = "git log -p"
     command_parts = ["git", "log", "-p"]
     assert shell.split_command(command) == command_parts
 
 
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
-def test_how_to_configure(shell: Bash, config_exists):
+def test_how_to_configure(shell: Bash, config_exists) -> None:
     config_exists.return_value = True
     assert shell.how_to_configure().can_configure_automatically
 
 
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
-def test_how_to_configure_when_config_not_found(shell: Bash, config_exists):
+def test_how_to_configure_when_config_not_found(shell: Bash, config_exists) -> None:
     config_exists.return_value = False
     assert not shell.how_to_configure().can_configure_automatically
 
 
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
-def test_info(shell: Bash, Popen: pytest_mock.MockType):
+def test_info(shell: Bash, Popen: pytest_mock.MockType) -> None:
     Popen.return_value.stdout.read.side_effect = [b"3.5.9"]
     assert shell.info() == "Bash 3.5.9"
 
 
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
-def test_get_version_error(shell: Bash, Popen: pytest_mock.MockType):
+def test_get_version_error(shell: Bash, Popen: pytest_mock.MockType) -> None:
     Popen.return_value.stdout.read.side_effect = OSError
     with pytest.raises(OSError):
         shell._get_version()

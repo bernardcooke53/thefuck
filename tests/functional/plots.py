@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 
-def _set_confirmation(proc, require):
+def _set_confirmation(proc, require) -> None:
     proc.sendline("mkdir -p ~/.thefuck")
     proc.sendline(f'echo "require_confirmation = {require}" > ~/.thefuck/settings.py')
 
 
-def with_confirmation(proc, TIMEOUT):
+def with_confirmation(proc, TIMEOUT) -> None:
     """Ensures that command can be fixed when confirmation enabled."""
     _set_confirmation(proc, True)
 
@@ -21,7 +21,7 @@ def with_confirmation(proc, TIMEOUT):
     assert proc.expect([TIMEOUT, "test"])
 
 
-def history_changed(proc, TIMEOUT, *to):
+def history_changed(proc, TIMEOUT, *to) -> None:
     """Ensures that history changed."""
     proc.send("\033[A")
     pattern = [TIMEOUT]
@@ -29,13 +29,13 @@ def history_changed(proc, TIMEOUT, *to):
     assert proc.expect(pattern)
 
 
-def history_not_changed(proc, TIMEOUT):
+def history_not_changed(proc, TIMEOUT) -> None:
     """Ensures that history not changed."""
     proc.send("\033[A")
     assert proc.expect([TIMEOUT, "fuck"])
 
 
-def select_command_with_arrows(proc, TIMEOUT):
+def select_command_with_arrows(proc, TIMEOUT) -> None:
     """Ensures that command can be selected with arrow keys."""
     _set_confirmation(proc, True)
 
@@ -57,7 +57,7 @@ def select_command_with_arrows(proc, TIMEOUT):
     assert proc.expect([TIMEOUT, "usage", "fatal: not a git repository"])
 
 
-def refuse_with_confirmation(proc, TIMEOUT):
+def refuse_with_confirmation(proc, TIMEOUT) -> None:
     """Ensures that fix can be refused when confirmation enabled."""
     _set_confirmation(proc, True)
 
@@ -72,7 +72,7 @@ def refuse_with_confirmation(proc, TIMEOUT):
     assert proc.expect([TIMEOUT, "Aborted"])
 
 
-def without_confirmation(proc, TIMEOUT):
+def without_confirmation(proc, TIMEOUT) -> None:
     """Ensures that command can be fixed when confirmation disabled."""
     _set_confirmation(proc, False)
 
@@ -83,6 +83,6 @@ def without_confirmation(proc, TIMEOUT):
     assert proc.expect([TIMEOUT, "test"])
 
 
-def how_to_configure(proc, TIMEOUT):
+def how_to_configure(proc, TIMEOUT) -> None:
     proc.sendline("fuck")
     assert proc.expect([TIMEOUT, "alias isn't configured"])

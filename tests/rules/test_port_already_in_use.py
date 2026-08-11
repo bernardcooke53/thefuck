@@ -82,7 +82,7 @@ def lsof(mocker):
     [Command("./app", output) for output in outputs]
     + [Command("./app", output) for output in outputs],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -95,7 +95,7 @@ def test_match(command):
         (Command("./app", outputs[2]), b""),
     ],
 )
-def test_not_match(lsof, command, lsof_output):
+def test_not_match(lsof, command, lsof_output) -> None:
     lsof.return_value.stdout = BytesIO(lsof_output)
 
     assert not match(command)
@@ -106,5 +106,5 @@ def test_not_match(lsof, command, lsof_output):
     [Command("./app", output) for output in outputs]
     + [Command("./app", output) for output in outputs],
 )
-def test_get_new_command(command):
+def test_get_new_command(command) -> None:
     assert get_new_command(command) == "kill 18233 && ./app"

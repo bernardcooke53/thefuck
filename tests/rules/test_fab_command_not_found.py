@@ -30,14 +30,14 @@ Available commands:
         Command("fab extenson deloyp", output),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
 @pytest.mark.parametrize(
     "command", [Command("gulp extenson", output), Command("fab deloyp", "")]
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -56,6 +56,6 @@ def test_not_match(command):
         ),
     ],
 )
-def test_get_new_command(script, result):
+def test_get_new_command(script, result) -> None:
     command = Command(script, output)
     assert get_new_command(command) == result

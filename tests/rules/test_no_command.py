@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture(autouse=True)
-def get_all_executables(mocker):
+def get_all_executables(mocker) -> None:
     mocker.patch(
         "thefuck.rules.no_command.get_all_executables",
         return_value=["vim", "fsck", "git", "go", "python"],
@@ -33,7 +33,7 @@ def history_without_current(mocker):
         ('gti commit -m "new commit"', "gti: command not found"),
     ],
 )
-def test_match(mocker, script, output):
+def test_match(mocker, script, output) -> None:
     mocker.patch("shutil.which", return_value=None)
 
     assert match(Command(script, output))
@@ -48,7 +48,7 @@ def test_match(mocker, script, output):
         ("vim file.py", "vim: not found", "vim"),
     ],
 )
-def test_not_match(mocker, script, output, which):
+def test_not_match(mocker, script, output, which) -> None:
     mocker.patch("shutil.which", return_value=which)
 
     assert not match(Command(script, output))
@@ -64,5 +64,5 @@ def test_not_match(mocker, script, output, which):
         ('gti commit -m "new commit"', ['git commit -m "new commit"']),
     ],
 )
-def test_get_new_command(script, result):
+def test_get_new_command(script, result) -> None:
     assert get_new_command(Command(script, "")) == result

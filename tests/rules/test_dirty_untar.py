@@ -16,10 +16,10 @@ from thefuck.types import Command
 
 @pytest.fixture
 def tar_error(tmpdir):
-    def fixture(filename):
+    def fixture(filename) -> None:
         path = os.path.join(str(tmpdir), filename)
 
-        def reset(path):
+        def reset(path) -> None:
             os.mkdir("d")
             with tarfile.TarFile(path, "w") as archive:
                 for file in ("a", "b", "c", "d/e"):

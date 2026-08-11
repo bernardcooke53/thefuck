@@ -16,7 +16,7 @@ def isfile(mocker: pytest_mock.MockerFixture):
 
 @pytest.fixture
 def history_lines(mocker: pytest_mock.MockerFixture, isfile: pytest_mock.MockType):
-    def aux(lines):
+    def aux(lines) -> None:
         mock = mocker.patch("builtins.open")
         mock.return_value.__enter__.return_value.readlines.return_value = lines
 

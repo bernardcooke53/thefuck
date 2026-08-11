@@ -60,7 +60,7 @@ def run_script(mocker):
 
 @pytest.mark.usefixtures("no_memoize")
 @pytest.mark.parametrize("script", ["npm watch-test", "npm develop"])
-def test_match(script):
+def test_match(script) -> None:
     command = Command(script, output)
     assert match(command)
 
@@ -75,7 +75,7 @@ def test_match(script):
         (Command("vim watch-test", output), run_script_stdout),
     ],
 )
-def test_not_match(run_script, command, run_script_out):
+def test_not_match(run_script, command, run_script_out) -> None:
     run_script.stdout = BytesIO(run_script_out)
     assert not match(command)
 
@@ -89,6 +89,6 @@ def test_not_match(run_script, command, run_script_out):
         ("npm -i watch-script --path ..", "npm run-script -i watch-script --path .."),
     ],
 )
-def test_get_new_command(script, result):
+def test_get_new_command(script, result) -> None:
     command = Command(script, output)
     assert get_new_command(command) == result

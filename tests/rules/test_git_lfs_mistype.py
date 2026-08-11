@@ -7,7 +7,7 @@ from thefuck.types import Command
 
 
 @pytest.fixture
-def mistype_response():
+def mistype_response() -> str:
     return """
 Error: unknown command "evn" for "git-lfs"
 
@@ -19,14 +19,14 @@ Run 'git-lfs --help' for usage.
     """
 
 
-def test_match(mistype_response):
+def test_match(mistype_response) -> None:
     assert match(Command("git lfs evn", mistype_response))
     err_response = "bash: git: command not found"
     assert not match(Command("git lfs env", err_response))
     assert not match(Command("docker lfs env", mistype_response))
 
 
-def test_get_new_command(mistype_response):
+def test_get_new_command(mistype_response) -> None:
     assert get_new_command(Command("git lfs evn", mistype_response)) == [
         "git lfs env",
         "git lfs ext",

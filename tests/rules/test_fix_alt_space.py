@@ -4,7 +4,7 @@ from thefuck.rules.fix_alt_space import get_new_command, match
 from thefuck.types import Command
 
 
-def test_match():
+def test_match() -> None:
     """
     The character before 'grep' is Alt+Space, which happens frequently
     on the Mac when typing the pipe character (Alt+7), and holding the Alt
@@ -16,6 +16,6 @@ def test_match():
     assert not match(Command("", ""))
 
 
-def test_get_new_command():
+def test_get_new_command() -> None:
     """Replace the Alt+Space character by a simple space"""
     assert get_new_command(Command("ps -ef | grep foo", "")) == "ps -ef | grep foo"

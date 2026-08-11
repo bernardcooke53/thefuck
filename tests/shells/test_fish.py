@@ -181,7 +181,7 @@ def test_how_to_configure(shell: Fish, config_exists) -> None:
 
 
 @pytest.mark.usefixtures("isfile", "no_memoize", "no_cache")
-def test_how_to_configure_when_config_not_found(shell: Fish, config_exists: Any):
+def test_how_to_configure_when_config_not_found(shell: Fish, config_exists: Any) -> None:
     config_exists.return_value = False
     assert not shell.how_to_configure().can_configure_automatically
 

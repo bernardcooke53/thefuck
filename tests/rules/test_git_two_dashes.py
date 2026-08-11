@@ -18,7 +18,7 @@ output = "error: did you mean `{}` (with two dashes ?)".format
         Command("git rebase -continue", output("--continue")),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -32,7 +32,7 @@ def test_match(command):
         Command("git rebase --continue", ""),
     ],
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -51,5 +51,5 @@ def test_not_match(command):
         ),
     ],
 )
-def test_get_new_command(command, output):
+def test_get_new_command(command, output) -> None:
     assert get_new_command(command) == output

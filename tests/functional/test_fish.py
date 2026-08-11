@@ -19,22 +19,22 @@ def proc(spawnu, TIMEOUT):
 
 
 @pytest.mark.functional
-def test_with_confirmation(proc, TIMEOUT):
+def test_with_confirmation(proc, TIMEOUT) -> None:
     with_confirmation(proc, TIMEOUT)
 
 
 @pytest.mark.functional
-def test_select_command_with_arrows(proc, TIMEOUT):
+def test_select_command_with_arrows(proc, TIMEOUT) -> None:
     select_command_with_arrows(proc, TIMEOUT)
 
 
 @pytest.mark.functional
-def test_refuse_with_confirmation(proc, TIMEOUT):
+def test_refuse_with_confirmation(proc, TIMEOUT) -> None:
     refuse_with_confirmation(proc, TIMEOUT)
 
 
 @pytest.mark.functional
-def test_without_confirmation(proc, TIMEOUT):
+def test_without_confirmation(proc, TIMEOUT) -> None:
     without_confirmation(proc, TIMEOUT)
 
 

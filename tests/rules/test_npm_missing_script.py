@@ -53,7 +53,7 @@ def run_script(mocker):
         Command("npm run-script sahare", output("sahare")),
     ],
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -65,7 +65,7 @@ def test_match(command):
         Command("npm run-script sahare", ""),
     ],
 )
-def test_not_match(command):
+def test_not_match(command) -> None:
     assert not match(command)
 
 
@@ -81,7 +81,7 @@ def test_not_match(command):
         ),
     ],
 )
-def test_get_new_command(script, output, result):
+def test_get_new_command(script, output, result) -> None:
     command = Command(script, output)
 
     assert get_new_command(command)[0] == result

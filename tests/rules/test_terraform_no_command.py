@@ -19,7 +19,7 @@ from thefuck.types import Command
         ),
     ],
 )
-def test_match(script, output):
+def test_match(script, output) -> None:
     assert match(Command(script, output))
 
 
@@ -34,7 +34,7 @@ def test_match(script, output):
         ),
     ],
 )
-def test_not_match(script, output):
+def test_not_match(script, output) -> None:
     assert not match(Command(script, output))
 
 
@@ -53,5 +53,5 @@ def test_not_match(script, output):
         ),
     ],
 )
-def test_get_new_command(script, output, new_command):
+def test_get_new_command(script, output, new_command) -> None:
     assert get_new_command(Command(script, output)) == new_command

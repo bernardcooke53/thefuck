@@ -9,7 +9,7 @@ from thefuck.types import Command
 @pytest.mark.parametrize(
     "command", [Command("python foo", ""), Command("python bar", "")]
 )
-def test_match(command):
+def test_match(command) -> None:
     assert match(command)
 
 
@@ -20,5 +20,5 @@ def test_match(command):
         (Command("python bar", ""), "python bar.py"),
     ],
 )
-def test_get_new_command(command, new_command):
+def test_get_new_command(command, new_command) -> None:
     assert get_new_command(command) == new_command
