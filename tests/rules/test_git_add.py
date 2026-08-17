@@ -1,4 +1,5 @@
 from __future__ import annotations
+import pytest_mock
 
 import pytest
 
@@ -7,12 +8,12 @@ from thefuck.types import Command
 
 
 @pytest.fixture(autouse=True)
-def path_exists(mocker):
-    return mocker.patch("thefuck.rules.git_add.Path.exists", return_value=True)
+def path_exists(mocker: pytest_mock.MockerFixture) -> pytest_mock.MockType:
+    return mocker.patch("pathlib.Path.exists", return_value=True)
 
 
 @pytest.fixture
-def output(target) -> str:
+def output(target: str) -> str:
     return f"error: pathspec '{target}' did not match any file(s) known to git."
 
 
@@ -20,7 +21,7 @@ def output(target) -> str:
     "script, target",
     [("git submodule update unknown", "unknown"), ("git commit unknown", "unknown")],
 )
-def test_match(output, script, target) -> None:
+def test_match(output: str, script: str, target: str) -> None:
     assert match(Command(script, output))
 
 
@@ -32,7 +33,13 @@ def test_match(output, script, target) -> None:
         ("git submodule update known", output, False),
     ],
 )
-def test_not_match(path_exists, output, script, target, exists) -> None:
+def test_not_match(
+    path_exists: pytest_mock.MockType,
+    output: str,
+    script: str,
+    target: str,
+    exists: bool,
+) -> None:
     path_exists.return_value = exists
     assert not match(Command(script, output))
 
@@ -48,5 +55,7 @@ def test_not_match(path_exists, output, script, target, exists) -> None:
         ("git commit unknown", "unknown", "git add -- unknown && git commit unknown"),
     ],
 )
-def test_get_new_command(output, script, target, new_command) -> None:
+def test_get_new_command(
+    output: str, script: str, target: str, new_command: str
+) -> None:
     assert get_new_command(Command(script, output)) == new_command

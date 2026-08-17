@@ -1,14 +1,23 @@
 from __future__ import annotations
+from thefuck.conf import Settings
+import pytest_mock
+from typing import NamedTuple, Any
 
 import os
-from collections import namedtuple
 
 import pytest
 
 from thefuck.rules.fix_file import get_new_command, match
 from thefuck.types import Command
 
-FixFileTest = namedtuple("FixFileTest", ["script", "file", "line", "col", "output"])
+
+class FixFileTest(NamedTuple):
+    script: str
+    file: str
+    line: int
+    col: int | None
+    output: str
+
 
 tests = (
     FixFileTest(
@@ -238,7 +247,7 @@ fatal: bad config file line 1 in /home/martin/.config/git/config
     FixFileTest(
         "node fuck.js asdf qwer",
         "/Users/pablo/Workspace/barebones/fuck.js",
-        "2",
+        2,
         5,
         """
 /Users/pablo/Workspace/barebones/fuck.js:2
@@ -292,7 +301,11 @@ E       NameError: name 'mocker' is not defined
 
 @pytest.mark.parametrize("test", tests)
 @pytest.mark.usefixtures("no_memoize")
-def test_match(mocker, monkeypatch, test) -> None:
+def test_match(
+    mocker: pytest_mock.MockerFixture,
+    monkeypatch: pytest.MonkeyPatch,
+    test: FixFileTest,
+) -> None:
     mocker.patch("os.path.isfile", return_value=True)
     monkeypatch.setenv("EDITOR", "dummy_editor")
     assert match(Command("", test.output))
@@ -300,7 +313,11 @@ def test_match(mocker, monkeypatch, test) -> None:
 
 @pytest.mark.parametrize("test", tests)
 @pytest.mark.usefixtures("no_memoize")
-def test_no_editor(mocker, monkeypatch, test) -> None:
+def test_no_editor(
+    mocker: pytest_mock.MockerFixture,
+    monkeypatch: pytest.MonkeyPatch,
+    test: FixFileTest,
+) -> None:
     mocker.patch("os.path.isfile", return_value=True)
     if "EDITOR" in os.environ:
         monkeypatch.delenv("EDITOR")
@@ -310,7 +327,11 @@ def test_no_editor(mocker, monkeypatch, test) -> None:
 
 @pytest.mark.parametrize("test", tests)
 @pytest.mark.usefixtures("no_memoize")
-def test_not_file(mocker, monkeypatch, test) -> None:
+def test_not_file(
+    mocker: pytest_mock.MockerFixture,
+    monkeypatch: pytest.MonkeyPatch,
+    test: FixFileTest,
+) -> None:
     mocker.patch("os.path.isfile", return_value=False)
     monkeypatch.setenv("EDITOR", "dummy_editor")
 
@@ -319,14 +340,12 @@ def test_not_file(mocker, monkeypatch, test) -> None:
 
 @pytest.mark.parametrize("test", tests)
 @pytest.mark.usefixtures("no_memoize")
-def test_get_new_command(mocker, monkeypatch, test) -> None:
-    mocker.patch("os.path.isfile", return_value=True)
-    monkeypatch.setenv("EDITOR", "dummy_editor")
-
-
-@pytest.mark.parametrize("test", tests)
-@pytest.mark.usefixtures("no_memoize")
-def test_get_new_command_with_settings(mocker, monkeypatch, test, settings) -> None:
+def test_get_new_command_with_settings(
+    mocker: pytest_mock.MockerFixture,
+    monkeypatch: pytest.MonkeyPatch,
+    test: FixFileTest,
+    settings: Settings[Any],
+) -> None:
     mocker.patch("os.path.isfile", return_value=True)
     monkeypatch.setenv("EDITOR", "dummy_editor")
 

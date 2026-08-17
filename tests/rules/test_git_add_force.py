@@ -17,12 +17,12 @@ def output() -> str:
     )
 
 
-def test_match(output) -> None:
+def test_match(output: str) -> None:
     assert match(Command("git add dist/*.js", output))
     assert not match(Command("git add dist/*.js", ""))
 
 
-def test_get_new_command(output) -> None:
+def test_get_new_command(output: str) -> None:
     assert (
         get_new_command(Command("git add dist/*.js", output))
         == "git add --force dist/*.js"

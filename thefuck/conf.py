@@ -21,18 +21,17 @@ def load_source(name: str, pathname: str, _file: None = None) -> ModuleType:
     return module
 
 
-_KT = TypeVar("_KT")
 _VT = TypeVar("_VT")
 
 
-class Settings(dict[_KT, _VT]):
-    def __getattr__(self, item: _KT) -> _VT | None:
+class Settings(dict[str, _VT]):
+    def __getattr__(self, item: str) -> _VT | None:
         return self.get(item)
 
-    def __setattr__(self, key: _KT, value: _VT) -> None:
+    def __setattr__(self, key: str, value: _VT) -> None:
         self[key] = value
 
-    def init(self, args=None) -> None:
+    def init(self, args: Any | None = None) -> None:
         """Fills `settings` with values from `settings.py` and env."""
         self._setup_user_dir()
         self._init_settings_file()

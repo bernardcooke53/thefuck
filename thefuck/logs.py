@@ -15,7 +15,7 @@ from thefuck.conf import settings
 from thefuck.shells.generic import ShellConfiguration
 from thefuck.types import CorrectedCommand, Rule
 
-_ExcInfo: TypeAlias = tuple[type[Exception], Exception, TracebackType]
+_ExcInfo: TypeAlias = tuple[type[BaseException], Exception, TracebackType]
 
 
 def color(color_: str) -> str:
